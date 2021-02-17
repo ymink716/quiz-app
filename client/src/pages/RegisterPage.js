@@ -1,31 +1,26 @@
 import React from 'react'
 import { Form, Input, Button } from 'antd';
 import axios from 'axios';
-import { MailOutlined, UserOutlined } from '@ant-design/icons';
+import { MailOutlined, UserOutlined, LockOutlined } from '@ant-design/icons';
 
-const layout = {
-    labelCol: { span: 8 },
-    wrapperCol: { span: 16 },
-};
-
-const tailLayout = {
-    wrapperCol: { offset: 8, span: 16 },
-};
- 
 function RegisterPage(props) {
-    const onFinish = async (values) => {
+    const onFinish = (values) => {
         const { email, nickname, password, passwordConfirm } = values;
         if (password !== passwordConfirm) {
             alert('비밀번호와 비밀번호 확인은 일치해야 합니다.');
         } else {
-            const response = await axios.post('/api/auth/register', { email, nickname, password });
-    
-            if (response.status(201)) {
-                alert('회원가입에 성공하였습니다.');
-                props.history.push('/login');
-            } else {
-                alert('회원가입에 실패하였습니다.');
-            }
+            axios.post('/api/auth/register', { email, nickname, password })
+            .then(response => {
+                if (response.status === 201) {
+                    alert('회원가입에 성공하였습니다.');
+                    props.history.push('/login');
+                } else {
+                    alert(response.data.message);
+                }
+            }).catch(error => {
+                console.error(error);
+                alert('오류가 발생하여 회원가입에 실패하였습니다.');
+            });
         }
     };
     
@@ -37,7 +32,6 @@ function RegisterPage(props) {
     return (
         <div style={{ margin: 'auto' }}>
             <Form
-                {...layout}
                 name="basic"
                 initialValues={{ remember: true }}
                 onFinish={onFinish}
@@ -65,17 +59,23 @@ function RegisterPage(props) {
                     name="password"
                     rules={[{ required: true, message: 'Please input your password!' }]}
                 >
-                    <Input.Password />
+                    <Input.Password 
+                        prefix={<LockOutlined style={{ color: "rgba(0,0,0,.25)" }} />}
+                        placeholder="Password"
+                    />
                 </Form.Item>
                 <Form.Item
                     name="passwordConfirm"
                     rules={[{ required: true, message: 'Please input your password again!' }]}
                 >
-                    <Input.Password />
+                    <Input.Password 
+                        prefix={<LockOutlined style={{ color: "rgba(0,0,0,.25)" }} />}
+                        placeholder="Confirm password"
+                    />
                 </Form.Item>
             
-                <Form.Item {...tailLayout}>
-                    <Button type="primary" htmlType="submit">
+                <Form.Item>
+                    <Button type="primary" htmlType="submit" style={{ width: '100%' }}>
                         회원가입
                     </Button>
                 </Form.Item>

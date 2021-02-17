@@ -6,7 +6,7 @@ exports.createUser = async (req, res, next) => {
     try {
         const user = await User.findOne({ email });
         if (user) {
-            res.status(409).json({ message: '이미 가입된 메일입니다.' });
+            return res.json({ message: '이미 가입된 메일입니다.' });
         }
 
         const hash = await bcrypt.hash(password, 12);
@@ -17,6 +17,6 @@ exports.createUser = async (req, res, next) => {
         res.status(201).json(newUser);
     } catch (error) {
         console.error(error);
-        return next(error);
+        next(error);
     }
 }
