@@ -50,7 +50,7 @@ function LoginPage() {
         
             <Form.Item {...tailLayout}>
                 <Button type="primary" htmlType="submit">
-                Submit
+                    로그인
                 </Button>
             </Form.Item>
             </Form>

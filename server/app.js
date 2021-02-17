@@ -25,7 +25,7 @@ app.use(cookieParser());
 app.use(cors());
 
 // 라우터
-app.use('/api/auth', require('./routes/AuthRoute'));
+app.use('/api/auth', require('./routes/AuthRouter'));
 
 app.use((req, res, next) => {
     res.status(404).json({ message: 'Not Found'});
