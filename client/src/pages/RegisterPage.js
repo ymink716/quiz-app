@@ -1,5 +1,7 @@
 import React from 'react'
-import { Form, Input, Button, Icon } from 'antd';
+import { Form, Input, Button } from 'antd';
+import axios from 'axios';
+import { MailOutlined, UserOutlined } from '@ant-design/icons';
 
 const layout = {
     labelCol: { span: 8 },
@@ -9,30 +11,29 @@ const layout = {
 const tailLayout = {
     wrapperCol: { offset: 8, span: 16 },
 };
-  
-const onFinish = (values) => {
-    const { email, nickName, password, passwordConfirm } = values;
+ 
+function RegisterPage(props) {
+    const onFinish = async (values) => {
+        const { email, nickname, password, passwordConfirm } = values;
+        if (password !== passwordConfirm) {
+            alert('비밀번호와 비밀번호 확인은 일치해야 합니다.');
+        } else {
+            const response = await axios.post('/api/auth/register', { email, nickname, password });
     
-    if (password != passwordConfirm) {
-        alert('비밀번호와 비밀번호 확인은 일치해야 합니다.');
-    } else {
-        // 회원가입 요청 보내기
-        
-        // 성공 시 알림 후 로그인 페이지로 넘기기
-
-        // 실패시 실패 메세지
+            if (response.status(201)) {
+                alert('회원가입에 성공하였습니다.');
+                props.history.push('/login');
+            } else {
+                alert('회원가입에 실패하였습니다.');
+            }
         }
+    };
     
-     
-};
+    const onFinishFailed = (errorInfo) => {
+        console.log('Failed:', errorInfo);
+        alert('입력하신 정보를 다시 확인해주세요.');
+    };
 
-const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
-    alert('회원가입에 실패하였습니다. 입력하신 정보를 다시 확인해주세요.');
-};
-
-const 
-function RegisterPage() {
     return (
         <div style={{ margin: 'auto' }}>
             <Form
@@ -43,29 +44,31 @@ function RegisterPage() {
                 onFinishFailed={onFinishFailed}
             >
                 <Form.Item
-                    label="E-mail"
                     name="email"
-                    rules={[{ required: true, message: 'Please input your email!' }]}
+                    rules={[{ required: true, type: 'email', message: 'Please input your email!' }]}
                 >
-                    <Input />
+                    <Input 
+                        prefix={<MailOutlined style={{ color: "rgba(0,0,0,.25)" }} />}
+                        placeholder="Email"
+                    />
                 </Form.Item>
                 <Form.Item
-                    label="닉네임"
-                    name="nickName"
+                    name="nickname"
                     rules={[{ required: true, message: 'Please input your nick name!' }]}
                 >
-                    <Input />
+                    <Input 
+                        prefix={<UserOutlined style={{ color: "rgba(0,0,0,.25)" }} />}
+                        placeholder="Nickname"
+                    />
                 </Form.Item>
                 <Form.Item
-                    label="비밀번호"
                     name="password"
                     rules={[{ required: true, message: 'Please input your password!' }]}
                 >
                     <Input.Password />
                 </Form.Item>
                 <Form.Item
-                    label="비밀번호"
-                    name="passwordconfirm"
+                    name="passwordConfirm"
                     rules={[{ required: true, message: 'Please input your password again!' }]}
                 >
                     <Input.Password />

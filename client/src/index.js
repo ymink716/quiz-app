@@ -7,11 +7,11 @@ import reportWebVitals from './reportWebVitals';
 import { UserProvider } from './context/UserContext';
 
 ReactDOM.render(
-  <BrowserRouter>
-    <UserProvider>
-     <App />
-    </UserProvider>
-  </BrowserRouter>,
+  <UserProvider>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </UserProvider>,
   document.getElementById('root')
 );
 
