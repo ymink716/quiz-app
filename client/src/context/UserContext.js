@@ -1,11 +1,19 @@
 import React, { useReducer, createContext, useContext } from 'react';
 import axios from 'axios';
 
+let user = localStorage.getItem('currentUser')
+    ? JSON.parse(localStorage.getItem('currentUser'))
+    : null;
+
+let token = localStorage.getItem('token')
+    ? JSON.parse(localStorage.getItem('token'))
+    : null;
+
 const initialState = {
     loading: false,
-    error: null,
-    user: null,
-    token: null
+    errorMessage: null,
+    user: null || user,
+    token: null || token
 };
 
 function userReducer(state, action) {
@@ -18,15 +26,15 @@ function userReducer(state, action) {
         case 'LOGIN_SUCESS':
             return {
                 ...state,
-                user: action.user,
-                token: action.token,
+                user: action.data.user,
+                token: action.data.token,
                 loading: false
             }
         case 'LOGIN_ERROR':
             return {
                 ...state,
                 loading: false,
-                error: action.error
+                errorMessage: action.error.message
             }
         case 'LOGOUT':
             return {
@@ -70,20 +78,18 @@ export function useUserDispatch() {
     return context;
 }
 
-const URL = 'http://localhost:5000/api';
-
-export async function login(dispatch, user) {
+export async function login(dispatch, payload) {
     dispatch({ type: 'LOGIN_USER' });
     try {
-        const response = await axios.post(`${URL}/auth/login`, user);
-        if (response.data) {
-            dispatch({ type: 'LOGIN_SUCCESS', user: response.data.user });
+        const response = await axios.post('api/auth/login', payload);
+        if(response.data.success) {
+            dispatch({ type: 'LOGIN_SUCESS', data: response.data });
             localStorage.setItem('currentUser', JSON.stringify(response.data.user));
             localStorage.setItem('token', JSON.stringify(response.data.token));
-            return response.data;
+            return response;
         }
     } catch (error) {
-        dispatch({ type: 'LOGIN_ERROR ', error });
+        dispatch({ type: 'LOGIN_ERROR', error: error.response.data });
     }
 }
 

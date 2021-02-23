@@ -1,6 +1,7 @@
 import React from 'react'
+import { withRouter } from 'react-router-dom';
 
-function NotFoundPage() {
+function NotFoundPage(props) {
     return (
         <div style={{ textAlign: 'center' }}>
             Page Not Found
@@ -8,4 +9,4 @@ function NotFoundPage() {
     )
 }
 
-export default NotFoundPage;
+export default withRouter(NotFoundPage);

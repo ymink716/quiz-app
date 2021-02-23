@@ -1,55 +1,66 @@
 import React from 'react'
+import { withRouter } from 'react-router-dom';
 import { Form, Input, Button, Checkbox } from 'antd';
+import { MailOutlined, LockOutlined } from '@ant-design/icons';
+import { useUserState, useUserDispatch, login } from '../context/UserContext';
 
-const layout = {
-    labelCol: { span: 8 },
-    wrapperCol: { span: 16 },
-};
+function LoginPage(props) {
+    const state = useUserState();
+    const dispatch = useUserDispatch();
+    const { user, errorMessage } = state;
 
-const tailLayout = {
-    wrapperCol: { offset: 8, span: 16 },
-};
-  
-const onFinish = (values) => {
-    console.log('Success:', values);
-};
+    const onFinish = async (values) => {
+        try {
+            const response = await login(dispatch, values);
+            if (!response.data.success) {
+                alert(errorMessage);
+            } else {
+                props.history.push('/');
+            }
+        } catch (error) {
+            console.error(error);
+            alert(errorMessage);
+        }
+    };
+    
+    const onFinishFailed = (errorInfo) => {
+        alert('입력하신 정보를 다시 확인해주세요.');
+    };
 
-const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
-};
-
-function LoginPage() {
     return (
         <div style={{ margin: 'auto' }}>
             <Form
-            {...layout}
-            name="basic"
-            initialValues={{ remember: true }}
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
+                name="basic"
+                initialValues={{ remember: true }}
+                onFinish={onFinish}
+                onFinishFailed={onFinishFailed}
             >
             <Form.Item
-                label="E-mail"
                 name="email"
-                rules={[{ required: true, message: 'Please input your email!' }]}
+                rules={[{ required: true, type: 'email', message: 'Please input your email!' }]}
             >
-                <Input />
+                <Input 
+                    prefix={<MailOutlined style={{ color: "rgba(0,0,0,.25)" }} />}
+                    placeholder="Email"
+                />
             </Form.Item>
         
             <Form.Item
-                label="Password"
                 name="password"
                 rules={[{ required: true, message: 'Please input your password!' }]}
             >
-                <Input.Password />
+                <Input.Password 
+                    prefix={<LockOutlined style={{ color: "rgba(0,0,0,.25)" }} />}
+                    placeholder="Password"
+                />
             </Form.Item>
         
-            <Form.Item {...tailLayout} name="remember" valuePropName="checked">
+            <Form.Item name="remember" valuePropName="checked">
                 <Checkbox>Remember me</Checkbox>
             </Form.Item>
         
-            <Form.Item {...tailLayout}>
-                <Button type="primary" htmlType="submit">
+            <Form.Item>
+                <Button type="primary" htmlType="submit" style={{ width: '100%' }}>
                     로그인
                 </Button>
             </Form.Item>
@@ -58,4 +69,4 @@ function LoginPage() {
       );
 }
 
-export default LoginPage;
+export default withRouter(LoginPage);

@@ -1,4 +1,5 @@
 import React from 'react'
+import { withRouter } from 'react-router-dom';
 import { Form, Input, Button } from 'antd';
 import axios from 'axios';
 import { MailOutlined, UserOutlined, LockOutlined } from '@ant-design/icons';
@@ -11,21 +12,24 @@ function RegisterPage(props) {
         } else {
             axios.post('/api/auth/register', { email, nickname, password })
             .then(response => {
-                if (response.status === 201) {
+                if (response.data.success) {
                     alert('회원가입에 성공하였습니다.');
                     props.history.push('/login');
                 } else {
                     alert(response.data.message);
                 }
             }).catch(error => {
-                console.error(error);
-                alert('오류가 발생하여 회원가입에 실패하였습니다.');
+                console.error(error.response.data);
+                if (error.response) {
+                    alert(error.response.data.message);
+                } else {
+                    alert('오류가 발생하여 회원가입에 실패하였습니다.');
+                }
             });
         }
     };
     
     const onFinishFailed = (errorInfo) => {
-        console.log('Failed:', errorInfo);
         alert('입력하신 정보를 다시 확인해주세요.');
     };
 
@@ -84,4 +88,4 @@ function RegisterPage(props) {
       );
 }
 
-export default RegisterPage;
+export default withRouter(RegisterPage);
