@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const { User } = require('../models/user');
 
-const checkCurrentUser = (req, res, next) => {
+const checkCurrentUser = async (req, res, next) => {
     try {
         const token = req.headers["authorization"];
 
@@ -21,5 +21,6 @@ const checkCurrentUser = (req, res, next) => {
         console.error(error);
         next(error);
     }
-
 }
+
+module.exports = { checkCurrentUser }
