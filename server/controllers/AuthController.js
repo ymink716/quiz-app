@@ -33,7 +33,7 @@ exports.createToken = async (req, res, next) => {
                 return res.status(401).json({ message: '아이디와 비밀번호를 다시 확인해주세요.'});
             }       
             const token = jwt.sign({ email, userId: user._id }, process.env.JWT_SECRET_KEY, { expiresIn: '7d' });
-            return res.json({ success: true, user, token });
+            return res.status(200).json({ success: true, user, token });
         } else {
             return res.status(401).json({ message: '아이디와 비밀번호를 다시 확인해주세요.'});
         }
