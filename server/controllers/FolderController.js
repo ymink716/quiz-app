@@ -6,7 +6,7 @@ exports.createFolder = async (req, res, next) => {
         const newFolder = await Folder.create({
             title, description, isPublic, maker: req.body.currentUser
         });
-
+        
         res.status(201).json({ success: true, newFolder });
     } catch (error) {
         console.error(error);

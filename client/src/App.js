@@ -10,6 +10,7 @@ import MainSide from './components/MainSide';
 import MainPage from './pages/MainPage';
 import RegisterPage from './pages/RegisterPage';
 import LoginPage from './pages/LoginPage';
+import MyFolderPage from './pages/MyFolderPage';
 import NotFoundPage from './pages/NotFoundPage';
 
 import { useUserState } from './context/UserContext';
@@ -30,6 +31,7 @@ function App() {
           {user ? (
             <Switch>
               <Route exact path="/" component={MainPage} />
+              <Route exact path="/myFolder" component={MyFolderPage} />
               <Route exact path="/*" component={NotFoundPage} />
             </Switch>
             ) : (

@@ -5,7 +5,7 @@ const { checkCurrentUser } = require('../middlewares/AuthMiddleware');
 
 router.post('/', checkCurrentUser, folderController.createFolder);
 router.get('/', folderController.getFolders);
-router.put('/:folderId', checkCurrentUser, folderController.updateFloder);
+router.put('/:folderId', checkCurrentUser, folderController.updateFolder);
 router.delete('/:folderId', checkCurrentUser, folderController.deleteFolder);
 
 module.exports = router;

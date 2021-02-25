@@ -15,7 +15,7 @@ const folderSchema = new Schema({
         type: String,
     },
     isPublic: {
-        type: Boolean,
+        type: String,
         required: true,
     }
 }, { timestamps: true });
