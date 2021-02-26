@@ -4,7 +4,7 @@ const { User } = require('../models/user');
 const checkCurrentUser = async (req, res, next) => {
     try {
         const token = req.headers["authorization"];
-        console.log(token);
+
         if (!token)
             return res.status(401).json({ message: 'token이 전달되지 않았습니다.' });
 
