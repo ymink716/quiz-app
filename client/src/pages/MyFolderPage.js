@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import { withRouter } from 'react-router-dom';
 import { useUserState } from '../context/UserContext';
-import { Modal, Button, Form, Input, Radio, Row } from 'antd';
+import { Modal, Button, Form, Input, Row } from 'antd';
 import axios from 'axios';
 import FolderCard from '../components/FolderCard';
 
 function MyFolderPage(props) {
-    const state = useUserState();
-    const { token } = state;
+    const userState = useUserState();
+    const { token } = userState;
 
     const [folders, setFolders] = useState([]);
 
     useEffect(() => {
-        if (folders.length > 0) return
         axios.get('/api/folder/myFolders', { headers: {Authorization: token ? token : ''}})
         .then(response => {
             if (response.data.success) {
@@ -23,9 +22,9 @@ function MyFolderPage(props) {
         })
         .catch((error) => {
             console.error(error);
-            alert('폴더 가져오기를 실패했습니다.');
+            alert('에러가 발생했습니다.');
         });
-    }, [folders]);
+    }, []);
 
     const randerFolders = folders.map((folder, index) => {
         return (
@@ -34,7 +33,6 @@ function MyFolderPage(props) {
     });
 
     const [form] = Form.useForm();
-
     const [isModalVisible, setIsModalVisible] = useState(false);
 
     const showModal = () => {
@@ -45,14 +43,13 @@ function MyFolderPage(props) {
         form
         .validateFields()
         .then(values => {
-            const { title, description, isPublic } = values;
+            const { title, description } = values;
             axios.post(
                 '/api/folder', 
-                { title, description, isPublic },
+                { title, description },
                 { headers: {Authorization: token ? token : ''}}
             ).then(response => {
                 setFolders([...folders, response.data.newFolder]);
-                //props.history.push('/myFolder');
             }).catch(error => {
                 alert('폴더 생성에 실패했습니다.');
             });
@@ -89,20 +86,11 @@ function MyFolderPage(props) {
                 onCancel={handleCancel}
             >
                 <Form form={form} id="newFolder" layout="vertical">
-                    <Form.Item 
-                        label="제목" 
-                        name="title" 
-                        rules={[{ required: true, message: '필수사항압니다.' }]}>
+                    <Form.Item label="제목" name="title" rules={[{ required: true, message: '필수사항압니다.' }]}>
                         <Input placeholder="제목을 입력하세요." />
                     </Form.Item>
                     <Form.Item label="설명" name="description">
                         <Input placeholder="설명을 입력하세요." />
-                    </Form.Item>
-                    <Form.Item name="isPublic" label="공개 여부">
-                        <Radio.Group rules={[{ required: true, message: '필수사항압니다.' }]}>
-                            <Radio value="public">공개</Radio>
-                            <Radio value="private">비공개</Radio>
-                        </Radio.Group>
                     </Form.Item>
                 </Form>
             </Modal>

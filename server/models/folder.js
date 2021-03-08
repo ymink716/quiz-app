@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const folderSchema = new Schema({
-    // 제목, 만든사람, 공개/비공개 
     title: {
         type: String,
         required: true,
@@ -13,10 +12,6 @@ const folderSchema = new Schema({
     },
     description: {
         type: String,
-    },
-    isPublic: {
-        type: String,
-        required: true,
     }
 }, { timestamps: true });
 

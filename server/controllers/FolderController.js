@@ -2,9 +2,9 @@ const { Folder } = require('../models/folder');
 
 exports.createFolder = async (req, res, next) => {
     try {
-        const { title, description, isPublic } = req.body;
+        const { title, description } = req.body;
         const newFolder = await Folder.create({
-            title, description, isPublic, maker: req.body.currentUser
+            title, description, maker: req.currentUser._id
         });
 
         res.status(201).json({ success: true, newFolder });
@@ -14,10 +14,14 @@ exports.createFolder = async (req, res, next) => {
     }
 }
 
-exports.getFolders = async (req, res, next) => {
+exports.getFolder = async (req, res, next) => {
     try {
-        const folders = await Folder.find();
-        res.status(200).json({ success: true, folders }); 
+        const folder = await Folder.findById(req.params.folderId);
+
+        if (!folder)
+            return res.status(404).json({ success: false, message: '해당 폴더를 찾을 수 없습니다.' });
+
+        res.status(200).json({ success: true, folder }); 
     } catch (error) {
         console.error(error);
         next(error);
@@ -26,7 +30,7 @@ exports.getFolders = async (req, res, next) => {
 
 exports.getFoldersByUser = async (req, res, next) => {
     try {
-        const folders = await Folder.find({ maker: req.body.currentUser });
+        const folders = await Folder.find({ maker: req.currentUser });
         res.status(200).json({ success: true, folders }); 
     } catch (error) {
         console.error(error);
@@ -36,17 +40,17 @@ exports.getFoldersByUser = async (req, res, next) => {
 
 exports.updateFolder = async (req, res, next) => {
     try {
-        const { title, description, isPublic } = req.body;
-        const folder = await Folder.findById(req.params.folderId);
+        const { title, description } = req.body;
+        const folder = await Folder.findById(req.params.folderId).populate('maker');
 
         if (!folder)
-            return res.status(404).json({ success: false, message: 'Not Found' });
-        if (folder.maker !== req.body.currentUser)
+            return res.status(404).json({ success: false, message: '해당 폴더를 찾을 수 없습니다.' });
+        if (folder.maker_id !== req.currentUser_id)
             return res.status(403).json({ success: false, message: '제작자만 가능한 작업입니다.' });
 
         const updatedFolder = await Folder.findByIdAndUpdate(
             req.params.folderId,
-            { title, description, isPublic }
+            { title, description }
         );
         
         res.status(200).json({ success: true, updatedFolder });
@@ -58,11 +62,11 @@ exports.updateFolder = async (req, res, next) => {
 
 exports.deleteFolder = async (req, res, next) => {
     try {
-        const folder = await Folder.findById(req.params.folderId);
-
+        const folder = await Folder.findById(req.params.folderId).populate('maker');
+        
         if (!folder)
-            return res.status(404).json({ success: false, message: 'Not Found' });
-        if (folder.maker !== req.body.currentUser)
+            return res.status(404).json({ success: false, message: '해당 폴더를 찾을 수 없습니다.' });
+        if (folder.maker_id !== req.currentUser_id)
             return res.status(403).json({ success: false, message: '제작자만 가능한 작업입니다.' });
         
         const deletedFolder = await Folder.findByIdAndDelete(req.params.folderId);
