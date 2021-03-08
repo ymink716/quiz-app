@@ -45,7 +45,7 @@ exports.updateFolder = async (req, res, next) => {
 
         if (!folder)
             return res.status(404).json({ success: false, message: '해당 폴더를 찾을 수 없습니다.' });
-        if (folder.maker_id !== req.currentUser_id)
+        if (folder.maker._id !== req.currentUser._id)
             return res.status(403).json({ success: false, message: '제작자만 가능한 작업입니다.' });
 
         const updatedFolder = await Folder.findByIdAndUpdate(
@@ -66,7 +66,7 @@ exports.deleteFolder = async (req, res, next) => {
         
         if (!folder)
             return res.status(404).json({ success: false, message: '해당 폴더를 찾을 수 없습니다.' });
-        if (folder.maker_id !== req.currentUser_id)
+        if (folder.maker._id !== req.currentUser._id)
             return res.status(403).json({ success: false, message: '제작자만 가능한 작업입니다.' });
         
         const deletedFolder = await Folder.findByIdAndDelete(req.params.folderId);
