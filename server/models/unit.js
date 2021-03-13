@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-const wordsSchema = new Schema({
+const unitSchema = new Schema({
     title: {
         type: String,
         required: true,
@@ -17,12 +17,15 @@ const wordsSchema = new Schema({
         type: String,
         required: true,
     },
-    wordList: {
+    image: {
+        type: String,
+    },
+    words: {
         type: Array,
         required: true,
     }
 }, { timestamps: true });
 
-const Words = mongoose.model('Words', wordsSchema);
+const Unit = mongoose.model('Unit', unitSchema);
 
-module.exports = { Words };
+module.exports = { Unit };

@@ -27,6 +27,7 @@ app.use(cors());
 // 라우터
 app.use('/api/auth', require('./routes/AuthRouter'));
 app.use('/api/folder', require('./routes/FolderRouter'));
+app.use('/api/unit', require('./routes/UnitRouter'));
 
 app.use((req, res, next) => {
     res.status(404).json({ message: 'Not Found' });
