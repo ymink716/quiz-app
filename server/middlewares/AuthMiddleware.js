@@ -9,7 +9,7 @@ const checkCurrentUser = async (req, res, next) => {
             return res.status(401).json({ message: 'token이 전달되지 않았습니다.' });
 
         const decoded = await jwt.verify(token, String(process.env.JWT_SECRET_KEY));
-        const user = await User.findById(decoded.userId);
+        const user = await User.findOne({ email: decoded.email });
 
         if (!user)
             return res.status(404).json({ message: '해당 사용자를 찾을 수 없습니다.' });

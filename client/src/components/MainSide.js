@@ -19,14 +19,8 @@ function MainSide() {
           defaultOpenKeys={['sub1']}
           style={{ height: '100%' }}
         >
-          <Menu.Item key="home">
-            <a href="/"> Home </a>
-          </Menu.Item>
-          <Menu.Item key="voca">단어장</Menu.Item>
-          <Menu.Item key="image">이미지</Menu.Item>
-          <Menu.Item key="myFolder">
-            <a href="/myFolder"> 내폴더 </a>
-          </Menu.Item>
+          <Menu.Item key="home"><a href="/">Home</a></Menu.Item>
+          <Menu.Item key="myFolder"><a href="/myFolder">내폴더</a></Menu.Item>
           <Menu.Item key="bookmark">북마크</Menu.Item>
           <Menu.Item key="myInfo">내정보</Menu.Item>
         </Menu>
@@ -37,9 +31,9 @@ function MainSide() {
           defaultOpenKeys={['sub1']}
           style={{ height: '100%' }}
         >
-          <Menu.Item key="home">Home</Menu.Item>
-          <Menu.Item key="voca">단어장</Menu.Item>
-          <Menu.Item key="image">이미지</Menu.Item>
+          <Menu.Item key="home"><a href="/">Home</a></Menu.Item>
+          <Menu.Item key="login"><a href="/login">로그인</a></Menu.Item>
+          <Menu.Item key="register"><a href="/register">회원가입</a></Menu.Item>
         </Menu>
         )}
       </Sider>

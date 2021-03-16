@@ -10,6 +10,10 @@ const unitSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User',
     },
+    folder: {
+        type: Schema.Types.ObjectId,
+        ref: 'Folder',
+    },
     description: {
         type: String,
     },

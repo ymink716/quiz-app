@@ -35,7 +35,7 @@ function App() {
               <Route exact path="/" component={MainPage} />
               <Route exact path="/myFolder" component={MyFolderPage} />
               <Route exact path="/folder/:folderId" component={FolderDetailPage} />
-              <Route exact path="/createUnit" component={CreateUnitPage} />
+              <Route exact path="/createUnit/:folderId" component={CreateUnitPage} />
               <Route exact path="/*" component={NotFoundPage} />
             </Switch>
             ) : (

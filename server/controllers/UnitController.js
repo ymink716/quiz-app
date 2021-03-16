@@ -2,9 +2,9 @@ const { Unit } = require('../models/unit');
 
 exports.createUnit = async (req, res, next) => {
     try {
-        const { title, description, isPublic, image, words } = req.body;
+        const { title, description, isPublic, image, words, folderId } = req.body;
         const newUnit = await Unit.create({
-            title, description, isPublic, image, words, maker: req.currentUser._id,
+            title, description, isPublic, image, words, maker: req.currentUser._id, folder: folderId
         });
 
         res.status(201).json({ success: true, newUnit });
@@ -77,3 +77,4 @@ exports.deleteUnit = async (req, res, next) => {
         next(error);
     }
 }
+

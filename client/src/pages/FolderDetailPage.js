@@ -32,7 +32,7 @@ function FolderDetailPage(props) {
     }, []);
 
     const addUnitHandler = () => {
-        props.history.push('/createUnit');
+        props.history.push(`/createUnit/${folderId}`);
     }
 
     const updateFolderHandler = () => {
