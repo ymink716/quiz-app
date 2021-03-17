@@ -1,4 +1,5 @@
 const { Folder } = require('../models/folder');
+const { Unit } = require('../models/unit');
 
 exports.createFolder = async (req, res, next) => {
     try {
@@ -21,7 +22,9 @@ exports.getFolder = async (req, res, next) => {
         if (!folder)
             return res.status(404).json({ success: false, message: '해당 폴더를 찾을 수 없습니다.' });
 
-        res.status(200).json({ success: true, folder }); 
+        const units = await Unit.find({ folder: req.params.folderId });
+
+        res.status(200).json({ success: true, folder, units }); 
     } catch (error) {
         console.error(error);
         next(error);
@@ -45,7 +48,7 @@ exports.updateFolder = async (req, res, next) => {
 
         if (!folder)
             return res.status(404).json({ success: false, message: '해당 폴더를 찾을 수 없습니다.' });
-        if (folder.maker._id !== req.currentUser._id)
+        if (toString(folder.maker._id) !== toString(req.currentUser))
             return res.status(403).json({ success: false, message: '제작자만 가능한 작업입니다.' });
 
         const updatedFolder = await Folder.findByIdAndUpdate(
@@ -66,12 +69,13 @@ exports.deleteFolder = async (req, res, next) => {
         
         if (!folder)
             return res.status(404).json({ success: false, message: '해당 폴더를 찾을 수 없습니다.' });
-        if (folder.maker._id !== req.currentUser._id)
+        if (toString(folder.maker._id) !== toString(req.currentUser))
             return res.status(403).json({ success: false, message: '제작자만 가능한 작업입니다.' });
         
         const deletedFolder = await Folder.findByIdAndDelete(req.params.folderId);
-        
-        res.status(200).json({ success: true, deletedFolder });
+        const deletedUnits = await Unit.deleteMany({ folder });
+
+        res.status(200).json({ success: true, deletedFolder, deletedUnits });
     } catch (error) {
         console.error(error);
         next(error);

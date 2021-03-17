@@ -77,6 +77,7 @@ function MyFolderPage(props) {
             <Row gutter={[{ xs: 8, sm: 16, md: 24, lg: 32 }, 16]}>
                 {randerFolders}
             </Row>
+            
             <Modal 
                 title="새 폴더 만들기" 
                 visible={isModalVisible}

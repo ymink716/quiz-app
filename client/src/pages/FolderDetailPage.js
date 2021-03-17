@@ -2,23 +2,26 @@ import React, { useState, useEffect } from 'react'
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import { useUserState } from '../context/UserContext';
-import { PageHeader, Button, Modal, Form, Input } from 'antd';
+import { PageHeader, Button, Modal, Form, Input, Row } from 'antd';
+import UnitCard from '../components/UnitCard';
 
 function FolderDetailPage(props) {
     const userState = useUserState();
     const { token } = userState;
+    const { folderId } = props.match.params;
 
     const [folder, setFolder] = useState([]);
     const [units, setUnits] = useState([]);
+
     const [form] = Form.useForm();
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const { folderId } = props.match.params;
 
     useEffect(() => {
         axios.get(`/api/folder/${folderId}`, { headers: {Authorization: token ? token : ''}})
         .then((response) => {
             if (response.data.success) {
                 setFolder(response.data.folder);
+                setUnits(response.data.units);
             } else {
                 alert(response.data.message);
             }
@@ -26,9 +29,6 @@ function FolderDetailPage(props) {
             console.error(error);
             alert('에러가 발생했습니다.')
         });
-
-        // 폴더 안 유닛 가져오기
-
     }, []);
 
     const addUnitHandler = () => {
@@ -84,6 +84,12 @@ function FolderDetailPage(props) {
         setIsModalVisible(false);
     };
 
+    const randerUnits = units.map((unit, index) => {
+        return (
+            <UnitCard unit={unit} key={index}></UnitCard>
+        )
+    });
+
     return (
         <div style={{ width: '100%', marginLeft: '5%' }}>
             <PageHeader
@@ -97,6 +103,10 @@ function FolderDetailPage(props) {
             >
                 <hr style={{ width: '100%' }}/>
             </PageHeader>
+            
+            <Row gutter={[{ xs: 8, sm: 16, md: 24, lg: 32 }, 16]}>
+                {randerUnits}
+            </Row>
 
             <Modal 
                 title="폴더 수정하기" 

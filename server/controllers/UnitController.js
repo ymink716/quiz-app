@@ -14,9 +14,9 @@ exports.createUnit = async (req, res, next) => {
     }
 }
 
-exports.getUnits = async (req, res, next) => {
+exports.getPublicUnits = async (req, res, next) => {
     try {
-        const units = await Unit.find();
+        const units = await Unit.find({ isPublic: 'public' });
         res.status(200).json({ success: true, units });
     } catch (error) {
         console.error(error);
@@ -45,7 +45,7 @@ exports.updateUnit = async (req, res, next) => {
 
         if (!unit)
             return res.status(404).json({ success: false, message: '해당 단어장을 찾을 수 없습니다.' });
-        if (unit.maker._id !== req.currentUser._id)
+        if (toString(unit.maker._id) !== toString(req.currentUser._id))
             return res.status(403).json({ success: false, message: '제작자만 가능한 작업입니다.' });
         
         const updatedUnit = await Unit.findByIdAndUpdate(
@@ -66,7 +66,7 @@ exports.deleteUnit = async (req, res, next) => {
 
         if (!unit)
             return res.status(404).json({ success: false, message: '해당 단어장을 찾을 수 없습니다.' });
-        if (unit.maker._id !== req.currentUser._id)
+        if (toString(unit.maker._id) !== toString(req.currentUser._id))
             return res.status(403).json({ success: false, message: '제작자만 가능한 작업입니다.' });
         
         const deletedUnit = await Unit.findByIdAndDelete(req.params.unitId);
