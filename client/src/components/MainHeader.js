@@ -16,6 +16,10 @@ function MainHeader(props) {
         props.history.push('/');
     }
 
+    const onSearch = (value) => {
+        window.location.href=`/?search=${value}`;
+    }
+
     return (
         <Header className="header" style={{ marginBottom: '20px' }}>       
             <div className="logo" style={{ float: 'left', marginRight: '15%', fontSize: '2em' }}>
@@ -26,7 +30,7 @@ function MainHeader(props) {
                 allowClear
                 enterButton="Search"
                 size="large"
-                onSearch
+                onSearch={onSearch}
                 style={{ 
                     width: '50%',
                     verticalAlign: 'middle'

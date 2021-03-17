@@ -38,6 +38,24 @@ exports.getUnitById = async (req, res, next) => {
     }
 }
 
+exports.getUnitsBySearchText = async (req, res, next) => {
+    try {
+        const text = req.params.text;
+        const units = await Unit.find().and([
+            { $or: [
+                {'title' : new RegExp(text, 'i')},
+                {'description' : new RegExp(text, 'i')}
+            ]},
+            { isPublic: 'public' }
+        ]);
+
+        res.status(200).json({ success: true, units });
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+}
+
 exports.updateUnit = async (req, res, next) => {
     try {
         const { title, description, isPublic, image, words } = req.body;

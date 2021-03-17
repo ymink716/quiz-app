@@ -6,27 +6,32 @@ import { useUserState } from '../context/UserContext';
 import axios from 'axios';
 import { Row } from 'antd';
 import UnitCard from '../components/UnitCard';
+import qs from 'qs';
 
 const { Content } = Layout;
 
-function MainPage() {
+function MainPage(props) {
     const state = useUserState();
     const { token } = state;
-
     const [units, setUnits] = useState([]);
 
-    useEffect(() => {
-        axios.get('/api/unit')
-        .then(response => {
-            if (response.data.success) {
-                setUnits(response.data.units);
-            } else {
-                alert(response.data.message);
-            }
-        }).catch(error => {
+    const query = qs.parse(props.location.search, {
+        ignoreQueryPrefix: true
+    });
+    const searchText = query.search;
+
+    useEffect(async () => {
+        try {
+            let response;
+            if (searchText) response = await axios.get(`/api/unit/search/${searchText}`);
+            else response = await axios.get('/api/unit');
+            
+            if (response.data.success) setUnits(response.data.units);
+            else alert(response.data.message);
+        } catch (error) {
             console.error(error);
             alert('데이터를 불러오는데 실패했습니다.');
-        });
+        }
     }, []);
 
     const randerUnits = units.map((unit, index) => {
