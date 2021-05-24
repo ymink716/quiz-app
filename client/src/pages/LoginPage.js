@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { Form, Input, Button, Checkbox } from 'antd';
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
@@ -7,7 +7,7 @@ import { useUserState, useUserDispatch, login } from '../context/UserContext';
 function LoginPage(props) {
     const state = useUserState();
     const dispatch = useUserDispatch();
-    const { user, errorMessage } = state;
+    const { errorMessage } = state;
 
     const onFinish = async (values) => {
         try {

@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import { useUserState } from '../context/UserContext';
-import { Button, Form, Input, Radio, Upload, message, Space } from 'antd';
+import { Button, Form, Input, Radio, Upload, Space } from 'antd';
 import { InboxOutlined, MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 
-function CreateUnitPage(props) {
+function UnitDetailPage(props) {
     const userState = useUserState();
     const { token } = userState;
     const { folderId } = props.match.params;
@@ -21,7 +21,7 @@ function CreateUnitPage(props) {
         try {
             const response = await axios.post('/api/upload', formData, {
                 headers: {
-                    Authorization: token ? token : '',
+                    Authorization: token,
                     'content-type': 'multipart/form-data'
                 }
             });
@@ -31,7 +31,7 @@ function CreateUnitPage(props) {
             onError(error);
         }
     }
-
+    
     const uploadProps = {
         accept: "image/*",
         maxCount: 1,
@@ -125,4 +125,4 @@ function CreateUnitPage(props) {
     )
 }
 
-export default withRouter(CreateUnitPage);
+export default withRouter(UnitDetailPage);

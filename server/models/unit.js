@@ -21,9 +21,6 @@ const unitSchema = new Schema({
         type: String,
         required: true,
     },
-    image: {
-        type: String,
-    },
     words: {
         type: Array,
         required: true,

@@ -12,7 +12,7 @@ import RegisterPage from './pages/RegisterPage';
 import LoginPage from './pages/LoginPage';
 import MyFolderPage from './pages/MyFolderPage';
 import FolderDetailPage from './pages/FolderDetailPage';
-import CreateUnitPage from './pages/CreateUnitPage';
+import UnitDetailPage from './pages/UnitDetailPage';
 import NotFoundPage from './pages/NotFoundPage';
 
 import { useUserState } from './context/UserContext';
@@ -35,7 +35,7 @@ function App() {
               <Route exact path="/" component={MainPage} />
               <Route exact path="/myFolder" component={MyFolderPage} />
               <Route exact path="/folder/:folderId" component={FolderDetailPage} />
-              <Route exact path="/createUnit/:folderId" component={CreateUnitPage} />
+              <Route exact path="/createUnit/:folderId" component={UnitDetailPage} />
               <Route exact path="/*" component={NotFoundPage} />
             </Switch>
             ) : (

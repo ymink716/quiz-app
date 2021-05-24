@@ -42,15 +42,21 @@ function MainPage(props) {
 
     return (
         <Content style={{ padding: '0 24px', minHeight: 280 }}>
-            <div>
-                <h2>Home</h2>
-                <hr/>
-            </div>
-
+            {searchText ? (
+                <div>
+                    <h2>검색결과 총 {units.length} Set</h2>
+                    <hr/>
+                </div>
+            ) : (
+                <div>
+                    <h2>Home</h2>
+                    <hr/>
+                </div>
+            )}
+           
             <Row gutter={[{ xs: 8, sm: 16, md: 24, lg: 32 }, 16]}>
                 {randerUnits}
             </Row>
-
         </Content>
     )
 }

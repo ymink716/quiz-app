@@ -2,9 +2,9 @@ const { Unit } = require('../models/unit');
 
 exports.createUnit = async (req, res, next) => {
     try {
-        const { title, description, isPublic, image, words, folderId } = req.body;
+        const { title, description, isPublic, words, folderId } = req.body;
         const newUnit = await Unit.create({
-            title, description, isPublic, image, words, maker: req.currentUser._id, folder: folderId
+            title, description, isPublic, words, maker: req.currentUser._id, folder: folderId
         });
 
         res.status(201).json({ success: true, newUnit });
@@ -58,7 +58,7 @@ exports.getUnitsBySearchText = async (req, res, next) => {
 
 exports.updateUnit = async (req, res, next) => {
     try {
-        const { title, description, isPublic, image, words } = req.body;
+        const { title, description, isPublic, words } = req.body;
         const unit = await Unit.findById(req.params.unitId).populate('maker');
 
         if (!unit)
@@ -68,7 +68,7 @@ exports.updateUnit = async (req, res, next) => {
         
         const updatedUnit = await Unit.findByIdAndUpdate(
             req.params.unitId,
-            { title, description, isPublic, image, words }
+            { title, description, isPublic, words }
         );
 
         res.status(200).json({ success: true, updatedUnit });
