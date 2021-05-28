@@ -27,15 +27,11 @@ exports.getPublicUnits = async (req, res, next) => {
 exports.getUnitById = async (req, res, next) => {
     try {
         const unit = await Unit.findById(req.params.unitId).populate('maker');
-        let isOwner = false;
 
         if(!unit)
             return res.status(404).json({ success: false, message: '해당 단어장을 찾을 수 없습니다.' });
-        
-        if (toString(unit.maker._id) === toString(req.currentUser._id))
-            isOwner = true;
 
-        res.status(200).json({ success: true, unit, isOwner });
+        res.status(200).json({ success: true, unit });
     } catch (error) {
         console.error(error);
         next(error);
