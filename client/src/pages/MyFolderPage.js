@@ -12,7 +12,7 @@ function MyFolderPage(props) {
     const [folders, setFolders] = useState([]);
 
     useEffect(() => {
-        axios.get('/api/folder/myFolders', { headers: {Authorization: token ? token : ''}})
+        axios.get('/api/folder/myFolders', { headers: {Authorization: token }})
         .then(response => {
             if (response.data.success) {
                 setFolders(response.data.folders);
