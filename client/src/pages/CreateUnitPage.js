@@ -47,7 +47,7 @@ function UnitDetailPage(props) {
                 isPublic: isPublicState, 
                 words: wordState, 
                 folderId },
-            {headers: { Authorization: token }}
+            { headers: { Authorization: token }}
         ).then(response => {
             if (response.data.success) {
                 props.history.push(`/folder/${folderId}`)
@@ -66,13 +66,14 @@ function UnitDetailPage(props) {
                 <div style={{ fontSize: '1.5rem', float: 'left' }}>단어장 만들기</div>
                 <hr style={{ clear: 'both', width: '100%' }}/>
             </div>
+
             <form
                 onSubmit={handleSubmit} 
                 style={{ 
                     border: '0.15rem solid #000',  
                     margin: '1rem auto', 
                     padding: '1rem' }}
-                >
+            >
                 <label htmlFor="title">제목 : </label>
                 <input 
                     type="text" 

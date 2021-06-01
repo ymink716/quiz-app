@@ -43,7 +43,7 @@ function FolderDetailPage(props) {
         const check = window.confirm('폴더와 폴더 안 모든 내용이 삭제됩니다. 삭제하시겠습니까?');
         if (!check) return
 
-        axios.delete(`/api/folder/${folderId}`, { headers: {Authorization: token ? token : ''}})
+        axios.delete(`/api/folder/${folderId}`, { headers: {Authorization: token }})
         .then((response) => {
             if (response.data.success) {
                 props.history.push('/myFolder');
