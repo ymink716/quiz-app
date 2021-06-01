@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import { useUserState } from '../context/UserContext';
 import axios from 'axios';
@@ -37,16 +37,18 @@ function UnitDetailPage(props) {
         setWordState(updatedWords);
     };
 
-    const handleSubmit = (e) => {
+    const handleCreate = (e) => {
         e.preventDefault();
 
         axios.post(
             '/api/unit', 
-            { title: titleState, 
+            { 
+                title: titleState, 
                 description: descriptionState, 
                 isPublic: isPublicState, 
                 words: wordState, 
-                folderId },
+                folderId 
+            },
             { headers: { Authorization: token }}
         ).then(response => {
             if (response.data.success) {
@@ -60,6 +62,52 @@ function UnitDetailPage(props) {
         });
     }
 
+    const handleUpdate = (e) => {
+        e.preventDefault();
+
+        const { unitId } = props.match.params;
+        axios.put(
+            `/api/unit/${unitId}`, 
+            { 
+                title: titleState, 
+                description: descriptionState, 
+                isPublic: isPublicState, 
+                words: wordState, 
+            },
+            { headers: { Authorization: token }}
+        ).then(response => {
+            if (response.data.success) {
+                props.history.push(`/folder/${response.data.updatedUnit.folder}`)
+            } else {
+                alert(response.data.message);
+            }
+        }).catch(error => {
+            console.error(error);
+            alert('에러가 발생했습니다.');
+        });
+    }
+    
+    useEffect(() => {        
+        if (props.match.path !== "/updateUnit/:unitId") return
+        const { unitId } = props.match.params;
+        
+        axios.get(`/api/unit/${unitId}`)
+        .then(response => {
+            if (response.data.success) {
+                setTitleState(response.data.unit.title);
+                setDescriptionState(response.data.unit.description);
+                setIsPublicState(response.data.unit.isPublic);
+                setWordState([ ...response.data.unit.words ]);
+            } else {
+                alert('단어장 불러오기를 실패했습니다.');
+            }
+        })
+        .catch((error) => {
+            console.error(error);
+            alert('에러가 발생했습니다.');
+        });
+    }, []);
+
     return (
         <div style={{ width: '100%', marginLeft: '5%' }}>
             <div style={{ marginBottom: '20px' }}> 
@@ -68,7 +116,7 @@ function UnitDetailPage(props) {
             </div>
 
             <form
-                onSubmit={handleSubmit} 
+                onSubmit={props.match.path === "/updateUnit/:unitId" ? handleUpdate : handleCreate} 
                 style={{ 
                     border: '0.15rem solid #000',  
                     margin: '1rem auto', 
@@ -79,13 +127,15 @@ function UnitDetailPage(props) {
                     type="text" 
                     name="title" 
                     id="title" 
+                    value={titleState}
                     onChange={handleTitleChange}
                     style={{ display: 'block' }} />
                 <label htmlFor="description">설명 : </label>
                 <input 
                     type="text" 
                     name="description" 
-                    id="description" 
+                    id="description"
+                    value={descriptionState} 
                     onChange={handleDescriptionChange}
                     style={{ display: 'block' }} />
 
@@ -145,7 +195,11 @@ function UnitDetailPage(props) {
                     onClick={addWord}    
                 />
 
-                <input type="submit" onSubmit={handleSubmit} style={{ display: 'block', margin: '1rem auto' }} />
+                {props.match.path === "/updateUnit/:unitId" ? (
+                    <input type="submit" onSubmit={handleUpdate} value="수 정" style={{ display: 'block', margin: '1rem auto' }} />
+                ) : (
+                    <input type="submit" onSubmit={handleCreate} value="생 성" style={{ display: 'block', margin: '1rem auto' }} />
+                )}
             </form>
         </div>
     );

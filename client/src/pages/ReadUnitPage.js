@@ -41,7 +41,7 @@ function ReadUnitPage(props) {
     }
 
     const updateWordsHandler = (e) => {
-
+        props.history.push(`/updateUnit/${unitId}`);
     }
 
     const deleteWordsHandler = (e) => {

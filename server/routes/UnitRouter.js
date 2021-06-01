@@ -10,5 +10,4 @@ router.get('/search/:text', unitController.getUnitsBySearchText);
 router.put('/:unitId', checkCurrentUser, unitController.updateUnit);
 router.delete('/:unitId', checkCurrentUser, unitController.deleteUnit);
 
-
 module.exports = router;
