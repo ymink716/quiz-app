@@ -35,6 +35,10 @@ function FolderDetailPage(props) {
         props.history.push(`/createUnit/${folderId}`);
     }
 
+    const addImageHandler = () => {
+        props.history.push(`/createImage/${folderId}`);
+    }
+
     const updateFolderHandler = () => {
         setIsModalVisible(true);
     }
@@ -96,7 +100,8 @@ function FolderDetailPage(props) {
                 title={folder.title}
                 subTitle={folder.description}
                 extra={[
-                    <Button onClick={addUnitHandler}>유닛 추가</Button>,
+                    <Button onClick={addUnitHandler}>단어장 생성</Button>,
+                    <Button onClick={addImageHandler}>이미지 생성</Button>,
                     <Button onClick={updateFolderHandler}>폴더 수정</Button>,
                     <Button onClick={deleteFolderHandler}>폴더 삭제</Button>
                 ]}

@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { useUserState } from '../context/UserContext';
 import axios from 'axios';
 
-function UnitDetailPage(props) {
+function SaveUnitPage(props) {
     const userState = useUserState();
     const { token } = userState;
     const { folderId } = props.match.params;
@@ -205,4 +205,4 @@ function UnitDetailPage(props) {
     );
 }
 
-export default withRouter(UnitDetailPage);
+export default withRouter(SaveUnitPage);
