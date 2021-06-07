@@ -21,9 +21,15 @@ const unitSchema = new Schema({
         type: String,
         required: true,
     },
+    type: {
+        type: Stirng,
+        required: true,
+    },
     words: {
         type: Array,
-        required: true,
+    },
+    imageURL: {
+        type: String,
     }
 }, { timestamps: true });
 

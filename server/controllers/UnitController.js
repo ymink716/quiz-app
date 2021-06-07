@@ -4,7 +4,10 @@ exports.createUnit = async (req, res, next) => {
     try {
         const { title, description, isPublic, words, folderId } = req.body;
         const newUnit = await Unit.create({
-            title, description, isPublic, words, maker: req.currentUser._id, folder: folderId
+            title, description, isPublic, words, 
+            maker: req.currentUser._id, 
+            folder: folderId,
+            type: "words",
         });
 
         res.status(201).json({ success: true, newUnit });
@@ -29,7 +32,7 @@ exports.getUnitById = async (req, res, next) => {
         const unit = await Unit.findById(req.params.unitId).populate('maker');
 
         if(!unit)
-            return res.status(404).json({ success: false, message: '해당 단어장을 찾을 수 없습니다.' });
+            return res.status(404).json({ success: false, message: '찾을 수 없습니다.' });
 
         res.status(200).json({ success: true, unit });
     } catch (error) {
@@ -62,7 +65,7 @@ exports.updateUnit = async (req, res, next) => {
         const unit = await Unit.findById(req.params.unitId).populate('maker');
 
         if (!unit)
-            return res.status(404).json({ success: false, message: '해당 단어장을 찾을 수 없습니다.' });
+            return res.status(404).json({ success: false, message: '찾을 수 없습니다.' });
         if (toString(unit.maker._id) !== toString(req.currentUser._id))
             return res.status(403).json({ success: false, message: '제작자만 가능한 작업입니다.' });
         
@@ -83,7 +86,7 @@ exports.deleteUnit = async (req, res, next) => {
         const unit = await Unit.findById(req.params.unitId).populate('maker');
 
         if (!unit)
-            return res.status(404).json({ success: false, message: '해당 단어장을 찾을 수 없습니다.' });
+            return res.status(404).json({ success: false, message: '찾을 수 없습니다.' });
         if (toString(unit.maker._id) !== toString(req.currentUser._id))
             return res.status(403).json({ success: false, message: '제작자만 가능한 작업입니다.' });
         

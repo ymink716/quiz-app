@@ -17,7 +17,7 @@ function FolderDetailPage(props) {
     const [isModalVisible, setIsModalVisible] = useState(false);
 
     useEffect(() => {
-        axios.get(`/api/folder/${folderId}`, { headers: {Authorization: token ? token : ''}})
+        axios.get(`/api/folder/${folderId}`, { headers: { Authorization: token }})
         .then((response) => {
             if (response.data.success) {
                 setFolder(response.data.folder);
@@ -31,17 +31,9 @@ function FolderDetailPage(props) {
         });
     }, []);
 
-    const addUnitHandler = () => {
-        props.history.push(`/createUnit/${folderId}`);
-    }
-
-    const addImageHandler = () => {
-        props.history.push(`/createImage/${folderId}`);
-    }
-
-    const updateFolderHandler = () => {
-        setIsModalVisible(true);
-    }
+    const addUnitHandler = () => props.history.push(`/createUnit/${folderId}`);
+    const addImageHandler = () => props.history.push(`/createImage/${folderId}`);
+    const updateFolderHandler = () => setIsModalVisible(true);
 
     const deleteFolderHandler = () => {
         const check = window.confirm('폴더와 폴더 안 모든 내용이 삭제됩니다. 삭제하시겠습니까?');
