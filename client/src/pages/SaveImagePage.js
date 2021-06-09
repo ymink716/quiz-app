@@ -39,7 +39,7 @@ function SaveImagePage(props) {
     }
 
     const onFinish = (values) => {
-        const {title, description, isPublic, imageURL } = values;
+        const {title, description, isPublic } = values;
         axios.post(
             '/api/image', 
             { title, folderId, description, isPublic, imageURL },
@@ -61,7 +61,7 @@ function SaveImagePage(props) {
     return (
         <div style={{ width: '100%', marginLeft: '5%' }}>
             <div style={{ marginBottom: '20px' }}>
-                <h2>새 단어장</h2>
+                <h2>새 이미지</h2>
                 <hr/>
             </div>
             

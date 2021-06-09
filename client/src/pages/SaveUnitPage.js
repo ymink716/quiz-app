@@ -28,7 +28,7 @@ function SaveUnitPage(props) {
 
     const removeWord = (e) => {
         const idx = e.target.getAttribute("data-idx");
-        setWordState(wordState.filter((w, i) => i != idx));
+        setWordState(wordState.filter((w, i) => i !== idx));
     }
 
     const handleWordChange = (e) => {

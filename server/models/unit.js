@@ -22,7 +22,7 @@ const unitSchema = new Schema({
         required: true,
     },
     type: {
-        type: Stirng,
+        type: String,
         required: true,
     },
     words: {

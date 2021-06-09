@@ -60,7 +60,7 @@ function FolderDetailPage(props) {
             axios.put(
                 `/api/folder/${folderId}`, 
                 { title, description },
-                { headers: {Authorization: token ? token : ''}}
+                { headers: {Authorization: token }}
             ).then(response => {
                 setFolder(response.data.updatedFolder);
                 form.resetFields();

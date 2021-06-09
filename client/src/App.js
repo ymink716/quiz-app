@@ -15,6 +15,7 @@ import FolderDetailPage from './pages/FolderDetailPage';
 import SaveUnitPage from './pages/SaveUnitPage';
 import ReadUnitPage from './pages/ReadUnitPage';
 import SaveImagePage from './pages/SaveImagePage';
+import ReadImagePage from './pages/ReadImagePage';
 import NotFoundPage from './pages/NotFoundPage';
 
 import { useUserState } from './context/UserContext';
@@ -39,8 +40,9 @@ function App() {
               <Route exact path="/folder/:folderId" component={FolderDetailPage} />
               <Route exact path="/createUnit/:folderId" component={SaveUnitPage} />
               <Route exact path="/updateUnit/:unitId" component={SaveUnitPage} />
-              <Route exact path="/createImage/:folderId" component={SaveImagePage} />
               <Route exact path="/unit/:unitId" component={ReadUnitPage} />
+              <Route exact path="/createImage/:folderId" component={SaveImagePage} />
+              <Route exact path="/image/:unitId" component={ReadImagePage} />
               <Route exact path="/*" component={NotFoundPage} />
             </Switch>
             ) : (
@@ -49,6 +51,7 @@ function App() {
               <Route exact path="/register" component={RegisterPage} />
               <Route exact path="/login" component={LoginPage} />
               <Route exact path="/unit/:unitId" component={ReadUnitPage} />
+              <Route exact path="/image/:unitId" component={ReadImagePage} />
               <Route exact path="/*" component={NotFoundPage} />
             </Switch>
           )}
