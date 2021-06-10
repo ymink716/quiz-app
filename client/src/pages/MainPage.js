@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
-import 'antd/dist/antd.css';
 import { Layout } from 'antd';
 import { useUserState } from '../context/UserContext';
 import axios from 'axios';

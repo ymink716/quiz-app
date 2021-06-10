@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { useUserState } from '../context/UserContext';
 import { PageHeader, Button, List } from 'antd';
 import axios from 'axios';
+import Bookmarks from '../components/Bookmarks';
 
 function ReadUnitPage(props) {
     const userState = useUserState();
@@ -21,28 +22,20 @@ function ReadUnitPage(props) {
                 setTitleState(response.data.unit.title);
                 setDescriptionState(response.data.unit.description);
                 setWordsState([ ...response.data.unit.words ]);
-                if (user && toString(user._id) === toString(response.data.unit.maker._id)) setIsOwnerState(true);
+                if (user && user.email == response.data.unit.maker.email) setIsOwnerState(true);
             } else {
                 alert('단어장 불러오기를 실패했습니다.');
             }
         })
         .catch((error) => {
             console.error(error);
-            alert('에러가 발생했습니다.');
+            alert('에러가 발생하였습니다.');
         });
     }, []);
 
-    const studyWordsHandler = (e) => {
-
-    }
-
-    const quizHandler = (e) => {
-        // 로그인한 사용자인지 아닌지 구분
-    }
-
-    const updateWordsHandler = (e) => {
-        props.history.push(`/updateUnit/${unitId}`);
-    }
+    const studyWordsHandler = (e) => props.history.push(`/study/${unitId}`);
+    const quizHandler = (e) => props.history.push(`/quiz/${unitId}`);
+    const updateWordsHandler = (e) => props.history.push(`/updateUnit/${unitId}`);
 
     const deleteWordsHandler = (e) => {
         const check = window.confirm('정말로 삭제하시겠습니까?');
@@ -63,30 +56,35 @@ function ReadUnitPage(props) {
         });
     }
 
-    const bookmarkHandler = (e) => {
-        // 로그인한 사용자인지 아닌지 구분
-    }
-
     return (
         <div style={{ width: '100%', marginLeft: '5%' }}>
-            <PageHeader
-                title={titleState}
-                subTitle={descriptionState}
-                extra={
-                    isOwnerState ? ([
+            {user && isOwnerState ? (
+                <PageHeader
+                    title={titleState}
+                    subTitle={descriptionState}              
+                    extra={[
                         <Button onClick={studyWordsHandler}>학 습</Button>,
                         <Button onClick={quizHandler}>퀴 즈</Button>,
+                        <Bookmarks unitId={unitId} />,
                         <Button onClick={updateWordsHandler}>수 정</Button>,
-                        <Button onClick={deleteWordsHandler}>삭 제</Button>
-                    ]) : ([
+                        <Button onClick={deleteWordsHandler}>삭 제</Button>,
+                        ]}
+                >
+                    <hr style={{ width: '100%' }}/>
+                </PageHeader>
+            ) : (
+                <PageHeader
+                    title={titleState}
+                    subTitle={descriptionState}              
+                    extra={[
                         <Button onClick={studyWordsHandler}>학 습</Button>,
                         <Button onClick={quizHandler}>퀴 즈</Button>,
-                        <Button onClick={bookmarkHandler}>북마크</Button>
-                    ])
-                }
-            >
-                <hr style={{ width: '100%' }}/>
-            </PageHeader>
+                        <Bookmarks unitId={unitId} />,
+                    ]}
+                >
+                    <hr style={{ width: '100%' }}/>
+                </PageHeader>
+            )}
 
             <List
                 header={`총 ${wordsState.length}단어`}

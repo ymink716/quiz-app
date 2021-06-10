@@ -4,8 +4,8 @@ const bookmarkController = require('../controllers/BookmarkController');
 const { checkCurrentUser } = require('../middlewares/AuthMiddleware');
 
 router.post('/', checkCurrentUser, bookmarkController.addBookmark);
-router.delete('/:bookmarkId', checkCurrentUser, bookmarkController.deleteBookmark);
-router.get('/counts', bookmarkController.getBookmarkCounts);
-router.get('/units', checkCurrentUser, bookmarkController.getBookmarkUnits);
+router.delete('/', checkCurrentUser, bookmarkController.deleteBookmark);
+router.get('/counts/:unitId', bookmarkController.getBookmarksByUnit);
+router.get('/users', checkCurrentUser, bookmarkController.getBookmarksByUser);
 
 module.exports = router;

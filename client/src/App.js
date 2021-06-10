@@ -17,6 +17,7 @@ import ReadUnitPage from './pages/ReadUnitPage';
 import SaveImagePage from './pages/SaveImagePage';
 import ReadImagePage from './pages/ReadImagePage';
 import NotFoundPage from './pages/NotFoundPage';
+import BookmarkPage from './pages/BookmarkPage';
 
 import { useUserState } from './context/UserContext';
 
@@ -43,6 +44,7 @@ function App() {
               <Route exact path="/unit/:unitId" component={ReadUnitPage} />
               <Route exact path="/createImage/:folderId" component={SaveImagePage} />
               <Route exact path="/image/:unitId" component={ReadImagePage} />
+              <Route exact path="/bookmark" component={BookmarkPage} />
               <Route exact path="/*" component={NotFoundPage} />
             </Switch>
             ) : (

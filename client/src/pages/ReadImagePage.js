@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { useUserState } from '../context/UserContext';
 import { PageHeader, Button } from 'antd';
 import axios from 'axios';
+import Bookmarks from '../components/Bookmarks';
 
 function ReadImagePage(props) {
     const userState = useUserState();
@@ -21,7 +22,7 @@ function ReadImagePage(props) {
                 setTitleState(response.data.unit.title);
                 setDescriptionState(response.data.unit.description);
                 setImageState(response.data.unit.imageURL);
-                if (user && toString(user._id) === toString(response.data.unit.maker._id)) setIsOwnerState(true);
+                if (user && user.email == response.data.unit.maker.email) setIsOwnerState(true);
             } else {
                 alert('이미지 불러오기를 실패했습니다.');
             }
@@ -51,25 +52,30 @@ function ReadImagePage(props) {
         });
     }
 
-    const bookmarkHandler = (e) => {
-        // 로그인한 사용자인지 아닌지 구분
-    }
-
     return (
         <div style={{ width: '100%', marginLeft: '5%' }}>
-            <PageHeader
-                title={titleState}
-                subTitle={descriptionState}
-                extra={
-                    isOwnerState ? ([
+            {user && isOwnerState ? (
+                <PageHeader
+                    title={titleState}
+                    subTitle={descriptionState}
+                    extra={[
+                        <Bookmarks unitId={unitId} />,
                         <Button onClick={deleteImageHandler}>삭 제</Button>
-                    ]) : ([
-                        <Button onClick={bookmarkHandler}>북마크</Button>
-                    ])
-                }
-            >
-                <hr style={{ width: '100%' }}/>
-            </PageHeader>
+                    ]}
+                >
+                    <hr style={{ width: '100%' }}/>
+                </PageHeader>
+            ) : (
+                <PageHeader
+                    title={titleState}
+                    subTitle={descriptionState}
+                    extra={[
+                        <Bookmarks unitId={unitId} />,
+                    ]}
+                >
+                    <hr style={{ width: '100%' }}/>
+                </PageHeader>
+            )}
             
             <img 
                 style={{ marginLeft: '5%' }}
