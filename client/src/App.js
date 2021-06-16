@@ -1,5 +1,4 @@
 import React from 'react';
-import 'antd/dist/antd.css';
 import './App.css';
 import { Route, Switch } from 'react-router-dom';
 
@@ -18,6 +17,7 @@ import SaveImagePage from './pages/SaveImagePage';
 import ReadImagePage from './pages/ReadImagePage';
 import NotFoundPage from './pages/NotFoundPage';
 import BookmarkPage from './pages/BookmarkPage';
+import StudyWordsPage from './pages/StudyWordsPage';
 
 import { useUserState } from './context/UserContext';
 
@@ -45,6 +45,7 @@ function App() {
               <Route exact path="/createImage/:folderId" component={SaveImagePage} />
               <Route exact path="/image/:unitId" component={ReadImagePage} />
               <Route exact path="/bookmark" component={BookmarkPage} />
+              <Route exact path="/study/:unitId" component={StudyWordsPage} />
               <Route exact path="/*" component={NotFoundPage} />
             </Switch>
             ) : (
@@ -54,6 +55,7 @@ function App() {
               <Route exact path="/login" component={LoginPage} />
               <Route exact path="/unit/:unitId" component={ReadUnitPage} />
               <Route exact path="/image/:unitId" component={ReadImagePage} />
+              <Route exact path="/study/:unitId" component={StudyWordsPage} />
               <Route exact path="/*" component={NotFoundPage} />
             </Switch>
           )}

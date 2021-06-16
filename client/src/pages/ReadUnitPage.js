@@ -10,27 +10,23 @@ function ReadUnitPage(props) {
     const { token, user } = userState;
     const { unitId } = props.match.params;
 
-    const [titleState, setTitleState] = useState('');
-    const [descriptionState, setDescriptionState] = useState('');
-    const [wordsState, setWordsState] = useState([]);
-    const [isOwnerState, setIsOwnerState] = useState(false);
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [words, setWords] = useState([]);
+    const [isOwner, setIsOwner] = useState(false);
 
     useEffect(() => {
         axios.get(`/api/unit/${unitId}`)
         .then(response => {
             if (response.data.success) {
-                setTitleState(response.data.unit.title);
-                setDescriptionState(response.data.unit.description);
-                setWordsState([ ...response.data.unit.words ]);
-                if (user && user.email == response.data.unit.maker.email) setIsOwnerState(true);
+                setTitle(response.data.unit.title);
+                setDescription(response.data.unit.description);
+                setWords([ ...response.data.unit.words ]);
+                if (user && user.email == response.data.unit.maker.email) setIsOwner(true);
             } else {
                 alert('단어장 불러오기를 실패했습니다.');
             }
-        })
-        .catch((error) => {
-            console.error(error);
-            alert('에러가 발생하였습니다.');
-        });
+        }).catch((error) => alert('에러가 발생하였습니다.'));
     }, []);
 
     const studyWordsHandler = (e) => props.history.push(`/study/${unitId}`);
@@ -50,18 +46,15 @@ function ReadUnitPage(props) {
             } else {
                 alert(response.data.message);
             }
-        }).catch(error => {
-            console.error(error);
-            alert('단어장 삭제에 실패했습니다.');
-        });
+        }).catch(error => alert('단어장 삭제에 실패했습니다.'));
     }
 
     return (
         <div style={{ width: '100%', marginLeft: '5%' }}>
-            {user && isOwnerState ? (
+            {user && isOwner ? (
                 <PageHeader
-                    title={titleState}
-                    subTitle={descriptionState}              
+                    title={title}
+                    subTitle={description}              
                     extra={[
                         <Button onClick={studyWordsHandler}>학 습</Button>,
                         <Button onClick={quizHandler}>퀴 즈</Button>,
@@ -74,8 +67,8 @@ function ReadUnitPage(props) {
                 </PageHeader>
             ) : (
                 <PageHeader
-                    title={titleState}
-                    subTitle={descriptionState}              
+                    title={title}
+                    subTitle={description}              
                     extra={[
                         <Button onClick={studyWordsHandler}>학 습</Button>,
                         <Button onClick={quizHandler}>퀴 즈</Button>,
@@ -87,14 +80,12 @@ function ReadUnitPage(props) {
             )}
 
             <List
-                header={`총 ${wordsState.length}단어`}
-                dataSource={wordsState}
+                header={`총 ${words.length}단어`}
+                dataSource={words}
                 renderItem={item => (
                     <List.Item>
                         <div style={{ width: '30%' }}>{item.word}</div>
                         <div style={{ width: '30%' }}>{item.meaning}</div>
-
-                        { /* 음성 사전 기능 추가 */}
                     </List.Item>
                 )}
             >
