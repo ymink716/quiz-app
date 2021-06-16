@@ -80,7 +80,7 @@ function FolderDetailPage(props) {
         setIsModalVisible(false);
     };
 
-    const randerUnits = units.map((unit, index) => {
+    const renderUnits = units.map((unit, index) => {
         return (
             <UnitCard unit={unit} key={index}></UnitCard>
         )
@@ -102,7 +102,7 @@ function FolderDetailPage(props) {
             </PageHeader>
             
             <Row gutter={[{ xs: 8, sm: 16, md: 24, lg: 32 }, 16]}>
-                {randerUnits}
+                {renderUnits}
             </Row>
 
             <Modal 

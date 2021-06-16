@@ -26,7 +26,7 @@ function MyFolderPage(props) {
         });
     }, []);
 
-    const randerFolders = folders.map((folder, index) => {
+    const renderFolders = folders.map((folder, index) => {
         return (
             <FolderCard folder={folder} key={index}></FolderCard>
         )
@@ -75,7 +75,7 @@ function MyFolderPage(props) {
             </div>
 
             <Row gutter={[{ xs: 8, sm: 16, md: 24, lg: 32 }, 16]}>
-                {randerFolders}
+                {renderFolders}
             </Row>
             
             <Modal 

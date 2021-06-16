@@ -3,7 +3,8 @@ import { withRouter } from 'react-router-dom';
 import { useUserState } from '../context/UserContext';
 import { PageHeader, Button, List } from 'antd';
 import axios from 'axios';
-import Bookmarks from '../components/Bookmarks';
+import BookmarkButton from '../components/BookmarkButton';
+import QuizButton from '../components/QuizButton';
 
 function ReadUnitPage(props) {
     const userState = useUserState();
@@ -30,7 +31,6 @@ function ReadUnitPage(props) {
     }, []);
 
     const studyWordsHandler = (e) => props.history.push(`/study/${unitId}`);
-    const quizHandler = (e) => props.history.push(`/quiz/${unitId}`);
     const updateWordsHandler = (e) => props.history.push(`/updateUnit/${unitId}`);
 
     const deleteWordsHandler = (e) => {
@@ -57,8 +57,8 @@ function ReadUnitPage(props) {
                     subTitle={description}              
                     extra={[
                         <Button onClick={studyWordsHandler}>학 습</Button>,
-                        <Button onClick={quizHandler}>퀴 즈</Button>,
-                        <Bookmarks unitId={unitId} />,
+                        <QuizButton unitId={unitId} words={words} />,
+                        <BookmarkButton unitId={unitId} />,
                         <Button onClick={updateWordsHandler}>수 정</Button>,
                         <Button onClick={deleteWordsHandler}>삭 제</Button>,
                         ]}
@@ -71,8 +71,8 @@ function ReadUnitPage(props) {
                     subTitle={description}              
                     extra={[
                         <Button onClick={studyWordsHandler}>학 습</Button>,
-                        <Button onClick={quizHandler}>퀴 즈</Button>,
-                        <Bookmarks unitId={unitId} />,
+                        <QuizButton unitId={unitId} words={words} />,
+                        <BookmarkButton unitId={unitId} />,
                     ]}
                 >
                     <hr style={{ width: '100%' }}/>

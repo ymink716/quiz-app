@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { useUserState } from '../context/UserContext';
 import { PageHeader, Button } from 'antd';
 import axios from 'axios';
-import Bookmarks from '../components/Bookmarks';
+import BookmarkButton from '../components/BookmarkButton';
 
 function ReadImagePage(props) {
     const userState = useUserState();
@@ -59,7 +59,7 @@ function ReadImagePage(props) {
                     title={titleState}
                     subTitle={descriptionState}
                     extra={[
-                        <Bookmarks unitId={unitId} />,
+                        <BookmarkButton unitId={unitId} />,
                         <Button onClick={deleteImageHandler}>삭 제</Button>
                     ]}
                 >
@@ -70,7 +70,7 @@ function ReadImagePage(props) {
                     title={titleState}
                     subTitle={descriptionState}
                     extra={[
-                        <Bookmarks unitId={unitId} />,
+                        <BookmarkButton unitId={unitId} />,
                     ]}
                 >
                     <hr style={{ width: '100%' }}/>

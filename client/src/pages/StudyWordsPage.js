@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import { PageHeader, Button } from 'antd';
 import axios from 'axios';
-import Bookmarks from '../components/Bookmarks';
+import QuizButton from '../components/QuizButton';
 import WordsCarousel from '../components/WordsCarousel';
 
 function StudyWordsPage(props) {
@@ -23,7 +23,6 @@ function StudyWordsPage(props) {
         }).catch((error) => alert('에러가 발생하였습니다.'));
     }, []);
 
-    const quizHandler = (e) => props.history.push(`/quiz/${unitId}`);
     const quitStudy = (e) => props.history.push(`/unit/${unitId}`);
 
     return (
@@ -32,8 +31,7 @@ function StudyWordsPage(props) {
                 title={title}
                 subTitle={`${words.length} 단어`}              
                 extra={[
-                    <Button onClick={quizHandler}>퀴 즈</Button>,
-                    <Bookmarks unitId={unitId} />,
+                    <QuizButton unitId={unitId} words={words} />,
                     <Button onClick={quitStudy}>학습종료</Button>,
                 ]}
             >

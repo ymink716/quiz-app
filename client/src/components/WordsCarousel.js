@@ -14,15 +14,10 @@ function WordsCarousel({words}) {
         background: '#364d79',
     };
 
-    const clickWord = (e) => {
-        setDisplayMeaning(!displayMeanig);
-    }
+    const clickWord = (e) => setDisplayMeaning(!displayMeanig);
+    const beforeChangeHandler = () => setDisplayMeaning(false);
 
-    const beforeChangeHandler = () => {
-        setDisplayMeaning(false);
-    }
-
-    const randerWords = words.map((word, index) => {
+    const renderWords = words.map((word, index) => {
         return (
             <div>
                 <h2 
@@ -45,7 +40,7 @@ function WordsCarousel({words}) {
                 beforeChange={beforeChangeHandler}
                 style={{ width: '600px', margin: '0 auto' }}
             >
-                {randerWords}
+                {renderWords}
             </Carousel>
         </div>
       )

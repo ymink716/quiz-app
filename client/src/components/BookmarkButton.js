@@ -4,7 +4,7 @@ import { useUserState } from '../context/UserContext';
 import { Button } from 'antd';
 import axios from 'axios';
 
-function Bookmarks(props) {
+function BookmarkButton(props) {
     const userState = useUserState();
     const { token, user } = userState;
 
@@ -16,9 +16,9 @@ function Bookmarks(props) {
         .then(response => {
             if (response.data.success) {
                 setCounts(response.data.bookmarks.length);
-
+                
                 response.data.bookmarks.map(bookmark => {
-                    if (bookmark.userId == user._id) setBookmarked(true);
+                    if (user && bookmark.userId == user._id) setBookmarked(true);
                 });
             } else {
                 alert('북마크 정보를 가져오는데 실패했습니다.');
@@ -65,15 +65,19 @@ function Bookmarks(props) {
         });
     }
 
+    const goToLoginPage = () => props.history.push('/login');
+
     return (
         <>
-            {bookmarked ? (
+            {user ? bookmarked ? (
                 <Button onClick={deleteBookmark}>북마크함 {counts}</Button>
             ) : (
                 <Button onClick={addBookmark}>북마크하지않음 {counts}</Button>
+            ) : (
+                <Button onClick={goToLoginPage}>북마크 {counts}</Button>
             )}
         </>
     )
 }
 
-export default withRouter(Bookmarks);
+export default withRouter(BookmarkButton);
