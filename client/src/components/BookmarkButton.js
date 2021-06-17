@@ -72,9 +72,9 @@ function BookmarkButton(props) {
             {user ? bookmarked ? (
                 <Button onClick={deleteBookmark}>북마크함 {counts}</Button>
             ) : (
-                <Button onClick={addBookmark}>북마크하지않음 {counts}</Button>
+                <Button onClick={addBookmark}>북마크하지않음{counts}</Button>
             ) : (
-                <Button onClick={goToLoginPage}>북마크 {counts}</Button>
+                <Button onClick={goToLoginPage} disabled>북마크{counts}</Button>
             )}
         </>
     )

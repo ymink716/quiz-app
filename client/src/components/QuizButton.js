@@ -3,12 +3,10 @@ import { Link } from 'react-router-dom';
 import { Button } from 'antd';
 
 function QuizButton(props) {
-    const words = props.words;
-
     return (
         <Link to={{
             pathname: `/quiz/${props.unitId}`,
-            state: { words }
+            state: { words: props.words, unitId: props.unitId }
         }}>
             <Button>퀴 즈</Button>
         </Link>
