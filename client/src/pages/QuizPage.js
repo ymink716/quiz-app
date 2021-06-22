@@ -31,26 +31,24 @@ function QuizPage(props) {
                 <hr />
             </PageHeader>
 
-            <form> {
-                words.map((word, index) => {
-                    return (
-                        <div>
-                            <label>{`#${index + 1}`}</label>
-                            <input
-                                type="text"
-                                value={words[index].word}
-                                disabled
-                            />
-                            <input
-                                type="text"
-                                name="answer"
-                                index={index}
-                                onChange={handleAnswerChange}
-                            />
-                        </div>
-                    )
-                })
-            } </form>
+            {words.map((word, index) => {
+                return (
+                    <div>
+                        <label>{`#${index + 1}`}</label>
+                        <input
+                            type="text"
+                            value={words[index].word}
+                            disabled
+                        />
+                        <input
+                            type="text"
+                            name="answer"
+                            index={index}
+                            onChange={handleAnswerChange}
+                        />
+                    </div>
+                )
+            })}
 
             <Link to={{
                 pathname: `/quizResult/${unitId}`,
