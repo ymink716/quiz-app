@@ -9,7 +9,6 @@ function QuizResultPage(props) {
     const [answerCount, setAnswerCount] = useState(0);
 
     useEffect(() => {
-        console.log(words, answers);
         words.map((word, index) => {
             word.answer = answers[index];
             word.index = index + 1;
@@ -19,7 +18,6 @@ function QuizResultPage(props) {
             }
             else word.check = false;
         });
-        console.log(words);
     }, []);
 
     const columns = [

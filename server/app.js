@@ -31,6 +31,7 @@ app.use('/api/folder', require('./routes/FolderRouter'));
 app.use('/api/unit', require('./routes/UnitRouter'));
 app.use('/api/image', require('./routes/ImageRouter'));
 app.use('/api/bookmark', require('./routes/BookmarkRouter'));
+app.use('/api/review', require('./routes/ReviewRouter'));
 
 app.use((req, res, next) => {
     res.status(404).json({ message: 'Not Found' });

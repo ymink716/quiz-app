@@ -1,17 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { PageHeader, Button } from 'antd';
+import axios from 'axios';
 
 function QuizPage(props) {
-    let words = props.location.state.words;
-    const unitId = props.location.state.unitId;
-    const [answers, setAnswers] = useState(new Array(words.length));
+    const { unitId } = props.match.params;
+    const [words, setWords] = useState([]);
+    const [answers, setAnswers] = useState([]);
 
     useEffect(() => {
-        for (let i = words.length - 1; i > 0; i--) {
-            let j = Math.floor(Math.random() * (i + 1));
-            [words[i], words[j]] = [words[j], words[i]];
-        }
+        axios.get(`/api/unit/${unitId}`)
+        .then(response => {
+            if (response.data.success) {
+                setWords([ ...response.data.unit.words]);
+                setAnswers(new Array(words.length));
+            } else {
+                alert('단어장 불러오기를 실패했습니다.');
+            }
+        }).catch((error) => alert('에러가 발생하였습니다.'));
     }, []);
 
     const goBack = () => props.history.push(`/unit/${unitId}`);
@@ -37,7 +43,7 @@ function QuizPage(props) {
                         <label>{`#${index + 1}`}</label>
                         <input
                             type="text"
-                            value={words[index].word}
+                            value={word.word}
                             disabled
                         />
                         <input

@@ -20,6 +20,7 @@ import BookmarkPage from './pages/BookmarkPage';
 import StudyWordsPage from './pages/StudyWordsPage';
 import QuizPage from './pages/QuizPage';
 import QuizResultPage from './pages/QuizResultPage';
+import MyInfoPage from './pages/MyInfoPage';
 
 import { useUserState } from './context/UserContext';
 
@@ -50,6 +51,7 @@ function App() {
               <Route exact path="/study/:unitId" component={StudyWordsPage} />
               <Route exact path="/quiz/:unitId" component={QuizPage} />
               <Route exact path="/quizResult/:unitId" component={QuizResultPage} />
+              <Route exact path="/myInfo" component={MyInfoPage} />
               <Route exact path="/*" component={NotFoundPage} />
             </Switch>
             ) : (

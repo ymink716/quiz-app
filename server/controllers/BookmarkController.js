@@ -1,6 +1,4 @@
 const { Bookmark } = require('../models/bookmark');
-const { Unit } = require('../models/unit');
-const { User } = require('../models/user');
 const ObjectId = require('mongoose').Types.ObjectId;
 
 exports.addBookmark = async (req, res, next) => {

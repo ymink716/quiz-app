@@ -22,7 +22,7 @@ function MainSide() {
           <Menu.Item key="home"><a href="/">Home</a></Menu.Item>
           <Menu.Item key="myFolder"><a href="/myFolder">내폴더</a></Menu.Item>
           <Menu.Item key="bookmark"><a href="/bookmark">북마크</a></Menu.Item>
-          <Menu.Item key="myInfo">내정보</Menu.Item>
+          <Menu.Item key="myInfo"><a href="/myInfo">내정보</a></Menu.Item>
         </Menu>
         ) : (
         <Menu
