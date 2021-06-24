@@ -81,7 +81,7 @@ export function useUserDispatch() {
 export async function login(dispatch, payload) {
     dispatch({ type: 'LOGIN_USER' });
     try {
-        const response = await axios.post('api/auth/login', payload);
+        const response = await axios.post('api/user/login', payload);
         if(response.data.success) {
             dispatch({ type: 'LOGIN_SUCESS', data: response.data });
             localStorage.setItem('currentUser', JSON.stringify(response.data.user));

@@ -10,7 +10,7 @@ function RegisterPage(props) {
         if (password !== passwordConfirm) {
             alert('비밀번호와 비밀번호 확인은 일치해야 합니다.');
         } else {
-            axios.post('/api/auth/register', { email, nickname, password })
+            axios.post('/api/user/register', { email, nickname, password })
             .then(response => {
                 if (response.data.success) {
                     alert('회원가입에 성공하였습니다.');

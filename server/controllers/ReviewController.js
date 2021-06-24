@@ -1,4 +1,4 @@
-const { Review } = require('../models/Review');
+const { Review } = require('../models/review');
 const ObjectId = require('mongoose').Types.ObjectId;
 
 exports.saveReview = async (req, res, next) => {
@@ -7,20 +7,22 @@ exports.saveReview = async (req, res, next) => {
             userId: req.currentUser._id,
             unitId: req.body.unitId,
         });
-        if (exReview) {
-            review = await Review.findOneAndUpdate(
+        if (review) {
+            review = await Review.findByIdAndUpdate(
                 review._id,
                 { rate: req.body.rate }
             );
         } else {
             review = await Review.create({
-                usetId: req.currentUser._id,
+                userId: req.currentUser._id,
                 rate: req.body.rate,
                 unitId: req.body.unitId
             })
         }
 
-        res.status(201).json({ success: true, review });
+        const reviews = await Review.find({ unitId: req.body.unitId });
+
+        res.status(201).json({ success: true, review, reviews });
     } catch (error) {
         console.error(error);
         next(error);

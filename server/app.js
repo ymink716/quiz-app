@@ -26,7 +26,7 @@ app.use(cors());
 app.use('/uploads', express.static('uploads'));
 
 // 라우터
-app.use('/api/auth', require('./routes/AuthRouter'));
+app.use('/api/user', require('./routes/UserRouter'));
 app.use('/api/folder', require('./routes/FolderRouter'));
 app.use('/api/unit', require('./routes/UnitRouter'));
 app.use('/api/image', require('./routes/ImageRouter'));

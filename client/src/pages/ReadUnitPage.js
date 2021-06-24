@@ -4,6 +4,7 @@ import { useUserState } from '../context/UserContext';
 import { PageHeader, Button, List } from 'antd';
 import axios from 'axios';
 import BookmarkButton from '../components/BookmarkButton';
+import ReviewButton from '../components/ReviewButton';
 
 function ReadUnitPage(props) {
     const userState = useUserState();
@@ -63,6 +64,7 @@ function ReadUnitPage(props) {
                         <Button onClick={deleteWordsHandler}>삭 제</Button>,
                         ]}
                 >
+                    <ReviewButton unitId={unitId} />
                     <hr />
                 </PageHeader>
             ) : (
@@ -75,6 +77,7 @@ function ReadUnitPage(props) {
                         <BookmarkButton unitId={unitId} />,
                     ]}
                 >
+                    <ReviewButton unitId={unitId} />
                     <hr style={{ width: '100%' }}/>
                 </PageHeader>
             )}

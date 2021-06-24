@@ -12,9 +12,8 @@ function MyInfoPage(props) {
     const myFolderHandler = () => props.history.push('/myFolder');
     const bookmarkHandler = () => props.history.push('/bookmark');
 
-    // 상단 버튼 : 비밀번호 변경, 회원 탈퇴
-    // 활동내역 : 내폴더, 북마크, 단어장, 이미지
-    // 프로필 : 이메일, 닉네임, 프로필업데이트버튼
+    // 상단 버튼 : 내폴더, 북마크
+    // 프로필 : 이메일, 닉네임, 프로필업데이트버튼, 비밀번호 변경 버튼, 회원탈퇴 버튼
     return (
         <div style={{ width: '100%', marginLeft: '5%' }}>
             <PageHeader

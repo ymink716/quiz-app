@@ -4,6 +4,7 @@ import { useUserState } from '../context/UserContext';
 import { PageHeader, Button } from 'antd';
 import axios from 'axios';
 import BookmarkButton from '../components/BookmarkButton';
+import ReviewButton from '../components/ReviewButton';
 
 function ReadImagePage(props) {
     const userState = useUserState();
@@ -63,7 +64,8 @@ function ReadImagePage(props) {
                         <Button onClick={deleteImageHandler}>삭 제</Button>
                     ]}
                 >
-                    <hr style={{ width: '100%' }}/>
+                    <ReviewButton unitId={unitId} />
+                    <hr />
                 </PageHeader>
             ) : (
                 <PageHeader
@@ -73,7 +75,8 @@ function ReadImagePage(props) {
                         <BookmarkButton unitId={unitId} />,
                     ]}
                 >
-                    <hr style={{ width: '100%' }}/>
+                    <ReviewButton unitId={unitId} />
+                    <hr />
                 </PageHeader>
             )}
             
