@@ -13,13 +13,13 @@ function LoginPage(props) {
         try {
             const response = await login(dispatch, values);
             if (!response.data.success) {
-                alert(errorMessage);
+                alert('아이디와 비밀번호를 다시 확인해주세요.');
             } else {
                 props.history.push('/');
             }
         } catch (error) {
             console.error(error);
-            alert(errorMessage);
+            alert('아이디와 비밀번호를 다시 확인해주세요.');
         }
     };
     

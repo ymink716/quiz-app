@@ -5,7 +5,7 @@ const { checkCurrentUser } = require('../middlewares/AuthMiddleware');
 
 router.post('/register', userController.createUser);
 router.post('/login', userController.createToken);
-router.put('/', checkCurrentUser, userController.updateProfile);
+router.put('/', checkCurrentUser, userController.updateUser);
 router.delete('/', checkCurrentUser, userController.deleteUser);
 
 module.exports = router;

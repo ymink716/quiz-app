@@ -48,17 +48,29 @@ exports.createToken = async (req, res, next) => {
     }
 }
 
-exports.updateProfile = async (req, res, next) => {
+exports.updateUser = async (req, res, next) => {
     try {
-        let updatedUser;
+        let user;
         if (req.body.newPassword) {
+            const result = await bcrypt.compare(req.body.currentPassword, req.currentUser.password);
+            if (!result) return res.status(401).json({ success: false, message: '비밀번호를 다시 확인해주세요.'});
+                    
             const hash = await bcrypt.hash(req.body.newPassword, 12);
-            updatedUser = await User.findOneAndUpdate({ password: hash });
+            user = await User.findOneAndUpdate(
+                { _id: req.currentUser._id },
+                { password: hash }, 
+                { new: true }
+            );
+        
         } else {
-            updateduser = await User.findOneAndUpdate({ email: req.body.email, nickname: req.body.email });
+            user = await User.findOneAndUpdate(
+                { _id: req.currentUser._id },
+                { email: req.body.email, nickname: req.body.nickname }, 
+                { new: true }
+            );
         }
 
-        res.status(200).json({ success: true, updatedUser });
+        res.status(200).json({ success: true, user });
     } catch (error) {
         console.error(error);
         next(error);
@@ -67,13 +79,16 @@ exports.updateProfile = async (req, res, next) => {
 
 exports.deleteUser = async (req, res, next) => {
     try {
-        const deletedBookmark = await Bookmark.deleteMany({ userId: req.createUser._id });
-        const deletedReview = await Review.deleteMany({ userId: req.createUser._id });
-        const deletedUnit = await Unit.deleteMany({ maker: req.createUser._id });
-        const deletedFolder = await Folder.deleteMany({ maker: req.createUser._id });
-        const deletedUser = await User.findOneAndDelete(req.createUser._id);
+        const result = await bcrypt.compare(req.body.password, req.currentUser.password);
+        if (!result) return res.status(401).json({ success: false, message: '비밀번호를 다시 확인해주세요.'});
+                
+        await Bookmark.deleteMany({ userId: req.currentUser._id });
+        await Review.deleteMany({ userId: req.currentUser._id });
+        await Unit.deleteMany({ maker: req.currentUser._id });
+        await Folder.deleteMany({ maker: req.currentUser._id });
+        const user = await User.findByIdAndDelete(req.currentUser._id);
 
-        res.status(200).json({ success: true, deletedUser });
+        res.status(200).json({ success: true, user });
     } catch (error) {
         console.error(error);
         next(error);

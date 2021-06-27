@@ -42,6 +42,23 @@ function userReducer(state, action) {
                 user: null,
                 token: null
             }
+        case 'UPDATE_PROFILE':
+            return {
+                ...state,
+                loading: true,
+            }
+        case 'UPDATE_PROFILE_SUCCESS':
+            return {
+                ...state,
+                user: action.data.user,
+                loading: false,
+            }
+        case 'UPDATE_PROFILE_ERROR':
+            return {
+                ...state,
+                loading: false,
+                errorMessage: action.error.message
+            }
         default:
             throw new Error(`Unhandled action type: ${action.type}`);
     }
@@ -97,4 +114,21 @@ export async function logout(dispatch) {
     dispatch({ type: 'LOGOUT' });
     localStorage.removeItem('currentUser');
     localStorage.removeItem('token');
+}
+
+export async function updateUser(dispatch, payload) {
+    dispatch({ type: 'UPDATE_PROFILE' });
+    try {
+        const response = await axios.put(
+            'api/user', payload, { headers: { Authorization: token }}
+        );
+        
+        if (response.data.success) {
+            dispatch({ type: 'UPDATE_PROFILE_SUCCESS', data: response.data });
+            localStorage.setItem('currentUser', JSON.stringify(response.data.user));
+            return response;
+        }
+    } catch (error) {
+        dispatch({ type: 'UPDATE_PROFILE_ERROR', error: error.response.data });
+    }
 }
