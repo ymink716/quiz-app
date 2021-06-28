@@ -27,8 +27,10 @@ function SaveUnitPage(props) {
     };
 
     const removeWord = (e) => {
+        e.preventDefault();
         const idx = e.target.getAttribute("data-idx");
-        setWordState(wordState.filter((w, i) => i !== idx));
+        const words = wordState.filter((w, i) => i !== Number(idx));
+        setWordState([ ...words ]);
     }
 
     const handleWordChange = (e) => {
@@ -168,7 +170,6 @@ function SaveUnitPage(props) {
                                     name={wordId}
                                     data-idx={idx}
                                     id={wordId}
-                                    className="word"
                                     value={wordState[idx].word}
                                     onChange={handleWordChange}                                    
                                 />
@@ -178,7 +179,6 @@ function SaveUnitPage(props) {
                                     name={meaningId}
                                     data-idx={idx}
                                     id={meaningId}
-                                    className="meaning"
                                     value={wordState[idx].meaning}
                                     onChange={handleWordChange}
                                 />

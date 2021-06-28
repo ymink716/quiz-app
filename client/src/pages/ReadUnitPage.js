@@ -5,6 +5,7 @@ import { PageHeader, Button, List } from 'antd';
 import axios from 'axios';
 import BookmarkButton from '../components/BookmarkButton';
 import ReviewButton from '../components/ReviewButton';
+import Speech from 'react-speech';
 
 function ReadUnitPage(props) {
     const userState = useUserState();
@@ -89,6 +90,7 @@ function ReadUnitPage(props) {
                     <List.Item>
                         <div style={{ width: '30%' }}>{item.word}</div>
                         <div style={{ width: '30%' }}>{item.meaning}</div>
+                        <Speech text={item.word} />
                     </List.Item>
                 )}
             >
