@@ -1,4 +1,6 @@
 const { Unit } = require('../models/unit');
+const { Review } = require('../models/review');
+const { Bookmark } = require('../models/bookmark');
 
 exports.createUnit = async (req, res, next) => {
     try {
@@ -90,9 +92,11 @@ exports.deleteUnit = async (req, res, next) => {
         if (toString(unit.maker._id) !== toString(req.currentUser._id))
             return res.status(403).json({ success: false, message: '제작자만 가능한 작업입니다.' });
         
+        const deletedReviews = await Review.deleteMany({ unitId: req.params.unitId });
+        const deletedBookmarks = await Bookmark.deleteMany({ unitId: req.params.unitId });
         const deletedUnit = await Unit.findByIdAndDelete(req.params.unitId);
 
-        res.status(200).json({ success: true, deletedUnit });
+        res.status(200).json({ success: true, deletedUnit, deletedBookmarks, deletedReviews });
     } catch (error) {
         console.error(error);
         next(error);
