@@ -1,6 +1,6 @@
 import React from 'react'
 import { withRouter } from 'react-router-dom';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, PageHeader } from 'antd';
 import axios from 'axios';
 import { MailOutlined, UserOutlined, LockOutlined } from '@ant-design/icons';
 
@@ -35,15 +35,18 @@ function RegisterPage(props) {
 
     return (
         <div style={{ margin: 'auto' }}>
+            <PageHeader title='Register'>
+                <hr />
+            </PageHeader>
+            
             <Form
-                name="basic"
-                initialValues={{ remember: true }}
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
+                size="large"
             >
                 <Form.Item
                     name="email"
-                    rules={[{ required: true, type: 'email', message: 'Please input your email!' }]}
+                    rules={[{ required: true, type: 'email', message: '이메일을 입력하세요.' }]}
                 >
                     <Input 
                         prefix={<MailOutlined style={{ color: "rgba(0,0,0,.25)" }} />}
@@ -52,7 +55,7 @@ function RegisterPage(props) {
                 </Form.Item>
                 <Form.Item
                     name="nickname"
-                    rules={[{ required: true, message: 'Please input your nick name!' }]}
+                    rules={[{ required: true, message: '닉네임(2~10글자)', min: 2, max: 10 }]}
                 >
                     <Input 
                         prefix={<UserOutlined style={{ color: "rgba(0,0,0,.25)" }} />}
@@ -61,7 +64,7 @@ function RegisterPage(props) {
                 </Form.Item>
                 <Form.Item
                     name="password"
-                    rules={[{ required: true, message: 'Please input your password!' }]}
+                    rules={[{ required: true, message: '비밀번호(6글자 이상)', min: 6 }]}
                 >
                     <Input.Password 
                         prefix={<LockOutlined style={{ color: "rgba(0,0,0,.25)" }} />}
@@ -70,7 +73,7 @@ function RegisterPage(props) {
                 </Form.Item>
                 <Form.Item
                     name="passwordConfirm"
-                    rules={[{ required: true, message: 'Please input your password again!' }]}
+                    rules={[{ required: true, message: '비밀번호(6글자 이상)', min: 6 }]}
                 >
                     <Input.Password 
                         prefix={<LockOutlined style={{ color: "rgba(0,0,0,.25)" }} />}

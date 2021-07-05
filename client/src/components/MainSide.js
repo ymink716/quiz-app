@@ -1,7 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import 'antd/dist/antd.css';
-import { Layout, Menu } from 'antd';
+import { Layout, Menu, Avatar } from 'antd';
+import { UserOutlined } from '@ant-design/icons';
 import { useUserState } from '../context/UserContext';
 
 const { Sider } = Layout;
@@ -11,32 +11,38 @@ function MainSide() {
   const { user } = state;
 
   return (
-      <Sider className="site-layout-background" width={200}>
-        {user ? (
+    <Sider 
+      width={200} 
+      style={{ backgroundColor: 'white', textAlign: 'center', marginTop: '10px' }}
+    >
+      {user ? (
+        <>
+        <div>
+          <Avatar size={64} icon={<UserOutlined />} style={{ marginTop: '10px', marginBottom: '10px' }}/>
+          <p>{user.email}</p>
+        </div>
         <Menu
           mode="inline"
-          defaultSelectedKeys={['1']}
-          defaultOpenKeys={['sub1']}
-          style={{ height: '100%' }}
+          style={{ margin: '0', textAlign: 'center' }}
         >
           <Menu.Item key="home"><a href="/">Home</a></Menu.Item>
           <Menu.Item key="myFolder"><a href="/myFolder">내폴더</a></Menu.Item>
           <Menu.Item key="bookmark"><a href="/bookmark">북마크</a></Menu.Item>
           <Menu.Item key="myInfo"><a href="/myInfo">내정보</a></Menu.Item>
+          <Menu.Item key="logout"><a href="/logout">로그아웃</a></Menu.Item>
         </Menu>
-        ) : (
+        </>
+      ) : (
         <Menu
           mode="inline"
-          defaultSelectedKeys={['1']}
-          defaultOpenKeys={['sub1']}
-          style={{ height: '100%' }}
+          style={{ margin: '0', textAlign: 'center' }}
         >
           <Menu.Item key="home"><a href="/">Home</a></Menu.Item>
           <Menu.Item key="login"><a href="/login">로그인</a></Menu.Item>
           <Menu.Item key="register"><a href="/register">회원가입</a></Menu.Item>
         </Menu>
-        )}
-      </Sider>
+      )}
+    </Sider>
   );
 }
 

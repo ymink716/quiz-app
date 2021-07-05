@@ -31,9 +31,8 @@ function FolderDetailPage(props) {
         });
     }, []);
 
-    const addUnitHandler = () => props.history.push(`/createUnit/${folderId}`);
-    const addImageHandler = () => props.history.push(`/createImage/${folderId}`);
     const updateFolderHandler = () => setIsModalVisible(true);
+    const handleCancel = () => setIsModalVisible(false);
 
     const deleteFolderHandler = () => {
         const check = window.confirm('폴더와 폴더 안 모든 내용이 삭제됩니다. 삭제하시겠습니까?');
@@ -41,11 +40,8 @@ function FolderDetailPage(props) {
 
         axios.delete(`/api/folder/${folderId}`, { headers: {Authorization: token }})
         .then((response) => {
-            if (response.data.success) {
-                props.history.push('/myFolder');
-            } else {
-                alert(response.data.message);
-            }
+            if (response.data.success) props.history.push('/myFolder');
+            else alert(response.data.message);
         }).catch((error) => {
             console.error(error);
             alert('폴더 삭제에 실패했습니다.');
@@ -53,8 +49,7 @@ function FolderDetailPage(props) {
     } 
 
     const handleOk = () => {
-        form
-        .validateFields()
+        form.validateFields()
         .then(values => {
             const { title, description } = values;
             axios.put(
@@ -76,10 +71,6 @@ function FolderDetailPage(props) {
         })
     }
 
-    const handleCancel = () => {
-        setIsModalVisible(false);
-    };
-
     const renderUnits = units.map((unit, index) => {
         return (
             <UnitCard unit={unit} key={index}></UnitCard>
@@ -92,13 +83,13 @@ function FolderDetailPage(props) {
                 title={folder.title}
                 subTitle={folder.description}
                 extra={[
-                    <Button onClick={addUnitHandler}>단어장 생성</Button>,
-                    <Button onClick={addImageHandler}>이미지 생성</Button>,
+                    <Button href={`/createUnit/${folderId}`}>단어장 생성</Button>,
+                    <Button href={`/createImage/${folderId}`}>이미지 생성</Button>,
                     <Button onClick={updateFolderHandler}>폴더 수정</Button>,
                     <Button onClick={deleteFolderHandler}>폴더 삭제</Button>
                 ]}
             >
-                <hr style={{ width: '100%' }}/>
+                <hr />
             </PageHeader>
             
             <Row gutter={[{ xs: 8, sm: 16, md: 24, lg: 32 }, 16]}>
@@ -122,11 +113,18 @@ function FolderDetailPage(props) {
                         description: folder.description
                     }}    
                 >
-                    <Form.Item label="제목" name="title">
-                        <Input />
+                    <Form.Item 
+                        label="제목" name="title"
+                        rules={[{ required: true, message: '제목(30글자 이내)', max: 30 }]}
+                    > 
+                        <Input /> 
                     </Form.Item>
-                    <Form.Item label="설명" name="description">
-                        <Input />
+                    <Form.Item 
+                        label="설명" name="description"
+                        rules={[{ message: '설명(100글자 이내)', max: 100 }]}
+
+                    > 
+                        <Input /> 
                     </Form.Item>
                 </Form>
             </Modal>

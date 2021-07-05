@@ -2,7 +2,7 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 import 'antd/dist/antd.css';
 import { useUserState, useUserDispatch, logout } from '../context/UserContext';
-import { Layout, Menu, Input } from 'antd';
+import { Layout, Menu, Input, Button } from 'antd';
 const { Header } = Layout;
 const { Search } = Input;
 
@@ -11,9 +11,13 @@ function MainHeader(props) {
     const dispatch = useUserDispatch();
     const { user } = state;
 
-    const logoutHandler = async () => {
+    const handleLogout = async (e) => {
         await logout(dispatch);
-        props.history.push('/');
+        window.location.href='/';
+    }
+
+    const handleLogin = (e) => {
+        window.location.href='/login';
     }
 
     const onSearch = (value) => {
@@ -22,13 +26,12 @@ function MainHeader(props) {
 
     return (
         <Header className="header" style={{ marginBottom: '20px' }}>       
-            <div className="logo" style={{ float: 'left', marginRight: '15%', fontSize: '2em' }}>
+            <div className="logo" style={{ float: 'left', marginLeft: '3%', marginRight: '20%', fontSize: '2em' }}>
                 <a href="/">Quiz</a>
             </div>     
             <Search
-                placeholder="input search text"
                 allowClear
-                enterButton="Search"
+                enterButton
                 size="large"
                 onSearch={onSearch}
                 style={{ 
@@ -37,18 +40,15 @@ function MainHeader(props) {
                 }}
             />
             {user ? (
-            <Menu theme="dark" mode="horizontal" style={{ float: "right" }}>
-                <Menu.Item key="logout">
-                    <a onClick={logoutHandler}>로그아웃</a>
-                </Menu.Item>
-            </Menu>
+                <Menu theme="dark" mode="horizontal" style={{ float: "right" }}>
+                    <Menu.Item key="logout">
+                        <Button ghost onClick={handleLogout}>로그아웃</Button>
+                    </Menu.Item>
+                </Menu>
             ) : (
                 <Menu theme="dark" mode="horizontal" style={{ float: "right" }}>
                     <Menu.Item key="login">
-                        <a href="/login">로그인</a>
-                    </Menu.Item>
-                    <Menu.Item key="register">
-                        <a href="/register">회원가입</a>
+                        <Button ghost onClick={handleLogin}>로그인</Button>
                     </Menu.Item>
                 </Menu>
             )}

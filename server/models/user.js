@@ -10,6 +10,7 @@ const userSchema = new Schema({
     nickname: {
         type: String,
         required: true,
+        minlength: 2,
     },
     password: {
         type: String,

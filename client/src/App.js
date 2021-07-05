@@ -15,7 +15,6 @@ import SaveUnitPage from './pages/SaveUnitPage';
 import ReadUnitPage from './pages/ReadUnitPage';
 import SaveImagePage from './pages/SaveImagePage';
 import ReadImagePage from './pages/ReadImagePage';
-import NotFoundPage from './pages/NotFoundPage';
 import BookmarkPage from './pages/BookmarkPage';
 import StudyWordsPage from './pages/StudyWordsPage';
 import QuizPage from './pages/QuizPage';
@@ -32,10 +31,10 @@ function App() {
   const { user } = state;
 
   return (
-    <Layout>
+    <Layout style={{ minHeight: '100vh' }}>
       <MainHeader />
-      <Content style={{ padding: '0 50px' }}>
-        <Layout className="site-layout-background" style={{ padding: '24px 0' }}>
+      <Content style={{ padding: '0 50px', }}>
+        <Layout >
           <MainSide />
           {user ? (
             <Switch>
@@ -52,7 +51,6 @@ function App() {
               <Route exact path="/quiz/:unitId" component={QuizPage} />
               <Route exact path="/quizResult/:unitId" component={QuizResultPage} />
               <Route exact path="/myInfo" component={MyInfoPage} />
-              <Route exact path="/*" component={NotFoundPage} />
             </Switch>
             ) : (
             <Switch>
@@ -64,7 +62,6 @@ function App() {
               <Route exact path="/study/:unitId" component={StudyWordsPage} />
               <Route exact path="/quiz/:unitId" component={QuizPage} />
               <Route exact path="/quizResult/:unitId" component={QuizResultPage} />
-              <Route exact path="/*" component={NotFoundPage} />
             </Switch>
           )}
         </Layout>

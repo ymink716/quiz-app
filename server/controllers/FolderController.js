@@ -22,7 +22,7 @@ exports.getFolder = async (req, res, next) => {
         if (!folder)
             return res.status(404).json({ success: false, message: '해당 폴더를 찾을 수 없습니다.' });
 
-        const units = await Unit.find({ folder: req.params.folderId });
+        const units = await Unit.find({ folder: req.params.folderId }).populate('maker');
 
         res.status(200).json({ success: true, folder, units }); 
     } catch (error) {

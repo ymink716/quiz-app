@@ -1,4 +1,5 @@
 const { Bookmark } = require('../models/bookmark');
+const { Unit } = require('../models/unit');
 const ObjectId = require('mongoose').Types.ObjectId;
 
 exports.addBookmark = async (req, res, next) => {
@@ -42,11 +43,14 @@ exports.getBookmarksByUnit = async (req, res, next) => {
 
 exports.getBookmarksByUser = async (req, res, next) => {
     try {
-        const bookmarks = await Bookmark.find({ 
-            userId: req.currentUser._id 
-        }).populate('unitId');
+        const bookmarks = await Bookmark.find({ userId: req.currentUser._id });
+        
+        let unitIds = [];
+        bookmarks.map((bookmark, index) => unitIds.push(bookmark.unitId)); 
 
-        res.status(200).json({ success: true, bookmarks });
+        const units = await Unit.find({ _id: { $in: unitIds }}).populate('maker');
+
+        res.status(200).json({ success: true, bookmarks, units });
     } catch (error) {
         console.error(error);
         next(error);

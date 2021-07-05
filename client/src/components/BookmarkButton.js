@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import { useUserState } from '../context/UserContext';
 import { Button } from 'antd';
+import { BookTwoTone, BookOutlined } from '@ant-design/icons'
 import axios from 'axios';
 
 function BookmarkButton(props) {
@@ -65,16 +66,14 @@ function BookmarkButton(props) {
         });
     }
 
-    const goToLoginPage = () => props.history.push('/login');
-
     return (
         <>
             {user ? bookmarked ? (
-                <Button onClick={deleteBookmark}>북마크함 {counts}</Button>
+                <Button icon={<BookTwoTone />} onClick={deleteBookmark}>{`북마크 ${counts}`}</Button>
             ) : (
-                <Button onClick={addBookmark}>북마크하지않음{counts}</Button>
+                <Button icon={<BookOutlined />} onClick={addBookmark}>{`북마크 ${counts}`}</Button>
             ) : (
-                <Button onClick={goToLoginPage} disabled>북마크{counts}</Button>
+                <Button icon={<BookOutlined />} disabled>{`북마크 ${counts}`}</Button>
             )}
         </>
     )

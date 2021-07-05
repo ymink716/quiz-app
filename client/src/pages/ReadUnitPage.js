@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import { useUserState } from '../context/UserContext';
-import { PageHeader, Button, List } from 'antd';
+import { PageHeader, Button, Input, Avatar, Divider } from 'antd';
+import { SoundOutlined, UserOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import BookmarkButton from '../components/BookmarkButton';
 import ReviewButton from '../components/ReviewButton';
-import Speech from 'react-speech';
+import { useSpeechSynthesis } from 'react-speech-kit';
 
 function ReadUnitPage(props) {
     const userState = useUserState();
@@ -15,7 +16,10 @@ function ReadUnitPage(props) {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [words, setWords] = useState([]);
+    const [maker, setMaker] = useState('');
     const [isOwner, setIsOwner] = useState(false);
+
+    const { speak } = useSpeechSynthesis();
 
     useEffect(() => {
         axios.get(`/api/unit/${unitId}`)
@@ -24,6 +28,7 @@ function ReadUnitPage(props) {
                 setTitle(response.data.unit.title);
                 setDescription(response.data.unit.description);
                 setWords([ ...response.data.unit.words ]);
+                setMaker(response.data.unit.maker);
                 if (user && user.email == response.data.unit.maker.email) setIsOwner(true);
             } else {
                 alert('단어장 불러오기를 실패했습니다.');
@@ -31,11 +36,7 @@ function ReadUnitPage(props) {
         }).catch((error) => alert('에러가 발생하였습니다.'));
     }, []);
 
-    const studyWordsHandler = (e) => props.history.push(`/study/${unitId}`);
-    const quizHandler = (e) => props.history.push(`/quiz/${unitId}`);
-    const updateWordsHandler = (e) => props.history.push(`/updateUnit/${unitId}`);
-
-    const deleteWordsHandler = (e) => {
+    const handleDeleteWords = (e) => {
         const check = window.confirm('정말로 삭제하시겠습니까?');
         if (!check) return
 
@@ -56,45 +57,67 @@ function ReadUnitPage(props) {
             {user && isOwner ? (
                 <PageHeader
                     title={title}
-                    subTitle={description}              
+                    subTitle={<ReviewButton unitId={unitId} />}              
                     extra={[
-                        <Button onClick={studyWordsHandler}>학 습</Button>,
-                        <Button onClick={quizHandler}>퀴 즈</Button>,
+                        <Button href={`/study/${unitId}`}>학 습</Button>,
+                        <Button href={`/quiz/${unitId}`}>퀴 즈</Button>,
                         <BookmarkButton unitId={unitId} />,
-                        <Button onClick={updateWordsHandler}>수 정</Button>,
-                        <Button onClick={deleteWordsHandler}>삭 제</Button>,
+                        <Button href={`/updateUnit/${unitId}`}>수 정</Button>,
+                        <Button onClick={handleDeleteWords}>삭 제</Button>,
                         ]}
                 >
-                    <ReviewButton unitId={unitId} />
+                    <Avatar 
+                        size="small"
+                        icon={<UserOutlined />}
+                        style={{marginRight: '5px'}}
+                    />{maker.nickname}
+                    <Divider type="vertical" />
+                    <span>{`${description} (${words.length}단어)`}</span>
                     <hr />
                 </PageHeader>
             ) : (
                 <PageHeader
                     title={title}
-                    subTitle={description}              
+                    subTitle={<ReviewButton unitId={unitId} />}              
                     extra={[
-                        <Button onClick={studyWordsHandler}>학 습</Button>,
-                        <Button onClick={quizHandler}>퀴 즈</Button>,
+                        <Button href={`/study/${unitId}`}>학 습</Button>,
+                        <Button href={`/quiz/${unitId}`}>퀴 즈</Button>,
                         <BookmarkButton unitId={unitId} />,
                     ]}
                 >
-                    <ReviewButton unitId={unitId} />
-                    <hr style={{ width: '100%' }}/>
+                    <Avatar 
+                        size="small"
+                        icon={<UserOutlined />}
+                        style={{marginRight: '5px'}}
+                    />{maker.nickname}
+                    <Divider type="vertical" />
+                    <span>{`${description} (${words.length}단어)`}</span>
+                    <hr />
                 </PageHeader>
             )}
 
-            <List
-                header={`총 ${words.length}단어`}
-                dataSource={words}
-                renderItem={item => (
-                    <List.Item>
-                        <div style={{ width: '30%' }}>{item.word}</div>
-                        <div style={{ width: '30%' }}>{item.meaning}</div>
-                        <Speech text={item.word} />
-                    </List.Item>
-                )}
-            >
-            </List>
+            <div style={{ margin: '0 auto', textAlign: 'center' }}>
+            {words.map((word, index) => {
+                return (
+                    <div index={index} style={{ marginBottom: '20px' }}>
+                        <h3 style={{ marginRight: '10px', display: 'inline' }}>{`#${index + 1}`}</h3>
+                        <Input
+                            value={word.word} disabled size="large"
+                            style={{ width: '30%', textAlign: 'center', cursor: 'default' }}
+                        />
+                        <Input
+                            value={word.meaning} disabled size="large"
+                            style={{ width: '30%', textAlign: 'center', cursor: 'default' }}
+                        />
+                        <Button 
+                            icon={< SoundOutlined/>}
+                            onClick={() => speak({ text: word.word })}
+                        >
+                        </Button>
+                    </div>
+                )
+            })}
+            </div>
         </div>
     )
 }

@@ -5,7 +5,7 @@ import { PageHeader, Row } from 'antd';
 import axios from 'axios';
 import UnitCard from '../components/UnitCard';
 
-function BookmarkPage(props) {
+function BookmarkPage() {
     const userState = useUserState();
     const { token } = userState;
 
@@ -15,11 +15,7 @@ function BookmarkPage(props) {
         axios.get('/api/bookmark/users', { headers: { Authorization: token }})
         .then((response) => {
             if (response.data.success) {
-                const arr = [];
-                response.data.bookmarks.map(bookmark => {
-                    arr.push(bookmark.unitId);
-                });
-                setUnits(arr);
+                setUnits(response.data.units);
             } else {
                 alert(response.data.message);
             }
@@ -39,9 +35,9 @@ function BookmarkPage(props) {
         <div style={{ width: '100%', marginLeft: '5%' }}>
             <PageHeader
                 title="북마크"
-                subTitle={`총 ${units.length}개`}
+                subTitle={`${units.length} Set`}
             >
-                <hr style={{ width: '100%' }}/>
+                <hr />
             </PageHeader>
             
             <Row gutter={[{ xs: 8, sm: 16, md: 24, lg: 32 }, 16]}>

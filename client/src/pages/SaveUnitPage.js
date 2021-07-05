@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import { useUserState } from '../context/UserContext';
+import { PageHeader, Button, Input } from 'antd';
+import { DeleteOutlined } from '@ant-design/icons'
 import axios from 'axios';
 
 function SaveUnitPage(props) {
@@ -8,35 +10,31 @@ function SaveUnitPage(props) {
     const { token } = userState;
     const { folderId } = props.match.params;
 
-    const [titleState, setTitleState] = useState('');
-    const handleTitleChange = (e) => setTitleState(e.target.value);
+    const [title, setTitle] = useState('');
+    const handleTitleChange = (e) => setTitle(e.target.value);
 
-    const [descriptionState, setDescriptionState] = useState('');
-    const handleDescriptionChange = (e) => setDescriptionState(e.target.value);
+    const [description, setDescription] = useState('');
+    const handleDescriptionChange = (e) => setDescription(e.target.value);
 
-    const [isPublicState, setIsPublicState] = useState("public");
-    const handleIspublicChange = (e) => setIsPublicState(e.target.value);
+    const [isPublic, setIsPublic] = useState("public");
+    const handleIspublicChange = (e) => setIsPublic(e.target.value);
 
     const blankWord = { word: '', meaning: '' };
-    const [wordState, setWordState] = useState([
-        { ...blankWord },
-    ]);
+    const [words, setWords] = useState([{ ...blankWord }]);
 
-    const addWord = () => {
-        setWordState([ ...wordState, { ...blankWord }]);
-    };
+    const addWord = () => setWords([ ...words, { ...blankWord }]);
 
     const removeWord = (e) => {
         e.preventDefault();
-        const idx = e.target.getAttribute("data-idx");
-        const words = wordState.filter((w, i) => i !== Number(idx));
-        setWordState([ ...words ]);
+        const updatedWords = words.filter((w, i) => i !== Number(e.target.dataset.idx));
+        setWords([ ...updatedWords ]);
     }
 
     const handleWordChange = (e) => {
-        const updatedWords = [ ...wordState ];
-        updatedWords[e.target.dataset.idx][e.target.className] = e.target.value;
-        setWordState(updatedWords);
+        const { name, value } = e.target;
+        const updatedWords = [ ...words ];
+        updatedWords[e.target.dataset.idx][name] = value;
+        setWords(updatedWords);
     };
 
     const handleCreate = (e) => {
@@ -44,20 +42,11 @@ function SaveUnitPage(props) {
 
         axios.post(
             '/api/unit', 
-            { 
-                title: titleState, 
-                description: descriptionState, 
-                isPublic: isPublicState, 
-                words: wordState, 
-                folderId 
-            },
+            { title, description, isPublic, words, folderId },
             { headers: { Authorization: token }}
         ).then(response => {
-            if (response.data.success) {
-                props.history.push(`/folder/${folderId}`)
-            } else {
-                alert('단어장 생성에 실패했습니다.');
-            }
+            if (response.data.success) props.history.push(`/folder/${folderId}`)
+            else alert('단어장 생성에 실패했습니다.');
         }).catch(error => {
             console.error(error);
             alert('에러가 발생했습니다.');
@@ -70,19 +59,11 @@ function SaveUnitPage(props) {
         const { unitId } = props.match.params;
         axios.put(
             `/api/unit/${unitId}`, 
-            { 
-                title: titleState, 
-                description: descriptionState, 
-                isPublic: isPublicState, 
-                words: wordState, 
-            },
+            { title, description, isPublic, words },
             { headers: { Authorization: token }}
         ).then(response => {
-            if (response.data.success) {
-                props.history.push(`/folder/${response.data.updatedUnit.folder}`)
-            } else {
-                alert(response.data.message);
-            }
+            if (response.data.success) props.history.push(`/unit/${unitId}`)
+            else alert(response.data.message);
         }).catch(error => {
             console.error(error);
             alert('에러가 발생했습니다.');
@@ -96,10 +77,10 @@ function SaveUnitPage(props) {
         axios.get(`/api/unit/${unitId}`)
         .then(response => {
             if (response.data.success) {
-                setTitleState(response.data.unit.title);
-                setDescriptionState(response.data.unit.description);
-                setIsPublicState(response.data.unit.isPublic);
-                setWordState([ ...response.data.unit.words ]);
+                setTitle(response.data.unit.title);
+                setDescription(response.data.unit.description);
+                setIsPublic(response.data.unit.isPublic);
+                setWords([ ...response.data.unit.words ]);
             } else {
                 alert('단어장 불러오기를 실패했습니다.');
             }
@@ -112,93 +93,69 @@ function SaveUnitPage(props) {
 
     return (
         <div style={{ width: '100%', marginLeft: '5%' }}>
-            <div style={{ marginBottom: '20px' }}> 
-                <div style={{ fontSize: '1.5rem', float: 'left' }}>단어장 만들기</div>
-                <hr style={{ clear: 'both', width: '100%' }}/>
-            </div>
-
-            <form
-                onSubmit={props.match.path === "/updateUnit/:unitId" ? handleUpdate : handleCreate} 
-                style={{ 
-                    border: '0.15rem solid #000',  
-                    margin: '1rem auto', 
-                    padding: '1rem' }}
+            <PageHeader
+                title={props.match.path === "/updateUnit/:unitId" ? "단어장 수정" : "단어장 생성"}
             >
-                <label htmlFor="title">제목 : </label>
-                <input 
-                    type="text" 
-                    name="title" 
-                    id="title" 
-                    value={titleState}
+                <hr />
+            </PageHeader>
+
+            <form style={{ width: '80%', margin: '0 auto' }}>
+                <Input
+                    required max={30} 
+                    name="title" value={title}
                     onChange={handleTitleChange}
-                    style={{ display: 'block' }} />
-                <label htmlFor="description">설명 : </label>
-                <input 
-                    type="text" 
-                    name="description" 
-                    id="description"
-                    value={descriptionState} 
+                    autoFocus prefix="제목 : " size="large"
+                    style={{ marginBottom: '20px' }}
+                />
+                <Input 
+                    name="description" value={description}
                     onChange={handleDescriptionChange}
-                    style={{ display: 'block' }} />
-
-                <label>공개 : </label>
-                <input 
-                    type="radio"
-                    name="isPublic"
-                    value="public"
-                    onChange={handleIspublicChange}
-                    checked={isPublicState === "public" ? true : false}
+                    prefix="설명 : " size="large" max={100}
+                    style={{ marginBottom: '20px' }}
                 />
-                <label>비공개 : </label>
-                <input 
-                    type="radio"
-                    name="isPublic"
-                    value="private"
-                    onChange={handleIspublicChange}
-                    checked={isPublicState === "private" ? true : false}
-                />
+                {props.match.path === "/updateUnit/:unitId" ? (<></>) : (
+                    <div style={{ width: '100%', marginBottom: '20px', textAlign: 'center' }}>
+                        <label>공개 : </label>
+                        <input 
+                            type="radio" name="isPublic" value="public"
+                            onChange={handleIspublicChange}
+                            checked={isPublic === "public" ? true : false}
+                            style={{marginRight: '10px'}}
+                        />
+                        <label>비공개 : </label>
+                        <input 
+                            type="radio" name="isPublic" value="private"
+                            onChange={handleIspublicChange}
+                            checked={isPublic === "private" ? true : false}
+                    />
+                    </div>
+                )}
+                
+                <div style={{ textAlign: 'center' }}>
+                {words.map((word, index) => { return (
+                    <div style={{ marginBottom: '20px' }}>
+                        <h3 style={{ marginRight: '10px', display: 'inline' }}>{`#${index + 1}`}</h3>
+                        <Input 
+                            name="word" data-idx={index} size="large" max={100}
+                            value={words[index].word} onChange={handleWordChange}
+                            style={{ width: '30%', textAlign: 'center' }}    
+                        />
+                        <Input 
+                            name="meaning" data-idx={index} size="large" max={100}
+                            value={words[index].meaning} onChange={handleWordChange}
+                            style={{ width: '30%', textAlign: 'center' }}
+                        />
+                        <Button data-idx={index} onClick={removeWord} icon={<DeleteOutlined />} size="large"></Button>
+                    </div>
+                );})}
+                </div>
 
-                {
-                    wordState.map((val, idx) => {
-                        const wordId = `word-${idx}`;
-                        const meaningId = `meaning-${idx}`;
-                        return (
-                            <div key={ `word-${idx}` }>
-                                <label htmlFor={wordId}>{`#${idx + 1} Word`}</label>
-                                <input
-                                    type="text"
-                                    name={wordId}
-                                    data-idx={idx}
-                                    id={wordId}
-                                    value={wordState[idx].word}
-                                    onChange={handleWordChange}                                    
-                                />
-                                <label htmlFor={meaningId}>Meaning</label>
-                                <input
-                                    type="text"
-                                    name={meaningId}
-                                    data-idx={idx}
-                                    id={meaningId}
-                                    value={wordState[idx].meaning}
-                                    onChange={handleWordChange}
-                                />
-                                <button data-idx={idx} onClick={removeWord}>삭제</button>
-                            </div>
-                        );
-                    })
-                }
-
-                <input 
-                    type="button" 
-                    value="Add New Word" 
-                    style={{ display: 'block', margin: '1rem auto' }} 
-                    onClick={addWord}    
-                />
+                <Button style={{ display: 'block', margin: '1rem auto' }} onClick={addWord}>Add New Word</Button>
 
                 {props.match.path === "/updateUnit/:unitId" ? (
-                    <input type="submit" onSubmit={handleUpdate} value="수 정" style={{ display: 'block', margin: '1rem auto' }} />
+                    <Button onClick={handleUpdate} type="primary" style={{ display: 'block', margin: '1rem auto' }}>수 정</Button>
                 ) : (
-                    <input type="submit" onSubmit={handleCreate} value="생 성" style={{ display: 'block', margin: '1rem auto' }} />
+                    <Button onClick={handleCreate} type="primary" style={{ display: 'block', margin: '1rem auto' }}>생 성</Button>
                 )}
             </form>
         </div>

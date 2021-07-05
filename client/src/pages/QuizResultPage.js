@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { withRouter } from 'react-router-dom';
 import { PageHeader, Button, Table } from 'antd';
-import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons'
+import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
+
 function QuizResultPage(props) {
     let words = props.location.state.words;
     const { unitId } = props.match.params;
@@ -45,7 +46,9 @@ function QuizResultPage(props) {
             title: 'Check',
             dataIndex: 'check',
             key: 'check',
-            render: check => check ? <CheckCircleOutlined /> : <CloseCircleOutlined />
+            render: check => check ? 
+                <CheckCircleOutlined style={{ color: "rgba(38, 194, 129, 1)", fontSize: '150%' }} /> 
+                : <CloseCircleOutlined style={{ color: "rgba(255, 99, 71, 1)", fontSize: '150%' }}/>
         },
     ];
 
@@ -55,7 +58,7 @@ function QuizResultPage(props) {
         <div style={{ width: '100%', marginLeft: '5%' }}>
             <PageHeader
                 title="테스트 결과"
-                subTitle={`${words.length}개 중 개 ${answerCount}맞춤`}
+                subTitle={` ${answerCount} / ${words.length} `}
                 extra={[ <Button onClick={goBack}>뒤로 가기</Button> ]}
             >
                 <hr />

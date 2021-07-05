@@ -12,6 +12,7 @@ function WordsCarousel({words}) {
         lineHeight: '300px',
         textAlign: 'center',
         background: '#364d79',
+        fontSize: '1.8rem'
     };
 
     const clickWord = (e) => setDisplayMeaning(!displayMeanig);
@@ -20,11 +21,9 @@ function WordsCarousel({words}) {
     const renderWords = words.map((word, index) => {
         return (
             <div>
-                <h2 
-                    style={contentStyle}
-                    value={word.word}     
-                    onClick={clickWord}
-                >{`${index + 1}. `} {displayMeanig ? word.meaning : word.word}</h2>
+                <h2 style={contentStyle} value={word.word} onClick={clickWord}>
+                    {`${index + 1}. `} {displayMeanig ? word.meaning : word.word}
+                </h2>
             </div>
         )
     });

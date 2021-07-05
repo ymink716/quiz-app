@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Layout } from 'antd';
-import { useUserState } from '../context/UserContext';
+import { Layout, PageHeader } from 'antd';
 import axios from 'axios';
 import { Row } from 'antd';
 import UnitCard from '../components/UnitCard';
@@ -10,8 +9,6 @@ import qs from 'qs';
 const { Content } = Layout;
 
 function MainPage(props) {
-    const state = useUserState();
-    const { token } = state;
     const [units, setUnits] = useState([]);
 
     const query = qs.parse(props.location.search, {
@@ -40,23 +37,21 @@ function MainPage(props) {
     });
 
     return (
-        <Content style={{ padding: '0 24px', minHeight: 280 }}>
+        <div style={{ width: '100%', marginLeft: '5%'}}>
             {searchText ? (
-                <div>
-                    <h2>검색결과 총 {units.length} Set</h2>
-                    <hr/>
-                </div>
+                <PageHeader title={`검색 결과 총 ${units.length} Set`} >
+                    <hr />
+                </PageHeader>
             ) : (
-                <div>
-                    <h2>Home</h2>
-                    <hr/>
-                </div>
+                <PageHeader title="Home" >
+                    <hr />
+                </PageHeader>
             )}
            
-            <Row gutter={[{ xs: 8, sm: 16, md: 24, lg: 32 }, 16]}>
+            <Row style={{margin: '0 auto'}} gutter={[{ xs: 8, sm: 16, md: 24, lg: 32 }, 16]}>
                 {renderUnits}
             </Row>
-        </Content>
+        </div>
     )
 }
 

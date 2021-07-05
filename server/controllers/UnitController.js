@@ -19,7 +19,7 @@ exports.createUnit = async (req, res, next) => {
 
 exports.getPublicUnits = async (req, res, next) => {
     try {
-        const units = await Unit.find({ isPublic: 'public' });
+        const units = await Unit.find({ isPublic: 'public' }).populate('maker');
         res.status(200).json({ success: true, units });
     } catch (error) {
         console.error(error);
@@ -50,7 +50,7 @@ exports.getUnitsBySearchText = async (req, res, next) => {
                 {'description' : new RegExp(text, 'i')}
             ]},
             { isPublic: 'public' }
-        ]);
+        ]).populate('maker');
 
         res.status(200).json({ success: true, units });
     } catch (error) {

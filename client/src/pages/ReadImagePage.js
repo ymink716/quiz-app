@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import { useUserState } from '../context/UserContext';
-import { PageHeader, Button } from 'antd';
+import { PageHeader, Button, Avatar, Divider } from 'antd';
+import { UserOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import BookmarkButton from '../components/BookmarkButton';
 import ReviewButton from '../components/ReviewButton';
@@ -11,19 +12,21 @@ function ReadImagePage(props) {
     const { token, user } = userState;
     const { unitId } = props.match.params;
 
-    const [titleState, setTitleState] = useState('');
-    const [descriptionState, setDescriptionState] = useState('');
-    const [imageState, setImageState] = useState('');
-    const [isOwnerState, setIsOwnerState] = useState(false);
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [image, setImage] = useState('');
+    const [maker, setMaker] = useState('');
+    const [isOwner, setIsOwner] = useState(false);
 
     useEffect(() => {
         axios.get(`/api/unit/${unitId}`)
         .then(response => {
             if (response.data.success) {
-                setTitleState(response.data.unit.title);
-                setDescriptionState(response.data.unit.description);
-                setImageState(response.data.unit.imageURL);
-                if (user && user.email == response.data.unit.maker.email) setIsOwnerState(true);
+                setTitle(response.data.unit.title);
+                setDescription(response.data.unit.description);
+                setImage(response.data.unit.imageURL);
+                setMaker(response.data.unit.maker);
+                if (user && user.email == response.data.unit.maker.email) setIsOwner(true);
             } else {
                 alert('이미지 불러오기를 실패했습니다.');
             }
@@ -42,11 +45,8 @@ function ReadImagePage(props) {
             `/api/unit/${unitId}`,
             { headers: { Authorization: token }}
         ).then(response => {
-            if (response.data.success) {
-                props.history.push(`/folder/${response.data.deletedUnit.folder}`);
-            } else {
-                alert(response.data.message);
-            }
+            if (response.data.success) props.history.push(`/folder/${response.data.deletedUnit.folder}`);
+            else alert(response.data.message);
         }).catch(error => {
             console.error(error);
             alert('단어장 삭제에 실패했습니다.');
@@ -55,38 +55,54 @@ function ReadImagePage(props) {
 
     return (
         <div style={{ width: '100%', marginLeft: '5%' }}>
-            {user && isOwnerState ? (
+            {user && isOwner ? (
                 <PageHeader
-                    title={titleState}
-                    subTitle={descriptionState}
+                    title={title}
+                    subTitle={<ReviewButton unitId={unitId} />}
                     extra={[
                         <BookmarkButton unitId={unitId} />,
                         <Button onClick={deleteImageHandler}>삭 제</Button>
                     ]}
                 >
-                    <ReviewButton unitId={unitId} />
+                    <Avatar 
+                        size="small"
+                        icon={<UserOutlined />}
+                        style={{marginRight: '5px'}}
+                    />{maker.nickname}
+                    <Divider type="vertical" />
+                    <span>{description}</span>
                     <hr />
                 </PageHeader>
             ) : (
                 <PageHeader
-                    title={titleState}
-                    subTitle={descriptionState}
+                    title={title}
+                    subTitle={<ReviewButton unitId={unitId} />}
                     extra={[
                         <BookmarkButton unitId={unitId} />,
                     ]}
                 >
-                    <ReviewButton unitId={unitId} />
+                    <Avatar 
+                        size="small"
+                        icon={<UserOutlined />}
+                        style={{marginRight: '5px'}}
+                    />{maker.nickname}
+                    <Divider type="vertical" />
+                    <span>{description}</span>
                     <hr />
                 </PageHeader>
             )}
             
-            <img 
-                style={{ marginLeft: '5%' }}
-                src={`http://localhost:5000/${imageState}`} 
-                alt={titleState} 
-                width= '600px'
-                height= '600px'    
-            />
+            <div style={{ textAlign: 'center' }}>
+                <img 
+                    style={{ 
+                        maxWidth: '1000px',
+                        height: 'auto',
+                        marginBottom: '20px'
+                    }}
+                    src={`http://localhost:5000/${image}`} 
+                    alt={title} 
+                />
+            </div>
         </div>
     )
 }

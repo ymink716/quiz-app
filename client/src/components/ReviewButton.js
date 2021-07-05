@@ -57,10 +57,9 @@ function ReviewButton(props) {
     return (
         <> 
             <div>
-                <span>{totalRate}</span>
-                <Rate disabled value={totalRate} />
-                <span>{`${reviewCount} 리뷰`}</span>
-                <Button type="link" onClick={openReviewModal} disabled={!user} >평점 남기기</Button>
+                <Rate disabled value={totalRate} style={{marginRight: '5px'}} />
+                <span>{`${totalRate} 평점 / ${reviewCount} 리뷰`}</span>
+                <Button type="link" onClick={openReviewModal} disabled={!user}>평점 남기기</Button>
             </div>
 
             <Modal
