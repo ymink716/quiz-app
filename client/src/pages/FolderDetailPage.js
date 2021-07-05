@@ -92,7 +92,7 @@ function FolderDetailPage(props) {
                 <hr />
             </PageHeader>
             
-            <Row gutter={[{ xs: 8, sm: 16, md: 24, lg: 32 }, 16]}>
+            <Row style={{margin: '0 auto'}} gutter={[{ xs: 8, sm: 16, md: 24, lg: 32 }, 16]}>
                 {renderUnits}
             </Row>
 

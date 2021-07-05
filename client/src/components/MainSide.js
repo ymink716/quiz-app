@@ -13,7 +13,7 @@ function MainSide() {
   return (
     <Sider 
       width={200} 
-      style={{ backgroundColor: 'white', textAlign: 'center', marginTop: '10px' }}
+      style={{ backgroundColor: 'white', textAlign: 'center', marginTop: '30px' }}
     >
       {user ? (
         <>
@@ -29,7 +29,6 @@ function MainSide() {
           <Menu.Item key="myFolder"><a href="/myFolder">내폴더</a></Menu.Item>
           <Menu.Item key="bookmark"><a href="/bookmark">북마크</a></Menu.Item>
           <Menu.Item key="myInfo"><a href="/myInfo">내정보</a></Menu.Item>
-          <Menu.Item key="logout"><a href="/logout">로그아웃</a></Menu.Item>
         </Menu>
         </>
       ) : (
