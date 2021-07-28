@@ -22,8 +22,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-    await User.deleteOne({ email: "test@gmail.com" });
-    await User.deleteOne({ email: "test@naver.com" });
+    await User.deleteMany();
 });
 
 describe("POST /api/user/register", () => {
@@ -120,14 +119,6 @@ describe("PUT /api/user", () => {
             });
         expect(response.statusCode).toBe(401);
     });
-
-    test("handle 500 error", async () => {
-        const response = await request(app)
-            .put('/api/user')
-            .set("authorization", 'wrong token')
-            .send({ nickname: 'tester23' });
-        expect(response.statusCode).toBe(500);
-    });
 });
 
 describe("DELETE /api/user", () => {
@@ -137,14 +128,6 @@ describe("DELETE /api/user", () => {
             .set("authorization", token)
             .send({ password: '123456' });
         expect(response.statusCode).toBe(401);
-    });
-    
-    test("handle 500 error", async () => {
-        const response = await request(app)
-            .delete('/api/user')
-            .set("authorization", 'wrong token')
-            .send({ password: '123456' });
-        expect(response.statusCode).toBe(500);
     });
 
     test("It should return 200", async () => {
