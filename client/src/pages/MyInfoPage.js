@@ -16,7 +16,6 @@ function MyInfoPage(props) {
 
         try {
             const response = await updateUser(dispatch, values);
-
             if (response.data.success) alert('변경되었습니다.');
             else alert('에러가 발생하였습니다.');
         } catch (error) {
@@ -97,9 +96,8 @@ function MyInfoPage(props) {
                     >
                         <Form.Item
                             name="email"
-                            rules={[{ required: true, type: 'email', message: '이메일을 입력하세요.' }]}
                         >
-                            <Input prefix={<MailOutlined style={{ color: "rgba(0,0,0,.25)" }} />} />
+                            <Input disabled prefix={<MailOutlined style={{ color: "rgba(0,0,0,.25)" }} />} />
                         </Form.Item>
                         <Form.Item 
                             name="nickname"

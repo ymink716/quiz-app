@@ -3,19 +3,11 @@ const dotenv = require('dotenv');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
-const mongoose = require("mongoose");
+const connect = require('./models');
 
 const app = express();
-
 dotenv.config();
-
-// DB 연결 
-mongoose.connect(process.env.mongoURI, {
-    useNewUrlParser: true, useUnifiedTopology: true,
-    useCreateIndex: true, useFindAndModify: false
-  })
-  .then(() => console.log('MongoDB Connected...'))
-  .catch(err => console.log(err));
+connect();
 
 // 미들웨어
 app.use(logger('dev'));

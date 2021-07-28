@@ -34,7 +34,7 @@ exports.getUnitById = async (req, res, next) => {
         const unit = await Unit.findById(req.params.unitId).populate('maker');
 
         if(!unit)
-            return res.status(404).json({ success: false, message: '찾을 수 없습니다.' });
+            return res.status(404).json({ success: false, message: 'can not find unit.' });
 
         res.status(200).json({ success: true, unit });
     } catch (error) {
@@ -63,17 +63,18 @@ exports.getUnitsBySearchText = async (req, res, next) => {
 
 exports.updateUnit = async (req, res, next) => {
     try {
-        const { title, description, isPublic, words } = req.body;
+        const { title, description, words } = req.body;
         const unit = await Unit.findById(req.params.unitId).populate('maker');
 
         if (!unit)
-            return res.status(404).json({ success: false, message: '찾을 수 없습니다.' });
+            return res.status(404).json({ success: false, message: 'can not find unit.' });
         if (toString(unit.maker._id) !== toString(req.currentUser._id))
-            return res.status(403).json({ success: false, message: '제작자만 가능한 작업입니다.' });
+            return res.status(403).json({ success: false, message: 'not allowed user' });
         
         const updatedUnit = await Unit.findByIdAndUpdate(
             req.params.unitId,
-            { title, description, isPublic, words }
+            { title, description, words },
+            { new: true }
         );
 
         res.status(200).json({ success: true, updatedUnit });
@@ -92,11 +93,11 @@ exports.deleteUnit = async (req, res, next) => {
         if (toString(unit.maker._id) !== toString(req.currentUser._id))
             return res.status(403).json({ success: false, message: '제작자만 가능한 작업입니다.' });
         
-        const deletedReviews = await Review.deleteMany({ unitId: req.params.unitId });
-        const deletedBookmarks = await Bookmark.deleteMany({ unitId: req.params.unitId });
+        await Review.deleteMany({ unitId: req.params.unitId });
+        await Bookmark.deleteMany({ unitId: req.params.unitId });
         const deletedUnit = await Unit.findByIdAndDelete(req.params.unitId);
 
-        res.status(200).json({ success: true, deletedUnit, deletedBookmarks, deletedReviews });
+        res.status(200).json({ success: true, deletedUnit });
     } catch (error) {
         console.error(error);
         next(error);
