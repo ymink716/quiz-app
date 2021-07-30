@@ -22,6 +22,9 @@ exports.deleteBookmark = async (req, res, next) => {
             userId: new ObjectId(req.body.userId), 
             unitId: new ObjectId(req.body.unitId) 
         });
+
+        if(!deletedBookmark)
+            return res.status(404).json({ success: false, message: 'Not Found' });
         
         res.status(200).json({ success: true, deletedBookmark });
     } catch (error) {
