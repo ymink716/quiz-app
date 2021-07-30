@@ -10,7 +10,8 @@ exports.saveReview = async (req, res, next) => {
         if (review) {
             review = await Review.findByIdAndUpdate(
                 review._id,
-                { rate: req.body.rate }
+                { rate: req.body.rate },
+                { new: true }
             );
         } else {
             review = await Review.create({
