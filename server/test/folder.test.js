@@ -4,7 +4,6 @@ const { app } = require('../app');
 const { Folder } = require('../models/folder');
 const { User } = require('../models/user');
 const bcrypt = require('bcrypt');
-const mongoose = require('mongoose');
 
 let token, userId, anotherUserId;
 beforeAll(async () => {
@@ -56,11 +55,11 @@ beforeEach(async () => {
 });
 
 afterAll(async () => {
-    await User.deleteMany();
+    await User.deleteMany({});
 });
 
 afterEach(async () => {
-    await Folder.deleteMany();
+    await Folder.deleteMany({});
 });
 
 describe("POST /api/folder", () => {

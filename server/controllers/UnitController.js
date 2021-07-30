@@ -67,9 +67,9 @@ exports.updateUnit = async (req, res, next) => {
         const unit = await Unit.findById(req.params.unitId).populate('maker');
 
         if (!unit)
-            return res.status(404).json({ success: false, message: 'can not find unit.' });
-        if (toString(unit.maker._id) !== toString(req.currentUser._id))
-            return res.status(403).json({ success: false, message: 'not allowed user' });
+            return res.status(404).json({ success: false, message: 'Not Found' });
+        if (String(unit.maker._id) !== String(req.currentUser._id))
+            return res.status(403).json({ success: false, message: 'Forbidden' });
         
         const updatedUnit = await Unit.findByIdAndUpdate(
             req.params.unitId,
@@ -89,9 +89,9 @@ exports.deleteUnit = async (req, res, next) => {
         const unit = await Unit.findById(req.params.unitId).populate('maker');
 
         if (!unit)
-            return res.status(404).json({ success: false, message: '찾을 수 없습니다.' });
-        if (toString(unit.maker._id) !== toString(req.currentUser._id))
-            return res.status(403).json({ success: false, message: '제작자만 가능한 작업입니다.' });
+            return res.status(404).json({ success: false, message: 'Not Found.' });
+        if (String(unit.maker._id) !== String(req.currentUser._id))
+            return res.status(403).json({ success: false, message: 'Forbidden.' });
         
         await Review.deleteMany({ unitId: req.params.unitId });
         await Bookmark.deleteMany({ unitId: req.params.unitId });

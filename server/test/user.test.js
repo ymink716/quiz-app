@@ -22,7 +22,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-    await User.deleteMany();
+    await User.deleteMany({});
 });
 
 describe("POST /api/user/register", () => {
