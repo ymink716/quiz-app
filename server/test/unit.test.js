@@ -1,30 +1,31 @@
 const request = require('supertest');
-process.env.NODE_ENV = "test";
+//process.env.NODE_ENV = "test";
 const { app } = require('../app');
 const { Unit } = require('../models/unit');
 const { User } = require('../models/user');
 const bcrypt = require('bcrypt');
+const mongoose = require('mongoose');
 
 let token, userId, anotherUserId;
 beforeAll(async () => {
     const password = await bcrypt.hash('test1234', 12);
     await User.create({
-        email: "test@gmail.com",
-        nickname: "tester",
+        email: "test3@gmail.com",
+        nickname: "tester3",
         password: password
     });
     const response = await request(app)
         .post('/api/user/login')
         .send({
-            email: 'test@gmail.com',
+            email: 'test3@gmail.com',
             password: 'test1234'
         });
     token = response.body.token;
     userId = response.body.user._id;
 
     const user = await User.create({
-        email: 'test2@gmail.com',
-        nickname: 'tester2',
+        email: 'test4@gmail.com',
+        nickname: 'tester4',
         password: password
     });
     anotherUserId = user._id;
@@ -73,6 +74,7 @@ beforeEach(async () => {
 
 afterAll(async () => {
     await User.deleteMany({});
+    await mongoose.disconnect();
 });
 
 afterEach(async () => {
@@ -197,7 +199,7 @@ describe("DELETE /api/unit/:unitId", () => {
 
     test("It should return 403 status code (forbidden)", async () => {
         const response = await request(app)
-            .put(`/api/unit/${anotherUserUnitId}`)
+            .delete(`/api/unit/${anotherUserUnitId}`)
             .set("authorization", token);
         expect(response.statusCode).toBe(403);
     });

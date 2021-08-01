@@ -10,40 +10,33 @@ function SaveImagePage(props) {
     const { token } = userState;
     const { folderId } = props.match.params;
 
-    const [imageURL, setImageURL] = useState("");
-
-    const uploadImage = async (options) => {
-        const { onSuccess, onError, file } = options;
-
-        const formData = new FormData();
-        formData.append("image", file);
-
-        try {
-            const response = await axios.post('/api/image/upload', formData, {
-                headers: {
-                    Authorization: token,
-                    'content-type': 'multipart/form-data'
-                }
-            });
-            setImageURL(response.data.image);
-            onSuccess("Ok");
-        } catch (error) {
-            onError(error);
-        }
-    }
+    const [image, setImage] = useState(null);
     
     const uploadProps = {
         accept: "image/*",
         maxCount: 1,
-        customRequest: uploadImage,
+        beforeUpload: file => {
+            setImage(file);
+            return false;
+        }
     }
 
     const onFinish = (values) => {
-        const {title, description, isPublic } = values;
+        const { title, description, isPublic } = values;
+        const formData = new FormData();
+        formData.append("image", image);
+        formData.append("title", title);
+        formData.append("description", description);
+        formData.append("isPublic", isPublic);
+        formData.append("folderId", folderId);
+
         axios.post(
             '/api/image', 
-            { title, folderId, description, isPublic, imageURL },
-            {headers: { Authorization: token }}
+            formData,
+            { headers: { 
+                Authorization: token,
+                'content-type': 'multipart/form-data'
+            }}
         ).then(response => {
             if (response.data.success) props.history.push(`/folder/${folderId}`)
             else alert('단어장 생성에 실패했습니다.');

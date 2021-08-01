@@ -1,8 +1,9 @@
 const request = require('supertest');
-process.env.NODE_ENV = "test";
+//process.env.NODE_ENV = "test";
 const { app } = require('../app');
 const { User } = require('../models/user');
 const bcrypt = require('bcrypt');
+const mongoose = require('mongoose');
 
 let token;
 beforeAll(async () => {
@@ -23,6 +24,7 @@ beforeAll(async () => {
 
 afterAll(async () => {
     await User.deleteMany({});
+    await mongoose.disconnect();
 });
 
 describe("POST /api/user/register", () => {

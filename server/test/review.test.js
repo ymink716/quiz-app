@@ -1,23 +1,24 @@
 const request = require('supertest');
-process.env.NODE_ENV = "test";
+//process.env.NODE_ENV = "test";
 const { app } = require('../app');
 const { Review } = require('../models/review');
 const { Unit } = require('../models/unit');
 const { User } = require('../models/user');
 const bcrypt = require('bcrypt');
+const mongoose = require('mongoose');
 
 let token, userId;
 beforeAll(async () => {
     const password = await bcrypt.hash('test1234', 12);
     await User.create({
-        email: "test@gmail.com",
-        nickname: "tester",
+        email: "test2@gmail.com",
+        nickname: "tester2",
         password: password
     });
     const response = await request(app)
         .post('/api/user/login')
         .send({
-            email: 'test@gmail.com',
+            email: 'test2@gmail.com',
             password: 'test1234'
         });
     token = response.body.token;
@@ -43,7 +44,8 @@ beforeEach(async () => {
 });
 
 afterAll(async () => {
-    await User.deleteOne({ email: 'test@gmail.com' });
+    await User.deleteOne({ email: 'test2@gmail.com' });
+    await mongoose.disconnect();
 });
 
 afterEach(async () => {

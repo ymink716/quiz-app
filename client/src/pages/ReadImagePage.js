@@ -42,10 +42,10 @@ function ReadImagePage(props) {
         if (!check) return
 
         axios.delete(
-            `/api/unit/${unitId}`,
+            `/api/image/${unitId}`,
             { headers: { Authorization: token }}
         ).then(response => {
-            if (response.data.success) props.history.push(`/folder/${response.data.deletedUnit.folder}`);
+            if (response.data.success) props.history.push(`/folder/${response.data.deletedImage.folder}`);
             else alert(response.data.message);
         }).catch(error => {
             console.error(error);
