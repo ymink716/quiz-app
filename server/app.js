@@ -9,7 +9,6 @@ const app = express();
 dotenv.config();
 connect();
 
-// 미들웨어
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -17,7 +16,6 @@ app.use(cookieParser());
 app.use(cors());
 app.use('/uploads', express.static('uploads'));
 
-// 라우터
 app.use('/api/user', require('./routes/UserRouter'));
 app.use('/api/folder', require('./routes/FolderRouter'));
 app.use('/api/unit', require('./routes/UnitRouter'));

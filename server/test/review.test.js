@@ -1,5 +1,4 @@
 const request = require('supertest');
-//process.env.NODE_ENV = "test";
 const { app } = require('../app');
 const { Review } = require('../models/review');
 const { Unit } = require('../models/unit');

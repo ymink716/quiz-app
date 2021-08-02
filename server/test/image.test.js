@@ -1,5 +1,4 @@
 const request = require('supertest');
-//process.env.NODE_ENV = "test";
 const { app } = require('../app');
 const { Unit } = require('../models/unit');
 const { User } = require('../models/user');
@@ -7,18 +6,18 @@ const bcrypt = require('bcrypt');
 const path = require('path');
 const mongoose = require('mongoose');
 
-let token, userId;
+let token, userId, image1;
 beforeAll(async () => {
     const password = await bcrypt.hash('test1234', 12);
     await User.create({
-        email: "test1@gmail.com",
+        email: "test@gmail.com",
         nickname: "tester",
         password: password
     });
     const response = await request(app)
         .post('/api/user/login')
         .send({
-            email: 'test1@gmail.com',
+            email: 'test@gmail.com',
             password: 'test1234'
         });
     token = response.body.token;
@@ -26,8 +25,11 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-    await User.deleteOne({ email: 'test1@gmail.com' });
+    await User.deleteOne({ email: 'test@gmail.com' });
     await Unit.deleteMany({});
+    await request(app)
+            .delete(`/api/image/${image1}`)
+            .set("authorization", token);
     await mongoose.disconnect();
 });
 
@@ -42,16 +44,7 @@ describe("POST /api/image", () => {
             .attach('image', path.join(__dirname, '/data/apple.jpg'));
         expect(response.statusCode).toBe(201);
         expect(response.body).toHaveProperty('newImage');
-    });
-
-    test("return 500 error", async () => {
-        const response = await request(app)
-            .post('/api/image')
-            .set('Authorization', token)
-            .field('description', 'test image 1')
-            .field('isPublic', 'public')
-            .attach('image', path.join(__dirname, '/data/apple.jpg'));
-        expect(response.statusCode).toBe(500);
+        image1 = response.body.newImage._id;
     });
 });
 
