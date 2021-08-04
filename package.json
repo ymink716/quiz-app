@@ -9,7 +9,7 @@
     "frontend": "npm run start --prefix client",
     "dev": "concurrently \"npm run backend\" \"npm run start --prefix client\"",
     "test": "set NODE_ENV=test&& jest --runInBand --detectOpenHandles --forceExit",
-    "heroku-postbuild": "npm install --prefix client && npm run build --prefix client"
+    "heroku-postbuild": "cd client && yarn install && yarn run build"
   },
   "repository": {
     "type": "git",
@@ -45,7 +45,8 @@
     ]
   },
   "engines": {
-    "node": "14.x",
-    "npm": "6.x"
+    "node": "14.15.4",
+    "npm": "7.5.2",
+    "yarn": "1.22.4"
   }
 }
