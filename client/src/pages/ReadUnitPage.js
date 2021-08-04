@@ -27,7 +27,7 @@ function ReadUnitPage(props) {
             if (response.data.success) {
                 setTitle(response.data.unit.title);
                 setDescription(response.data.unit.description);
-                if (response.data.unit.words.length !== 0) 
+                if (response.data.unit.words && response.data.unit.words.length !== 0) 
                     setWords([ ...response.data.unit.words ]);
                 setMaker(response.data.unit.maker);
                 if (user && user.email == response.data.unit.maker.email) setIsOwner(true);

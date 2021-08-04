@@ -12,7 +12,7 @@ function QuizPage(props) {
         axios.get(`/api/unit/${unitId}`)
         .then(response => {
             if (response.data.success) {
-                if (response.data.unit.words.length !== 0) 
+                if (response.data.unit.words && response.data.unit.words.length !== 0) 
                     setWords([ ...response.data.unit.words ]);
                 setAnswers(new Array(words.length));
             } else {
