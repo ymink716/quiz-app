@@ -14,11 +14,7 @@ function BookmarkPage() {
     useEffect(() => {
         axios.get('/api/bookmark/users', { headers: { Authorization: token }})
         .then((response) => {
-            if (response.data.success) {
-                setUnits(response.data.units);
-            } else {
-                alert(response.data.message);
-            }
+            setUnits([...response.data.units]);
         }).catch((error) => {
             console.error(error);
             alert('에러가 발생했습니다.')

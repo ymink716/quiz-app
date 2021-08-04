@@ -10,7 +10,7 @@ function FolderDetailPage(props) {
     const { token } = userState;
     const { folderId } = props.match.params;
 
-    const [folder, setFolder] = useState([]);
+    const [folder, setFolder] = useState('');
     const [units, setUnits] = useState([]);
 
     const [form] = Form.useForm();
@@ -21,7 +21,7 @@ function FolderDetailPage(props) {
         .then((response) => {
             if (response.data.success) {
                 setFolder(response.data.folder);
-                setUnits(response.data.units);
+                setUnits([...response.data.units]);
             } else {
                 alert(response.data.message);
             }
