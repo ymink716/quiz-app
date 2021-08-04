@@ -14,7 +14,8 @@ function MyFolderPage() {
     useEffect(() => {
         axios.get('/api/folder/myFolders', { headers: {Authorization: token }})
         .then(response => {
-            setFolders([...response.data.folders]);
+            if (response.data.folders.length !== 0) 
+                setFolders([...response.data.folders]);
         }).catch((error) => {
             console.error(error);
             alert('에러가 발생했습니다.');

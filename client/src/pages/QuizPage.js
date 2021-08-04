@@ -12,7 +12,8 @@ function QuizPage(props) {
         axios.get(`/api/unit/${unitId}`)
         .then(response => {
             if (response.data.success) {
-                setWords([ ...response.data.unit.words ]);
+                if (response.data.unit.words.length !== 0) 
+                    setWords([ ...response.data.unit.words ]);
                 setAnswers(new Array(words.length));
             } else {
                 alert('단어장 불러오기를 실패했습니다.');

@@ -18,7 +18,11 @@ function MainPage(props) {
         if (searchText) {
             axios.get(`/api/unit/search/${searchText}`)
             .then(response => {
-                setUnits([...response.data.units]);
+                if (response.data.units.length !== 0) 
+                    setUnits([...response.data.units]);
+            }).catch(error => {
+                console.error(error);
+                alert('에러가 발생했습니다.')
             });
         } else {
             axios.get('/api/unit')

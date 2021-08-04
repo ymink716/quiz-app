@@ -21,7 +21,8 @@ function FolderDetailPage(props) {
         .then((response) => {
             if (response.data.success) {
                 setFolder(response.data.folder);
-                setUnits([...response.data.units]);
+                if (response.data.units.length !== 0) 
+                    setUnits([...response.data.units]);
             } else {
                 alert(response.data.message);
             }
