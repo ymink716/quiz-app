@@ -4,6 +4,7 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const connect = require('./models');
+const path = require('path');
 
 const app = express();
 dotenv.config();
@@ -15,6 +16,14 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(cors());
 app.use('/uploads', express.static('uploads'));
+
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static("client/build"));
+
+    app.get("*", (req, res) => {
+        res.sendFile(path.join(__dirname, "../client/build/index.html"));
+    });
+}
 
 app.use('/api/user', require('./routes/UserRouter'));
 app.use('/api/folder', require('./routes/FolderRouter'));

@@ -8,7 +8,8 @@
     "backend": "nodemon server/index.js",
     "frontend": "npm run start --prefix client",
     "dev": "concurrently \"npm run backend\" \"npm run start --prefix client\"",
-    "test": "set NODE_ENV=test&& jest --runInBand --detectOpenHandles --forceExit"
+    "test": "set NODE_ENV=test&& jest --runInBand --detectOpenHandles --forceExit",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false cd client && yarn install && yarn run build"
   },
   "repository": {
     "type": "git",
