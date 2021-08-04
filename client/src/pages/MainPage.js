@@ -6,7 +6,6 @@ import { Row } from 'antd';
 import UnitCard from '../components/UnitCard';
 import qs from 'qs';
 
-
 function MainPage(props) {
     const [units, setUnits] = useState([]);
 
@@ -19,18 +18,12 @@ function MainPage(props) {
         if (searchText) {
             axios.get(`/api/unit/search/${searchText}`)
             .then(response => {
-                setUnits(response.data.units);
-            }).catch(error => {
-                console.error(error);
-                alert('데이터를 불러오는데 실패했습니다.');
-            })
+                setUnits([...response.data.units]);
+            });
         } else {
             axios.get('/api/unit')
             .then(response => {
-                setUnits(response.data.units);
-            }).catch(error => {
-                console.error(error);
-                alert('데이터를 불러오는데 실패했습니다.');
+                setUnits([...response.data.units]);
             });
         }
     }, []);
@@ -44,7 +37,7 @@ function MainPage(props) {
     return (
         <div style={{ width: '100%', marginLeft: '5%'}}>
             {searchText ? (
-                <PageHeader title={`검색 결과 총 ${units.length} Set`} >
+                <PageHeader title={`검색 결과 "${searchText}" (${units.length} 건)`} >
                     <hr />
                 </PageHeader>
             ) : (
