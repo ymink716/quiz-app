@@ -11,6 +11,7 @@
     "axios": "^0.21.1",
     "http-proxy-middleware": "^1.0.6",
     "qs": "^6.9.6",
+    "quiz-app": "file:..",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-icons": "^4.1.0",
