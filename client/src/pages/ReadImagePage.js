@@ -20,7 +20,7 @@ function ReadImagePage(props) {
 
     const url = window.location.hostname === 'localhost'
         ? 'http://localhost:5000/'
-        : 'https://ymink-quiz-app.herokuapp.com:5000';
+        : 'https://ymink-quiz-app.herokuapp.com:5000/';
 
     useEffect(() => {
         axios.get(`/api/unit/${unitId}`)
