@@ -39,7 +39,7 @@ function SaveImagePage(props) {
             }}
         ).then(response => {
             if (response.data.success) props.history.push(`/folder/${folderId}`)
-            else alert('단어장 생성에 실패했습니다.');
+            else alert('이미지 생성에 실패했습니다.');
         }).catch(error => {
             console.error(error);
             alert('에러가 발생했습니다.');

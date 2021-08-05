@@ -15,7 +15,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(cors());
-app.use('/uploads', express.static('uploads'));
 
 app.use('/api/user', require('./routes/UserRouter'));
 app.use('/api/folder', require('./routes/FolderRouter'));
@@ -23,6 +22,8 @@ app.use('/api/unit', require('./routes/UnitRouter'));
 app.use('/api/image', require('./routes/ImageRouter'));
 app.use('/api/bookmark', require('./routes/BookmarkRouter'));
 app.use('/api/review', require('./routes/ReviewRouter'));
+
+app.use('/uploads', express.static('uploads'));
 
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static("client/build"));

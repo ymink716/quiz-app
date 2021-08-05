@@ -15,7 +15,7 @@ function QuizResultPage(props) {
             word.index = index + 1;
             if (word.meaning == word.answer) {
                 word.check = true;
-                setAnswerCount(answerCount + 1);
+                setAnswerCount(answerCount => answerCount + 1);
             }
             else word.check = false;
         });

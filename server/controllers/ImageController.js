@@ -10,7 +10,7 @@ exports.uploadImage = async (req, res, next) => {
 
         const newImage = await Unit.create({
             title, description, isPublic, 
-            imageURL: req.file.path, 
+            imageURL: `uploads/${req.file.filename}`, 
             folder: folderId,
             type: "image", 
             maker: req.currentUser._id,
