@@ -18,6 +18,10 @@ function ReadImagePage(props) {
     const [maker, setMaker] = useState('');
     const [isOwner, setIsOwner] = useState(false);
 
+    const url = window.location.hostname === 'localhost'
+        ? 'http://localhost:5000/'
+        : 'https://ymink-quiz-app.herokuapp.com:5000';
+
     useEffect(() => {
         axios.get(`/api/unit/${unitId}`)
         .then(response => {
@@ -99,7 +103,7 @@ function ReadImagePage(props) {
                         height: 'auto',
                         marginBottom: '20px'
                     }}
-                    src={`http://localhost:5000/${image}`} 
+                    src={`${url}${image}`} 
                     alt={title} 
                 />
             </div>
