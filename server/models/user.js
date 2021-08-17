@@ -11,10 +11,10 @@ const userSchema = new Schema({
         type: String,
         required: true,
         minlength: 2,
+        maxlength: 10,
     },
     password: {
-        type: String,
-        minlength: 6,
+        type: String
     },
 }, { timestamps: true });
 

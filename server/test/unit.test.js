@@ -4,9 +4,17 @@ const { Unit } = require('../models/unit');
 const { User } = require('../models/user');
 const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
+require('dotenv').config();
 
 let token, userId, anotherUserId;
 beforeAll(async () => {
+    await mongoose.connect(process.env.mongoTestURI, {
+        useNewUrlParser: true, useUnifiedTopology: true,
+        useCreateIndex: true, useFindAndModify: false
+      })
+      .then(() => console.log('MongoDB Connected...'))
+      .catch(err => console.log(err));
+
     const password = await bcrypt.hash('test1234', 12);
     await User.create({
         email: "test3@gmail.com",

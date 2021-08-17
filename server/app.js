@@ -23,8 +23,6 @@ app.use('/api/image', require('./routes/ImageRouter'));
 app.use('/api/bookmark', require('./routes/BookmarkRouter'));
 app.use('/api/review', require('./routes/ReviewRouter'));
 
-app.use('/uploads', express.static('uploads'));
-
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static("client/build"));
 
@@ -38,6 +36,7 @@ app.use((req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
+    console.error(err);
     res.status(500).json({ message: err.message });
 });
 
