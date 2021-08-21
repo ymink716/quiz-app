@@ -20,17 +20,20 @@ function SaveUnitPage(props) {
     const handleIspublicChange = (e) => setIsPublic(e.target.value);
 
     const blankWord = { word: '', meaning: '' };
-    const [words, setWords] = useState([{ ...blankWord }]);
+    const [words, setWords] = useState([
+        { ...blankWord },
+    ]);
 
     const addWord = () => setWords([ ...words, { ...blankWord }]);
+    
 
-    const removeWord = (e) => {
-        e.preventDefault();
-        const updatedWords = words.filter((w, i) => i !== Number(e.target.dataset.idx));
+    const removeWord = (idx) => {
+        const updatedWords = words.filter((w, i) => i !== Number(idx));
         setWords([ ...updatedWords ]);
     }
 
     const handleWordChange = (e) => {
+        e.preventDefault();
         const { name, value } = e.target;
         const updatedWords = [ ...words ];
         updatedWords[e.target.dataset.idx][name] = value;
@@ -145,7 +148,7 @@ function SaveUnitPage(props) {
                             value={words[index].meaning} onChange={handleWordChange}
                             style={{ width: '30%', textAlign: 'center' }}
                         />
-                        <Button data-idx={index} onClick={removeWord} icon={<DeleteOutlined />} size="large"></Button>
+                        <Button onClick={() => removeWord(index)} icon={<DeleteOutlined />} size="large"></Button>
                     </div>
                 );})}
                 </div>
