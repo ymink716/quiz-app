@@ -1,6 +1,4 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
-import 'antd/dist/antd.css';
 import { useUserState, useUserDispatch, logout } from '../context/UserContext';
 import { Layout, Menu, Input, Button } from 'antd';
 const { Header } = Layout;
@@ -56,4 +54,4 @@ function MainHeader(props) {
     );
 }
 
-export default withRouter(MainHeader);
+export default MainHeader;

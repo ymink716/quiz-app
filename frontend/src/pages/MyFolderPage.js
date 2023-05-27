@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { withRouter } from 'react-router-dom';
 import { useUserState } from '../context/UserContext';
-import { Modal, Button, Form, Input, Row, PageHeader } from 'antd';
+import { Modal, Button, Form, Input, Row } from 'antd';
+import { PageHeader } from '@ant-design/pro-layout';
 import axios from 'axios';
 import FolderCard from '../components/FolderCard';
 
@@ -100,4 +100,4 @@ function MyFolderPage() {
     )
 }
 
-export default withRouter(MyFolderPage);
+export default MyFolderPage;

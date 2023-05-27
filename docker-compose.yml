@@ -1,0 +1,27 @@
+version: "3"
+services:
+  frontend:
+    build:  # 개발환경을 위한 Dockerfile이 어디에 있는지
+      dockerfile: Dockerfile.dev
+      context: ./frontend
+    volumes:  # 코드 수정 후 이미지를 다시 빌드하지 않아도 수정된 코드가 반영되도록
+      - /app/node_modules  # node_modules 참조 x
+      - ./frontend:/app  # ./frontend를 workdir /app에서 참조할 수 있게 함
+    stdin_open: true  # 리액트 앱 종료시 나오는 버그 잡아줌
+
+  nginx:
+    restart: always  # 서버를 항상 재시작
+    build:
+      dockerfile: Dockerfile
+      context: ./nginx
+    ports:  # 포트 매핑 로컬 3000 : 컨테이너 80
+      - "3000:80"
+
+  backend:
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./backend
+    container_name: app_backend
+    volumes:
+      - /app/node_modules
+      - ./backend:/app

@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { withRouter } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useUserState } from '../context/UserContext';
-import { PageHeader, Button, Input, Avatar, Divider } from 'antd';
+import { Button, Input, Avatar, Divider } from 'antd';
 import { SoundOutlined, UserOutlined } from '@ant-design/icons';
+import { PageHeader } from '@ant-design/pro-layout';
 import axios from 'axios';
 import BookmarkButton from '../components/BookmarkButton';
 import ReviewButton from '../components/ReviewButton';
 import { useSpeechSynthesis } from 'react-speech-kit';
 
-function ReadUnitPage(props) {
+function ReadUnitPage() {
     const userState = useUserState();
     const { token, user } = userState;
-    const { unitId } = props.match.params;
+    const { unitId } = useParams();
+    const navigate = useNavigate();
 
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
@@ -46,7 +48,7 @@ function ReadUnitPage(props) {
             { headers: { Authorization: token }}
         ).then(response => {
             if (response.data.success) {
-                props.history.push(`/folder/${response.data.deletedUnit.folder}`);
+                navigate(`/folder/${response.data.deletedUnit.folder}`);
             } else {
                 alert(response.data.message);
             }
@@ -123,4 +125,4 @@ function ReadUnitPage(props) {
     )
 }
 
-export default withRouter(ReadUnitPage);
+export default ReadUnitPage;

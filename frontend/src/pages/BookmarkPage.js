@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { withRouter } from 'react-router-dom';
 import { useUserState } from '../context/UserContext';
-import { PageHeader, Row } from 'antd';
+import { Row } from 'antd';
+import { PageHeader } from '@ant-design/pro-layout';
 import axios from 'axios';
 import UnitCard from '../components/UnitCard';
 
@@ -44,4 +44,4 @@ function BookmarkPage() {
     )
 }
 
-export default withRouter(BookmarkPage);
+export default BookmarkPage;

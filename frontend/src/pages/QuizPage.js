@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { withRouter, Link } from 'react-router-dom';
-import { PageHeader, Button, Input } from 'antd';
+import { Link, useParams } from 'react-router-dom';
+import { Button, Input } from 'antd';
+import { PageHeader } from '@ant-design/pro-layout';
 import axios from 'axios';
 
 function QuizPage(props) {
-    const { unitId } = props.match.params;
+    const { unitId } = useParams();
     const [words, setWords] = useState([]);
     const [answers, setAnswers] = useState([]);
 
@@ -70,4 +71,4 @@ function QuizPage(props) {
     )
 }
 
-export default withRouter(QuizPage);
+export default QuizPage;

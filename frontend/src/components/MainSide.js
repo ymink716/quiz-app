@@ -1,5 +1,4 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
 import { Layout, Menu, Avatar } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import { useUserState } from '../context/UserContext';
@@ -45,4 +44,4 @@ function MainSide() {
   );
 }
 
-export default withRouter(MainSide);
+export default MainSide;

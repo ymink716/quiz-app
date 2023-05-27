@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import { withRouter } from 'react-router-dom';
-import { PageHeader, Button, Table } from 'antd';
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
+import { Button, Table } from 'antd';
 import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
+import { PageHeader } from '@ant-design/pro-layout';
 
 function QuizResultPage(props) {
-    let words = props.location.state.words;
-    const { unitId } = props.match.params;
-    const answers = props.location.state.answers;
+    const navigate = useNavigate();
+    const { unitId } = useParams();
+    const { state } = useLocation();
+    
+    let words = state.words;
+    const answers = state.answers;
     const [answerCount, setAnswerCount] = useState(0);
 
     useEffect(() => {
@@ -52,7 +56,7 @@ function QuizResultPage(props) {
         },
     ];
 
-    const goBack = () => props.history.push(`/unit/${unitId}`);
+    const goBack = () => navigate(`/unit/${unitId}`);
 
     return (
         <div style={{ width: '100%', marginLeft: '5%' }}>
@@ -69,4 +73,4 @@ function QuizResultPage(props) {
     )
 }
 
-export default withRouter(QuizResultPage);
+export default QuizResultPage;

@@ -2,7 +2,7 @@ import React from 'react'
 import { Col, Card, Avatar } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 
-function UnitCard({unit, index, history}) {
+function UnitCard({unit, index}) {
     let link;
     if (unit.type === "words") link = `/unit/${unit._id}`;
     else link = `/image/${unit._id}`;

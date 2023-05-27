@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
-import { withRouter } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useUserState } from '../context/UserContext';
-import { Button, Form, Input, Radio, Upload, PageHeader } from 'antd';
+import { Button, Form, Input, Radio, Upload } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
+import { PageHeader } from '@ant-design/pro-layout';
 
 function SaveImagePage(props) {
     const userState = useUserState();
     const { token } = userState;
-    const { folderId } = props.match.params;
+    const { folderId } = useParams();
 
     const [image, setImage] = useState(null);
-    
+    const navigate = useNavigate();
+
     const uploadProps = {
         accept: "image/*",
         maxCount: 1,
@@ -38,7 +40,7 @@ function SaveImagePage(props) {
                 'content-type': 'multipart/form-data'
             }}
         ).then(response => {
-            if (response.data.success) props.history.push(`/folder/${folderId}`)
+            if (response.data.success) navigate(`/folder/${folderId}`)
             else alert('이미지 생성에 실패했습니다.');
         }).catch(error => {
             console.error(error);
@@ -99,4 +101,4 @@ function SaveImagePage(props) {
     )
 }
 
-export default withRouter(SaveImagePage);
+export default SaveImagePage;

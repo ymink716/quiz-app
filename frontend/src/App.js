@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
 import MainHeader from './components/MainHeader';
 import MainFooter from './components/MainFooter';
@@ -37,32 +37,32 @@ function App() {
         <Layout >
           <MainSide />
           {user ? (
-            <Switch>
-              <Route exact path="/" component={MainPage} />
-              <Route exact path="/myFolder" component={MyFolderPage} />
-              <Route exact path="/folder/:folderId" component={FolderDetailPage} />
-              <Route exact path="/createUnit/:folderId" component={SaveUnitPage} />
-              <Route exact path="/updateUnit/:unitId" component={SaveUnitPage} />
-              <Route exact path="/unit/:unitId" component={ReadUnitPage} />
-              <Route exact path="/createImage/:folderId" component={SaveImagePage} />
-              <Route exact path="/image/:unitId" component={ReadImagePage} />
-              <Route exact path="/bookmark" component={BookmarkPage} />
-              <Route exact path="/study/:unitId" component={StudyWordsPage} />
-              <Route exact path="/quiz/:unitId" component={QuizPage} />
-              <Route exact path="/quizResult/:unitId" component={QuizResultPage} />
-              <Route exact path="/myInfo" component={MyInfoPage} />
-            </Switch>
+            <Routes>
+              <Route path="/" element={<MainPage />} />
+              <Route path="/myFolder" element={<MyFolderPage />} />
+              <Route path="/folder/:folderId" element={<FolderDetailPage />} />
+              <Route path="/createUnit/:folderId" element={<SaveUnitPage />} />
+              <Route path="/updateUnit/:unitId" element={<SaveUnitPage />} />
+              <Route path="/unit/:unitId" element={<ReadUnitPage />} />
+              <Route path="/createImage/:folderId" element={<SaveImagePage />} />
+              <Route path="/image/:unitId" element={<ReadImagePage />} />
+              <Route path="/bookmark" element={<BookmarkPage />} />
+              <Route path="/study/:unitId" element={<StudyWordsPage />} />
+              <Route path="/quiz/:unitId" element={<QuizPage />} />
+              <Route path="/quizResult/:unitId" element={<QuizResultPage />} />
+              <Route path="/myInfo" element={<MyInfoPage />} />
+            </Routes>
             ) : (
-            <Switch>
-              <Route exact path="/" component={MainPage} />
-              <Route exact path="/register" component={RegisterPage} />
-              <Route exact path="/login" component={LoginPage} />
-              <Route exact path="/unit/:unitId" component={ReadUnitPage} />
-              <Route exact path="/image/:unitId" component={ReadImagePage} />
-              <Route exact path="/study/:unitId" component={StudyWordsPage} />
-              <Route exact path="/quiz/:unitId" component={QuizPage} />
-              <Route exact path="/quizResult/:unitId" component={QuizResultPage} />
-            </Switch>
+            <Routes>
+              <Route path="/" element={<MainPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/unit/:unitId" element={<ReadUnitPage />} />
+              <Route path="/image/:unitId" element={<ReadImagePage />} />
+              <Route path="/study/:unitId" element={<StudyWordsPage />} />
+              <Route path="/quiz/:unitId" element={<QuizPage />} />
+              <Route path="/quizResult/:unitId" element={<QuizResultPage />} />
+            </Routes>
           )}
         </Layout>
       </Content>

@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { withRouter } from 'react-router-dom';
-import { PageHeader, Button } from 'antd';
+import { useParams, useNavigate } from 'react-router-dom';
+import { Button } from 'antd';
+import { PageHeader } from '@ant-design/pro-layout';
 import axios from 'axios';
 import WordsCarousel from '../components/WordsCarousel';
 
-function StudyWordsPage(props) {
-    const { unitId } = props.match.params;
+function StudyWordsPage() {
+    const { unitId } = useParams();
+    const navigate = useNavigate();
 
     const [title, setTitle] = useState('');
     const [words, setWords] = useState([]);
@@ -22,8 +24,8 @@ function StudyWordsPage(props) {
         }).catch((error) => alert('에러가 발생하였습니다.'));
     }, []);
 
-    const quizHandler = (e) => props.history.push(`/quiz/${unitId}`);
-    const quitStudy = (e) => props.history.push(`/unit/${unitId}`);
+    const quizHandler = (e) => navigate(`/quiz/${unitId}`);
+    const quitStudy = (e) => navigate(`/unit/${unitId}`);
 
     return (
         <div style={{ width: '100%', marginLeft: '5%' }}>
@@ -43,4 +45,4 @@ function StudyWordsPage(props) {
     )
 }
 
-export default withRouter(StudyWordsPage);
+export default StudyWordsPage;

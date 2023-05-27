@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { withRouter } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useUserState } from '../context/UserContext';
-import { PageHeader, Button, Input } from 'antd';
-import { DeleteOutlined } from '@ant-design/icons'
+import { Button, Input } from 'antd';
+import { DeleteOutlined } from '@ant-design/icons';
+import { PageHeader } from '@ant-design/pro-layout';
 import axios from 'axios';
 
-function SaveUnitPage(props) {
+function SaveUnitPage() {
     const userState = useUserState();
     const { token } = userState;
-    const { folderId } = props.match.params;
+    const { folderId, unitId, path } = useParams();
+    const navigate = useNavigate();
 
     const [title, setTitle] = useState('');
     const handleTitleChange = (e) => setTitle(e.target.value);
@@ -48,7 +50,7 @@ function SaveUnitPage(props) {
             { title, description, isPublic, words, folderId },
             { headers: { Authorization: token }}
         ).then(response => {
-            if (response.data.success) props.history.push(`/folder/${folderId}`)
+            if (response.data.success) navigate(`/folder/${folderId}`)
             else alert('단어장 생성에 실패했습니다.');
         }).catch(error => {
             console.error(error);
@@ -59,13 +61,12 @@ function SaveUnitPage(props) {
     const handleUpdate = (e) => {
         e.preventDefault();
 
-        const { unitId } = props.match.params;
         axios.put(
             `/api/unit/${unitId}`, 
             { title, description, isPublic, words },
             { headers: { Authorization: token }}
         ).then(response => {
-            if (response.data.success) props.history.push(`/unit/${unitId}`)
+            if (response.data.success) navigate(`/unit/${unitId}`)
             else alert(response.data.message);
         }).catch(error => {
             console.error(error);
@@ -74,8 +75,7 @@ function SaveUnitPage(props) {
     }
     
     useEffect(() => {        
-        if (props.match.path !== "/updateUnit/:unitId") return
-        const { unitId } = props.match.params;
+        if (path !== "/updateUnit/:unitId") return
         
         axios.get(`/api/unit/${unitId}`)
         .then(response => {
@@ -97,7 +97,7 @@ function SaveUnitPage(props) {
     return (
         <div style={{ width: '100%', marginLeft: '5%' }}>
             <PageHeader
-                title={props.match.path === "/updateUnit/:unitId" ? "단어장 수정" : "단어장 생성"}
+                title={path === "/updateUnit/:unitId" ? "단어장 수정" : "단어장 생성"}
             >
                 <hr />
             </PageHeader>
@@ -116,7 +116,7 @@ function SaveUnitPage(props) {
                     prefix="설명 : " size="large" max={100}
                     style={{ marginBottom: '20px' }}
                 />
-                {props.match.path === "/updateUnit/:unitId" ? (<></>) : (
+                {path === "/updateUnit/:unitId" ? (<></>) : (
                     <div style={{ width: '100%', marginBottom: '20px', textAlign: 'center' }}>
                         <label>공개 : </label>
                         <input 
@@ -155,7 +155,7 @@ function SaveUnitPage(props) {
 
                 <Button style={{ display: 'block', margin: '1rem auto' }} onClick={addWord}>Add New Word</Button>
 
-                {props.match.path === "/updateUnit/:unitId" ? (
+                {path === "/updateUnit/:unitId" ? (
                     <Button onClick={handleUpdate} type="primary" style={{ display: 'block', margin: '1rem auto' }}>수 정</Button>
                 ) : (
                     <Button onClick={handleCreate} type="primary" style={{ display: 'block', margin: '1rem auto' }}>생 성</Button>
@@ -165,4 +165,4 @@ function SaveUnitPage(props) {
     );
 }
 
-export default withRouter(SaveUnitPage);
+export default SaveUnitPage;

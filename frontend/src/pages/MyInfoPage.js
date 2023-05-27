@@ -1,14 +1,16 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useUserState, useUserDispatch, updateUser, logout } from '../context/UserContext';
-import { PageHeader, Button, Form, Input, Divider, Row, Col } from 'antd';
+import { Button, Form, Input, Divider, Row, Col } from 'antd';
 import { MailOutlined, UserOutlined, LockOutlined } from '@ant-design/icons';
+import { PageHeader } from '@ant-design/pro-layout';
 import axios from 'axios';
 
 function MyInfoPage(props) {
     const userState = useUserState();
     const dispatch = useUserDispatch();
     const { token, user } = userState;
+    const navigate = useNavigate();
 
     const updateProfile = async (values) => {
         const check = window.confirm('변경하시겠습니까?');
@@ -59,7 +61,7 @@ function MyInfoPage(props) {
             if (response.data.success) {
                 alert('정상적으로 처리되었습니다.');
                 await logout(dispatch);
-                props.history.push('/');
+                navigate('/');
             } else {
                 alert('비밀번호를 확인해주세요.');
             }
@@ -177,4 +179,4 @@ function MyInfoPage(props) {
     )
 }
 
-export default withRouter(MyInfoPage);
+export default MyInfoPage;

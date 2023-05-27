@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { withRouter } from 'react-router-dom';
-import { PageHeader } from 'antd';
+import { useLocation } from 'react-router-dom';
+import { PageHeader } from '@ant-design/pro-layout';
 import axios from 'axios';
 import { Row } from 'antd';
 import UnitCard from '../components/UnitCard';
@@ -8,8 +8,8 @@ import qs from 'qs';
 
 function MainPage(props) {
     const [units, setUnits] = useState([]);
-
-    const query = qs.parse(props.location.search, {
+    const { search } = useLocation();
+    const query = qs.parse(search, {
         ignoreQueryPrefix: true
     });
     const searchText = query.search;
@@ -57,4 +57,4 @@ function MainPage(props) {
     )
 }
 
-export default withRouter(MainPage);
+export default MainPage;

@@ -1,10 +1,13 @@
 import React from 'react'
-import { withRouter } from 'react-router-dom';
-import { Form, Input, Button, PageHeader } from 'antd';
+import { useNavigate } from 'react-router-dom';
+import { Form, Input, Button } from 'antd';
+import { PageHeader } from '@ant-design/pro-layout';
 import axios from 'axios';
 import { MailOutlined, UserOutlined, LockOutlined } from '@ant-design/icons';
 
-function RegisterPage(props) {
+function RegisterPage() {
+    const navigate = useNavigate();
+
     const onFinish = (values) => {
         const { email, nickname, password, passwordConfirm } = values;
         if (password !== passwordConfirm) {
@@ -14,7 +17,7 @@ function RegisterPage(props) {
             .then(response => {
                 if (response.data.success) {
                     alert('회원가입에 성공하였습니다.');
-                    props.history.push('/login');
+                    navigate('/login');
                 } else {
                     alert(response.data.message);
                 }
@@ -91,4 +94,4 @@ function RegisterPage(props) {
       );
 }
 
-export default withRouter(RegisterPage);
+export default RegisterPage;

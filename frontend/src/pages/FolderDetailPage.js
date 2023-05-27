@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from 'react'
-import { withRouter } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useUserState } from '../context/UserContext';
-import { PageHeader, Button, Modal, Form, Input, Row } from 'antd';
+import { Button, Modal, Form, Input, Row } from 'antd';
+import { PageHeader } from '@ant-design/pro-layout';
 import UnitCard from '../components/UnitCard';
 
 function FolderDetailPage(props) {
     const userState = useUserState();
     const { token } = userState;
-    const { folderId } = props.match.params;
+    const { folderId } = useParams();
 
     const [folder, setFolder] = useState('');
     const [units, setUnits] = useState([]);
+
+    const navigate = useNavigate();
 
     const [form] = Form.useForm();
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -41,7 +44,7 @@ function FolderDetailPage(props) {
 
         axios.delete(`/api/folder/${folderId}`, { headers: {Authorization: token }})
         .then((response) => {
-            if (response.data.success) props.history.push('/myFolder');
+            if (response.data.success) navigate('/myFolder');
             else alert(response.data.message);
         }).catch((error) => {
             console.error(error);
@@ -133,4 +136,4 @@ function FolderDetailPage(props) {
     )
 }
 
-export default withRouter(FolderDetailPage);
+export default FolderDetailPage;

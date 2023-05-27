@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { withRouter } from 'react-router-dom';
 import { useUserState } from '../context/UserContext';
 import { Button } from 'antd';
 import { BookTwoTone, BookOutlined } from '@ant-design/icons'
@@ -19,7 +18,7 @@ function BookmarkButton(props) {
                 setCounts(response.data.bookmarks.length);
                 
                 response.data.bookmarks.map(bookmark => {
-                    if (user && bookmark.userId == user._id) setBookmarked(true);
+                    if (user && bookmark.userId === user._id) setBookmarked(true);
                 });
             } else {
                 alert('북마크 정보를 가져오는데 실패했습니다.');
@@ -79,4 +78,4 @@ function BookmarkButton(props) {
     )
 }
 
-export default withRouter(BookmarkButton);
+export default BookmarkButton;

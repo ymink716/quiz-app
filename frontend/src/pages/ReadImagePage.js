@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { withRouter } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useUserState } from '../context/UserContext';
-import { PageHeader, Button, Avatar, Divider } from 'antd';
+import { Button, Avatar, Divider } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
+import { PageHeader } from '@ant-design/pro-layout';
 import axios from 'axios';
 import BookmarkButton from '../components/BookmarkButton';
 import ReviewButton from '../components/ReviewButton';
 
 function ReadImagePage(props) {
+    const navigate = useNavigate();
     const userState = useUserState();
     const { token, user } = userState;
-    const { unitId } = props.match.params;
+    const { unitId } = useParams();
 
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
@@ -45,7 +47,7 @@ function ReadImagePage(props) {
             `/api/image/${unitId}`,
             { headers: { Authorization: token }}
         ).then(response => {
-            if (response.data.success) props.history.push(`/folder/${response.data.deletedImage.folder}`);
+            if (response.data.success) navigate(`/folder/${response.data.deletedImage.folder}`);
             else alert(response.data.message);
         }).catch(error => {
             console.error(error);
@@ -107,4 +109,4 @@ function ReadImagePage(props) {
     )
 }
 
-export default withRouter(ReadImagePage);
+export default ReadImagePage;

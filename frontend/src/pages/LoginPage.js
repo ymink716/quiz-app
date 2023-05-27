@@ -1,7 +1,7 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
-import { Form, Input, Button, PageHeader } from 'antd';
+import { Form, Input, Button } from 'antd';
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
+import { PageHeader } from '@ant-design/pro-layout';
 import { useUserDispatch, login } from '../context/UserContext';
 
 function LoginPage() {
@@ -68,4 +68,4 @@ function LoginPage() {
       );
 }
 
-export default withRouter(LoginPage);
+export default LoginPage;
