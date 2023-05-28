@@ -19,7 +19,7 @@ exports.addBookmark = async (req, res, next) => {
 exports.deleteBookmark = async (req, res, next) => {
     try {
         const deletedBookmark = await Bookmark.findOneAndDelete({ 
-            userId: new ObjectId(req.body.userId), 
+            userId: new ObjectId(req.currentUser._id), 
             unitId: new ObjectId(req.body.unitId) 
         });
 

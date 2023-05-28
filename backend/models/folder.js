@@ -8,7 +8,7 @@ const folderSchema = new Schema({
     },
     maker: {
         type: Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'User',
     },
     description: {
         type: String,
