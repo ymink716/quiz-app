@@ -4,21 +4,23 @@ const { Unit } = require('../models/unit');
 const s3 = require('../config/s3');
 
 exports.uploadImage = async (req, res, next) => {
-    try {
-        const { title, description, isPublic, folderId } = req.body;
+    const { title, description, isPublic, folderId } = req.body;
+    const url = req.file.location;
+    const userId = req.currentUser._id;
 
+    try {
         if (!req.file.location)
             return res.status(400).json({ success: false, message: 'image does not exist' });
 
-        const newImage = await Unit.create({
+        await Unit.create({
             title, description, isPublic, 
-            imageURL: req.file.location, 
+            imageURL: url, 
             folder: folderId,
             type: "image", 
-            maker: req.currentUser._id,
+            maker: userId,
         });
         
-        res.status(201).json({ success: true, newImage });
+        res.status(201).json({ success: true });
     } catch (error) {
         console.error(error);
         next(error);
@@ -26,20 +28,24 @@ exports.uploadImage = async (req, res, next) => {
 }
 
 exports.deleteImage = async (req, res, next) => {
+    const imageId = req.params.imageId;
+    const userId = req.currentUser._id;
+
     try {
-        const image = await Unit.findById(req.params.imageId).populate('maker');
+        const image = await Unit.findById(imageId).populate('maker');
 
         if (!image)
             return res.status(404).json({ success: false, message: 'Not Found.' });
-        if (String(image.maker._id) !== String(req.currentUser._id))
+        if (String(image.maker._id) !== String(userId))
             return res.status(403).json({ success: false, message: 'Forbidden.' });
         
-        await Review.deleteMany({ unitId: req.params.imageId });
-        await Bookmark.deleteMany({ unitId: req.params.imageId });
-        const deletedImage = await Unit.findByIdAndDelete(req.params.imageId);
+        await Review.deleteMany({ unitId: imageId });
+        await Bookmark.deleteMany({ unitId: imageId });
+        await Unit.findByIdAndDelete(imageId);
         
         const url = image.imageURL.split('/');
         const fileName = url[url.length - 1];
+
         s3.deleteObject({
             Bucket: process.env.AWS_S3_BUCKET_NAME,
             Key: fileName
@@ -48,7 +54,7 @@ exports.deleteImage = async (req, res, next) => {
             console.log('image delete success', data);
         });
         
-        res.status(200).json({ success: true, deletedImage });
+        res.status(200).json({ success: true });
     } catch (error) {
         console.error(error);
         next(error);

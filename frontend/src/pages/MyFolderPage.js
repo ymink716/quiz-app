@@ -84,13 +84,13 @@ function MyFolderPage() {
                 >
                     <Form.Item 
                         label="제목 :" name="title" 
-                        rules={[{ required: true, message: '필수사항(30글자 이내)', max: 30 }]}
+                        rules={[{ required: true, message: '필수사항 (50글자 이내)', max: 50 }]}
                     >
                         <Input placeholder="제목을 입력하세요." />
                     </Form.Item>
                     <Form.Item 
                         label="설명 :" name="description"
-                        rules={[{ message: '설명(100글자 이내)', max: 100 }]}
+                        rules={[{ message: '설명 (255글자 이내)', max: 255 }]}
                     >
                         <Input placeholder="설명을 입력하세요." />
                     </Form.Item>

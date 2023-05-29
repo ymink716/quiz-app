@@ -64,12 +64,12 @@ function SaveImagePage(props) {
             >
                 <Form.Item 
                     name="title" label="제목 :" 
-                    rules={[{ required: true, max:30, message: '필수사항입니다. (30글자 이내)' }]}>
+                    rules={[{ required: true, max: 50, message: '필수사항입니다. (50글자 이내)' }]}>
                     <Input autoFocus placeholder="제목을 입력하세요."/>
                 </Form.Item>
                 <Form.Item 
                     name="description" label="설명 :"
-                    rules={[{ max: 100, message: '(100글자 이내)' }]}
+                    rules={[{ max: 255, message: '(255글자 이내)' }]}
                 >
                     <Input placeholder="설명을 입력하세요."/>
                 </Form.Item>

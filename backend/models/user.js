@@ -16,7 +16,19 @@ const userSchema = new Schema({
     password: {
         type: String
     },
-}, { timestamps: true });
+}, { 
+    timestamps: true,
+    versionKey: false,
+});
+
+userSchema.statics.toResponseData = function(user) {
+    const obj = user.toObject();
+    delete obj.createdAt;
+    delete obj.updatedAt;
+    delete obj.password;
+    
+    return obj;
+}
 
 const User = mongoose.model('User', userSchema);
 

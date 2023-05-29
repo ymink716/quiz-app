@@ -8,8 +8,9 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 exports.createUser = async (req, res, next) => {
+    const { email, nickname, password } = req.body;
+
     try {
-        const { email, nickname, password } = req.body;
         const user = await User.findOne({ email });
         if (user) {
             return res.status(409).json({ message: 'This email is already in use.' });
@@ -17,11 +18,10 @@ exports.createUser = async (req, res, next) => {
 
         const salt = await bcrypt.genSalt(10);
         const hash = await bcrypt.hash(password, salt);
-        const newUser = await User.create({
-            email, nickname, password: hash
-        });
 
-        res.status(201).json({ success: true, newUser });
+        await User.create({ email, nickname, password: hash });
+
+        res.status(201).json({ success: true });
     } catch (error) {
         console.error(error);
         next(error);
@@ -29,17 +29,24 @@ exports.createUser = async (req, res, next) => {
 }
 
 exports.createToken = async (req, res, next) => {
+    const { email, password } = req.body;
+
     try {
-        const { email, password } = req.body;
         const user = await User.findOne({ email });
 
         if (user) {
             const result = await bcrypt.compare(password, user.password);
+            
             if (!result) {
                 return res.status(401).json({ message: 'Please check your ID and password again.'});
-            }       
+            }
+
             const token = jwt.sign({ email, userId: user._id }, process.env.JWT_SECRET_KEY);
-            return res.status(200).json({ success: true, user, token });
+            
+            return res.status(200).json({ 
+                success: true, 
+                user: User.toResponseData(user), 
+                token });
         } else {
             return res.status(401).json({ message: 'Please check your ID and password again.' });
         }
@@ -50,25 +57,38 @@ exports.createToken = async (req, res, next) => {
 }
 
 exports.updateUser = async (req, res, next) => {
+    const newPassword = req.body.newPassword || null;
+    const currentPassword = req.body.currentPassword || null;
+    const nickname = req.body.nickname || null;
+    const userId = req.currentUser._id;
+
     try {
-        if (req.body.newPassword) {
-            const result = await bcrypt.compare(req.body.currentPassword, req.currentUser.password);
+        if (newPassword) {
+            const user = await User.findOne({ userId });
+
+            const result = await bcrypt.compare(currentPassword, user.password);
             if (!result) return res.status(401).json({ success: false, message: 'Please check your password again.'});
                     
-            const hash = await bcrypt.hash(req.body.newPassword, 12);
-            const user = await User.findOneAndUpdate(
-                { _id: req.currentUser._id },
+            const hash = await bcrypt.hash(newPassword, 10);
+            const updatedUser = await User.findOneAndUpdate(
+                { _id: userId },
                 { password: hash }, 
                 { new: true }
             );
-            res.status(200).json({ success: true, user });
+            res.status(200).json({ 
+                success: true, 
+                user: User.toResponseData(updatedUser), 
+            });
         } else {
-            const user = await User.findOneAndUpdate(
-                { _id: req.currentUser._id },
-                { nickname: req.body.nickname }, 
+            const updatedUser = await User.findOneAndUpdate(
+                { _id: userId },
+                { nickname }, 
                 { new: true }
             );
-            res.status(200).json({ success: true, user });
+            res.status(200).json({ 
+                success: true, 
+                user: User.toResponseData(updatedUser) 
+            });
         }
     } catch (error) {
         console.error(error);
@@ -77,17 +97,22 @@ exports.updateUser = async (req, res, next) => {
 }
 
 exports.deleteUser = async (req, res, next) => {
+    const password = req.body.password;
+    const userId = req.currentUser._id;
+
     try {
-        const result = await bcrypt.compare(req.body.password, req.currentUser.password);
+        const user = await User.findOne({ userId });
+
+        const result = await bcrypt.compare(password, user.password);
         if (!result) return res.status(401).json({ success: false, message: 'Please check your password again.'});
                 
-        await Bookmark.deleteMany({ userId: req.currentUser._id });
-        await Review.deleteMany({ userId: req.currentUser._id });
-        await Unit.deleteMany({ maker: req.currentUser._id });
-        await Folder.deleteMany({ maker: req.currentUser._id });
-        const user = await User.findByIdAndDelete(req.currentUser._id);
+        await Bookmark.deleteMany({ userId });
+        await Review.deleteMany({ userId });
+        await Unit.deleteMany({ maker: userId });
+        await Folder.deleteMany({ maker: userId });
+        await User.findByIdAndDelete(userId);
 
-        res.status(200).json({ success: true, user });
+        res.status(200).json({ success: true });
     } catch (error) {
         console.error(error);
         next(error);

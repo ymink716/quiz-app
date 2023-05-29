@@ -12,7 +12,28 @@ const bookmarkSchema = mongoose.Schema({
         ref: 'Unit',
         required: true,
     },
-}, { timestamps: true })
+}, { 
+    timestamps: true,  
+    versionKey: false,
+});
+
+bookmarkSchema.statics.toResponseData = function(bookmark) {
+    const obj = bookmark.toObject();
+    delete obj.createdAt;
+    delete obj.updatedAt;
+
+    return obj;
+}
+
+bookmarkSchema.statics.toResponseDataList = function(bookmarkList) {
+    const array = [];
+
+    for (const bookmark of bookmarkList) {
+        array.push(bookmark.toResponseData());
+    }
+
+    return array;
+};
 
 
 const Bookmark = mongoose.model('Bookmark', bookmarkSchema);

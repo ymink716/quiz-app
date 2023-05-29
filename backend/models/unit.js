@@ -31,7 +31,31 @@ const unitSchema = new Schema({
     imageURL: {
         type: String,
     }
-}, { timestamps: true });
+}, { 
+    timestamps: true,
+    versionKey: false,
+});
+
+unitSchema.statics.toResponseData = function(unit) {
+    const obj = unit.toObject();
+    delete obj.createdAt;
+    delete obj.updatedAt;
+    delete obj.maker.password;
+    delete obj.maker.createdAt;
+    delete obj.maker.updatedAt;
+    
+    return obj;
+}
+
+unitSchema.statics.toResponseDataList = function(units) {
+    const array = [];
+
+    for (const unit of units) {
+        array.push(unit.toResponseData());
+    }
+
+    return array;
+};
 
 const Unit = mongoose.model('Unit', unitSchema);
 

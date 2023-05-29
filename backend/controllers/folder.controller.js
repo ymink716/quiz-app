@@ -2,13 +2,18 @@ const { Folder } = require('../models/folder');
 const { Unit } = require('../models/unit');
 
 exports.createFolder = async (req, res, next) => {
-    try {
-        const { title, description } = req.body;
-        const newFolder = await Folder.create({
-            title, description, maker: req.currentUser._id
-        });
+    const { title, description } = req.body;
+    const userId = req.currentUser._id;
 
-        res.status(201).json({ success: true, newFolder });
+    try {
+        const newFolder = await Folder.create({
+            title, description, maker: userId
+        });
+        
+        res.status(201).json({ 
+            success: true,
+            newFolder: Folder.toResponseData(newFolder),
+         });
     } catch (error) {
         console.error(error);
         next(error);
@@ -16,9 +21,15 @@ exports.createFolder = async (req, res, next) => {
 }
 
 exports.getFoldersByUser = async (req, res, next) => {
+    const maker = req.currentUser;
+
     try {
-        const folders = await Folder.find({ maker: req.currentUser });
-        res.status(200).json({ success: true, folders }); 
+        const folders = await Folder.find({ maker });
+
+        res.status(200).json({ 
+            success: true, 
+            folders: Folder.toResponseDataList(folders), 
+        }); 
     } catch (error) {
         console.error(error);
         next(error);
@@ -26,15 +37,18 @@ exports.getFoldersByUser = async (req, res, next) => {
 }
 
 exports.getFolder = async (req, res, next) => {
+    const folderId = req.params.folderId;
+
     try {
-        const folder = await Folder.findById(req.params.folderId);
+        let folder = await Folder.findById(folderId);
 
         if (!folder)
             return res.status(404).json({ success: false, message: 'Not Found.' });
 
-        const units = await Unit.find({ folder: req.params.folderId }).populate('maker');
-
-        res.status(200).json({ success: true, folder, units }); 
+        res.status(200).json({ 
+            success: true, 
+            folder: Folder.toResponseData(folder), 
+        }); 
     } catch (error) {
         console.error(error);
         next(error);
@@ -42,9 +56,11 @@ exports.getFolder = async (req, res, next) => {
 }
 
 exports.updateFolder = async (req, res, next) => {
+    const { title, description } = req.body;
+    const folderId = req.params.folderId;
+
     try {
-        const { title, description } = req.body;
-        const folder = await Folder.findById(req.params.folderId).populate('maker');
+        const folder = await Folder.findById(folderId).populate('maker');
 
         if (!folder)
             return res.status(404).json({ success: false, message: 'Not Found.' });
@@ -52,12 +68,15 @@ exports.updateFolder = async (req, res, next) => {
             return res.status(403).json({ success: false, message: 'Forbidden.' });
 
         const updatedFolder = await Folder.findByIdAndUpdate(
-            req.params.folderId,
+            folderId,
             { title, description },
             { new: true }
         );
         
-        res.status(200).json({ success: true, updatedFolder });
+        res.status(200).json({ 
+            success: true, 
+            updatedFolder: Folder.toResponseData(updatedFolder), 
+        });
     } catch (error) {
         console.error(error);
         next(error);
@@ -65,18 +84,21 @@ exports.updateFolder = async (req, res, next) => {
 }
 
 exports.deleteFolder = async (req, res, next) => {
+    const folderId = req.params.folderId;
+    const userId = req.currentUser._id;
+
     try {
-        const folder = await Folder.findById(req.params.folderId).populate('maker');
+        const folder = await Folder.findById(folderId).populate('maker');
         
         if (!folder)
             return res.status(404).json({ success: false, message: 'Not Found.' });
-        if (String(folder.maker._id) !== String(req.currentUser._id))
+        if (String(folder.maker._id) !== String(userId))
             return res.status(403).json({ success: false, message: 'Forbidden.' });
         
-        const deletedFolder = await Folder.findByIdAndDelete(req.params.folderId);
-        const deletedUnits = await Unit.deleteMany({ folder });
+        await Folder.findByIdAndDelete(folderId);
+        await Unit.deleteMany({ folder });
 
-        res.status(200).json({ success: true, deletedFolder, deletedUnits });
+        res.status(200).json({ success: true });
     } catch (error) {
         console.error(error);
         next(error);

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const imageController = require('../controllers/ImageController');
+const imageController = require('../controllers/image.controller');
 const { checkCurrentUser } = require('../middlewares/auth.middleware');
 const multer = require('multer');
 const multerS3 = require('multer-s3');

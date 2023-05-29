@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const reviewController = require('../controllers/ReviewController');
+const reviewController = require('../controllers/review.controller');
 const { checkCurrentUser } = require('../middlewares/auth.middleware');
 const { body } = require('express-validator');
 const { catchValidationError } = require('../middlewares/validation-checker.middleware');
