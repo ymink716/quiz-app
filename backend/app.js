@@ -3,11 +3,13 @@ const dotenv = require('dotenv');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
-const connect = require('./models');
+const connectDatabase = require('./models');
+require('express-async-errors');
+const { HTTPError } = require('http-errors');
 
 const app = express();
 dotenv.config();
-connect();
+connectDatabase();
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -27,8 +29,12 @@ app.use((req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
-    console.error(err);
-    res.status(500).json({ message: err.message });
-});
+    if (err instanceof HTTPError) {
+        res.status(err.status).json({ message: err.message });
+    } else {
+        console.error(err);
+        res.status(500).json({ message: err.message });
+    }
+}); 
 
 module.exports = { app };
