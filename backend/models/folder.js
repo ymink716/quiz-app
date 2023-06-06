@@ -1,40 +1,34 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
+const { folderNotFound, folderForbidden } = require('../common/error-type').ErrorType;
 
 const folderSchema = new Schema({
-    title: {
-        type: String,
-        required: true,
-    },
-    maker: {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-    },
-    description: {
-        type: String,
-    }
+  title: {
+    type: String,
+    required: true,
+  },
+  maker: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+  },
+  description: {
+    type: String,
+  }
 }, { 
-    timestamps: true,
-    versionKey: false,
+  timestamps: true,
+  versionKey: false,
 });
 
-folderSchema.statics.toResponseData = function(folder) {
-    const obj = folder.toObject();
-    delete obj.maker;
-    delete obj.createdAt;
-    delete obj.updatedAt;
+folderSchema.statics.checkIsWriter = async (folderId, userId) => {
+  const folder = await Folder.findById(folderId).populate('maker');
 
-    return obj;
-}
+  if (!folder) {
+    throw new CustomError(folderNotFound.type, folderNotFound.status, folderNotFound.message);
+  }
 
-folderSchema.statics.toResponseDataList = function(folders) {
-    const array = [];
-
-    for (const folder of folders) {
-        array.push(folder.toResponseData());
-    }
-
-    return array;
+  if (String(folder.maker._id) !== String(userId)) {
+    throw new CustomError(folderForbidden.type, folderForbidden.status, folderForbidden.message);
+  }
 };
 
 const Folder = mongoose.model('Folder', folderSchema);

@@ -3,8 +3,8 @@ const router = express.Router();
 const userService = require('../service/user.service');
 const { checkCurrentUser } = require('../middlewares/auth.middleware');
 const { body } = require('express-validator');
-const { catchValidationError } = require('../middlewares/validation-checker.middleware');
-const { asyncWrapper } = require('../middlewares/async-wrapper.middleware');
+const { catchValidationError } = require('../middlewares/validation-checker');
+const { asyncWrapper } = require('../middlewares/async-wrapper');
 
 // TODO: 인증 방식 수정 -> Oauth, refesh token
 

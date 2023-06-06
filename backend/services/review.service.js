@@ -11,11 +11,11 @@ exports.saveReview = async (userId, unitId, rate) => {
 
   const reviews = await Review.find({ unitId });
 
-  return Review.toResponseDataList(reviews);
+  return reviews.map((review) => Review.toJSON(review));
 }
  
 exports.getReviewsByUnit = async (unitId) => {
   const reviews = await Review.find({ unitId });
 
-  return Review.toResponseDataList(reviews);
+  return reviews.map((review) => Review.toJSON(review));
 }

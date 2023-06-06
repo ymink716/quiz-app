@@ -2,12 +2,12 @@ const { Review } = require('../models/review');
 const { Bookmark } = require('../models/bookmark');
 const { Unit } = require('../models/unit');
 const s3 = require('../config/s3');
-const createError = require('http-errors');
-const { imageBadRequest, imageNotFound, imageForbidden } = require('../common/error-type').ErrorType;
+const CustomError = require('../common/error/custom-error');
+const { imageBadRequest } = require('../common/error-type').ErrorType;
 
 exports.uploadImage = async (title, description, isPublic, folderId, url, userId) => {
   if (!url) {
-    throw new createError(imageBadRequest.statusCode, imageBadRequest.message);
+    throw new CustomError(imageBadRequest.type, imageBadRequest.status, imageBadRequest.message);
   }
 
   await Unit.create({
@@ -20,7 +20,7 @@ exports.uploadImage = async (title, description, isPublic, folderId, url, userId
 }
 
 exports.deleteImage = async (imageId, userId) => {
-  await checkIsWriter(imageId, userId);
+  await Unit.checkIsWriter(imageId, userId);
     
   await Review.deleteMany({ unitId: imageId });
   await Bookmark.deleteMany({ unitId: imageId });
@@ -35,16 +35,4 @@ exports.deleteImage = async (imageId, userId) => {
   }, function(err, data) {
     if (err) next(err);
   });    
-}
-
-const checkIsWriter = async (imageId, userId) => {
-  const image = await Unit.findById(imageId).populate('maker');
-
-  if (!image) {
-    throw new createError(imageNotFound.statusCode, imageNotFound.statusCode);
-  }
-  
-  if (String(image.maker._id) !== String(userId)) {
-    throw new createError(imageForbidden.statusCode, imageForbidden.message);
-  }
 }

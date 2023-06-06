@@ -1,8 +1,8 @@
 const { Unit } = require('../models/unit');
 const { Review } = require('../models/review');
 const { Bookmark } = require('../models/bookmark');
-const createError = require('http-errors');
-const { unitNotFound, unitForbidden } = require('../common/error-type').ErrorType;
+const CustomError = require('../common/error/custom-error');
+const { unitNotFound } = require('../common/error-type').ErrorType;
 
 exports.createUnit = async (title, description, isPublic, words, folderId, userId) => {
   await Unit.create({
@@ -16,17 +16,17 @@ exports.createUnit = async (title, description, isPublic, words, folderId, userI
 exports.getPublicUnits = async () => {
   const units = await Unit.find({ isPublic: 'public' }).populate('maker');
     
-  return Unit.toResponseDataList(units);
+  return units.map((unit) => Unit.toJSON(unit));
 }
 
 exports.getUnitById = async (unitId) => {
   const unit = await Unit.findById(unitId).populate('maker');
 
   if(!unit) {
-    throw new createError(unitNotFound.statusCode, unitNotFound.message);
+    throw new CustomError(unitNotFound.type, unitNotFound.status, unitNotFound.message);
   }
 
-  return Unit.toResponseData(unit);
+  return Unit.toJSON(unit);
 }
 
 exports.getUnitsBySearchText = async (text) => {
@@ -38,13 +38,13 @@ exports.getUnitsBySearchText = async (text) => {
       { isPublic: 'public' }
     ]).populate('maker');
 
-    return Unit.toResponseDataList(units);
-}
+    return units.map((unit) => Unit.toJSON(unit));
+  }
 
 exports.getUnitsByFolder = async (folderId) => {
   const units = await Unit.find({ folder: folderId }).populate('maker');
 
-  return Unit.toResponseDataList(units);
+  return units.map((unit) => Unit.toJSON(unit));
 }
 
 exports.getBookmarkedUnits = async (userId) => {
@@ -55,11 +55,11 @@ exports.getBookmarkedUnits = async (userId) => {
 
   const units = await Unit.find({ _id: { $in: unitIds }}).populate('maker');
 
-  return Unit.toResponseDataList(units);
+  return units.map((unit) => Unit.toJSON(unit));
 }
 
 exports.updateUnit = async (title, description, words, unitId, userId) => {
-  await checkIsWriter(unitId, userId);
+  await Unit.checkIsWriter(unitId, userId);
     
   const updatedUnit = await Unit.findByIdAndUpdate(
     unitId,
@@ -67,26 +67,13 @@ exports.updateUnit = async (title, description, words, unitId, userId) => {
     { new: true }
   );
 
-  return Unit.toResponseData(updatedUnit);
+  return Unit.toJSON(updatedUnit);
 }
 
 exports.deleteUnit = async (unitId, userId) => {
-  checkIsWriter(unitId, userId);
+  Unit.checkIsWriter(unitId, userId);
     
   await Review.deleteMany({ unitId });
   await Bookmark.deleteMany({ unitId });
   await Unit.findByIdAndDelete(unitId);
 }
-
-const checkIsWriter = async (unitId, userId) => {
-  const unit = await Unit.findById(unitId).populate('maker');
-
-  if (!unit) {
-    throw new createError(unitNotFound.statusCode, unitNotFound.message);
-  }
-    
-  if (String(unit.maker._id) !== String(userId)) {
-    throw new createError(unitForbidden.statusCode, unitForbidden.message);
-  }
-}
-

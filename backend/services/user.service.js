@@ -3,7 +3,7 @@ const { Bookmark } = require('../models/bookmark');
 const { Review } = require('../models/review');
 const { Unit } = require('../models/unit');
 const { Folder } = require('../models/folder');
-const createError = require('http-errors');
+const CustomError = require('../common/error/custom-error');
 const { existedUser, userBadRequest } = require('../common/error-type').ErrorType;
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -12,7 +12,7 @@ exports.createUser = async (email, nickname, password) => {
   const user = await User.findOne({ email });
 
   if (user) {
-    throw new createError(exisstedUser.statusCode, existedUser.message);
+    throw new CustomError(existedUser.type, exisstedUser.status, existedUser.message);
   }
 
   const salt = await bcrypt.genSalt(10);
@@ -24,19 +24,19 @@ exports.createUser = async (email, nickname, password) => {
 exports.createToken = async (email, password) => {
   const user = await User.findOne({ email });
 
-  if (user) {
-    const result = await bcrypt.compare(password, user.password);
-        
-    if (!result) {
-      throw new createError(userBadRequest.statusCode, userBadRequest.message);
-    }
-
-    const token = jwt.sign({ email, userId: user._id }, process.env.JWT_SECRET_KEY);
-        
-    return { user: User.toResponseData(user), token };
-  } else {
-    throw new createError(userBadRequest.statusCode, userBadRequest.message);
+  if (!user) {
+    throw new CustomError(userBadRequest.type, userBadRequest.status, userBadRequest.message);
   }
+
+  const isMatched = await bcrypt.compare(password, user.password);
+      
+  if (!isMatched) {
+    throw new CustomError(userBadRequest.type, userBadRequest.status, userBadRequest.message);
+  }
+
+  const token = jwt.sign({ email, userId: user._id }, process.env.JWT_SECRET_KEY);
+      
+  return { user: User.toJSON(user), token };
 }
 
 // exports.updateUser = async (req, res) => {
