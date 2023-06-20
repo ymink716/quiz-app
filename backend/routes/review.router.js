@@ -3,8 +3,8 @@ const router = express.Router();
 const reviewService = require('../services/review.service');
 const { checkCurrentUser } = require('../middlewares/auth.middleware');
 const { body, param } = require('express-validator');
-const { catchValidationError } = require('../middlewares/validation-checker.middleware');
-const { asyncWrapper } = require('../middlewares/async-wrapper.middleware');
+const { catchValidationError } = require('../middlewares/validation-checker');
+const { asyncWrapper } = require('../middlewares/async-wrapper');
 
 router.post('/', 
   [

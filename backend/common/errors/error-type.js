@@ -1,4 +1,4 @@
-export const ErrorType = {  
+const ErrorType = {  
   // User & Auth
   existedUser: { type: 'Conflict', status: 409, message: '이미 가입된 계정입니다.' },
   unauthorized: { type: 'Unauthorized', status: 401, message: '인증되지 않은 사용자입니다.' },
@@ -27,7 +27,7 @@ export const ErrorType = {
   internalServerError: { type: 'Internal Server Error', status: 500, message: '서버 에러입니다.' },
 }  
 
-
+module.exports = { ErrorType };
 
 
 

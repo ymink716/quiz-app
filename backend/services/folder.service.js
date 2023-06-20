@@ -1,7 +1,7 @@
 const { Folder } = require('../models/folder');
 const { Unit } = require('../models/unit');
-const CustomError = require('../common/error/custom-error');
-const { folderNotFound } = require('../common/error-type').ErrorType;
+const CustomError = require('../common/errors/custom-error');
+const { folderNotFound } = require('../common/errors/error-type').ErrorType;
 
 exports.createFolder = async (title, description, userId) => {
   const newFolder = await Folder.create({

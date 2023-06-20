@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
-const CustomError = require('../common/error/custom-error');
-const { unitNotFound, unitForbidden } = require('../common/error-type').ErrorType;
+const CustomError = require('../common/errors/custom-error');
+const { unitNotFound, unitForbidden } = require('../common/errors/error-type').ErrorType;
 
 const unitSchema = new Schema({
   title: {
@@ -46,7 +46,8 @@ unitSchema.statics.toJSON = function(unit) {
   delete obj.maker.password;
   delete obj.maker.createdAt;
   delete obj.maker.updatedAt;
-    
+  delete obj.maker.email;
+
   return obj;
 }
 

@@ -1,7 +1,7 @@
 const { Bookmark } = require('../models/bookmark');
 const ObjectId = require('mongoose').Types.ObjectId;
-const CustomError = require('../common/error/custom-error');
-const { bookmarkNotFound } = require('../common/error/error-type').ErrorType;
+const CustomError = require('../common/errors/custom-error');
+const { bookmarkNotFound } = require('../common/errors/error-type').ErrorType;
 
 exports.addBookmark = async (userId, unitId) => {
   await Bookmark.create({ userId, unitId });

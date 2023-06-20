@@ -1,8 +1,8 @@
 const { Unit } = require('../models/unit');
 const { Review } = require('../models/review');
 const { Bookmark } = require('../models/bookmark');
-const CustomError = require('../common/error/custom-error');
-const { unitNotFound } = require('../common/error-type').ErrorType;
+const CustomError = require('../common/errors/custom-error');
+const { unitNotFound } = require('../common/errors/error-type').ErrorType;
 
 exports.createUnit = async (title, description, isPublic, words, folderId, userId) => {
   await Unit.create({

@@ -1,23 +1,23 @@
 const express = require('express');
 const router = express.Router();
-const imageService = require('../service/image.service');
+const imageService = require('../services/image.service');
 const { checkCurrentUser } = require('../middlewares/auth.middleware');
 const multer = require('multer');
 const multerS3 = require('multer-s3');
 const s3 = require('../config/s3');
 const { body } = require('express-validator');
-const { catchValidationError } = require('../middlewares/validation-checker.middleware');
-const { asyncWrapper } = require('../middlewares/async-wrapper.middleware');
+const { catchValidationError } = require('../middlewares/validation-checker');
+const { asyncWrapper } = require('../middlewares/async-wrapper');
 
 const upload = multer({
-    storage: multerS3({
-        s3: s3,
-        bucket: process.env.AWS_S3_BUCKET_NAME,
-        ACL: 'public-read',
-        key: function(rqe, file, cb) {
-            cb(null, `${Date.now()}_${file.originalname}`);
-        }
-    })
+  storage: multerS3({
+    s3: s3,
+    bucket: `${process.env.AWS_S3_BUCKET_NAME}`,
+    ACL: 'public-read',
+    key: function(rqe, file, cb) {
+      cb(null, `${Date.now()}_${file.originalname}`);
+    }
+  })
 });
 
 router.post('/', 

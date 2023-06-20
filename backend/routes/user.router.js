@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const userService = require('../service/user.service');
+const userService = require('../services/user.service');
 const { checkCurrentUser } = require('../middlewares/auth.middleware');
 const { body } = require('express-validator');
 const { catchValidationError } = require('../middlewares/validation-checker');

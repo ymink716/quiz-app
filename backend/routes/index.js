@@ -2,17 +2,17 @@ const express = require('express');
 const router = express.Router();
 
 const users = require('./user.router');
-const folders = require('./user.router');
-const units = require('./user.router');
-const images = require('./user.router');
-const bookmarks = require('./user.router');
-const reviews = require('./user.router');
+const folders = require('./folder.router');
+const units = require('./unit.router');
+const images = require('./image.router');
+const bookmarks = require('./bookmark.router');
+const reviews = require('./review.router');
 
-app.use('/users', users);
-app.use('/folders', folders);
-app.use('/units', units);
-app.use('/images', images);
-app.use('/bookmarks', bookmarks);
-app.use('/reviews', reviews);
+router.use('/users', users);
+router.use('/folders', folders);
+router.use('/units', units);
+router.use('/images', images);
+router.use('/bookmarks', bookmarks);
+router.use('/reviews', reviews);
 
 module.exports = router;

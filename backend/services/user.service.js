@@ -3,8 +3,8 @@ const { Bookmark } = require('../models/bookmark');
 const { Review } = require('../models/review');
 const { Unit } = require('../models/unit');
 const { Folder } = require('../models/folder');
-const CustomError = require('../common/error/custom-error');
-const { existedUser, userBadRequest } = require('../common/error-type').ErrorType;
+const CustomError = require('../common/errors/custom-error');
+const { existedUser, userBadRequest } = require('../common/errors/error-type').ErrorType;
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 

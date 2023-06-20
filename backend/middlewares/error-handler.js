@@ -1,5 +1,5 @@
-const CustomError = require("../common/error/custom-error");
-const { InternalServerError } = require('../common/error/error-type').ErrorType;
+const CustomError = require("../common/errors/custom-error");
+const { InternalServerError } = require('../common/errors/error-type').ErrorType;
 
 // TODO: logging 
 const errorHandler = (err, req, res, next) => {

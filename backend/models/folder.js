@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
-const { folderNotFound, folderForbidden } = require('../common/error-type').ErrorType;
+const { folderNotFound, folderForbidden } = require('../common/errors/error-type').ErrorType;
 
 const folderSchema = new Schema({
   title: {

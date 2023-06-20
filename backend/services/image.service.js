@@ -2,8 +2,8 @@ const { Review } = require('../models/review');
 const { Bookmark } = require('../models/bookmark');
 const { Unit } = require('../models/unit');
 const s3 = require('../config/s3');
-const CustomError = require('../common/error/custom-error');
-const { imageBadRequest } = require('../common/error-type').ErrorType;
+const CustomError = require('../common/errors/custom-error');
+const { imageBadRequest } = require('../common/errors/error-type').ErrorType;
 
 exports.uploadImage = async (title, description, isPublic, folderId, url, userId) => {
   if (!url) {
