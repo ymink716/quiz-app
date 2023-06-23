@@ -4,8 +4,8 @@ import { UserOutlined } from '@ant-design/icons';
 
 function UnitCard({unit, index}) {
     let link;
-    if (unit.type === "words") link = `/unit/${unit._id}`;
-    else link = `/image/${unit._id}`;
+    if (unit.type === "words") link = `/units/${unit._id}`;
+    else link = `/images/${unit._id}`;
 
     return (
         <Col className="gutter-row" lg={6} md={8} xs={24}>

@@ -20,14 +20,13 @@ router.post('/register',
     
     await userService.createUser(email, nickname, password);
 
-    res.status(201).json({ success: true });
+    return res.status(201).json({ success: true });
   })
 );
 
 router.post('/login',
   [
     body('email').notEmpty().isEmail(),
-    body('nickname').notEmpty().isString(),
     body('password').notEmpty().isString(),
     catchValidationError
   ],
