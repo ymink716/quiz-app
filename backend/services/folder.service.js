@@ -12,7 +12,7 @@ exports.createFolder = async (title, description, userId) => {
 }
 
 exports.getFoldersByUser = async (maker) => {
-  const folders = await Folder.find({ maker }).select(['-maker', 'createdAt', '-updatedAt']);
+  const folders = await Folder.find({ maker }).select(['-maker', '-createdAt', '-updatedAt']);
 
   return folders;
 }

@@ -12,7 +12,7 @@ function BookmarkButton(props) {
     const [bookmarked, setBookmarked] = useState(false);
 
     useEffect(() => {
-        axios.get(`/api/bookmark/counts/${props.unitId}`)
+        axios.get(`/api/bookmarks/counts/${props.unitId}`)
         .then(response => {
             if (response.data.success) {
                 setCounts(response.data.bookmarks.length);
@@ -32,7 +32,7 @@ function BookmarkButton(props) {
 
     const addBookmark = (e) => {
         axios.post(
-            '/api/bookmark', 
+            '/api/bookmarks', 
             { unitId: props.unitId },
             { headers: { Authorization: token }}
         ).then(response => {
@@ -49,7 +49,7 @@ function BookmarkButton(props) {
 
     const deleteBookmark = (e) => {     
         axios.delete(
-            '/api/bookmark', { 
+            '/api/bookmarks', { 
                 headers: { Authorization: token },
                 data: { userId: user._id, unitId: props.unitId },
             },

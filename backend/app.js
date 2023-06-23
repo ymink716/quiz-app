@@ -5,8 +5,8 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const connectDatabase = require('./models');
 const routes = require('./routes');
-const notFound = require('./middlewares/not-found');
-const errorHandler = require('./middlewares/error-handler');
+const { notFound } = require('./middlewares/not-found');
+const { errorHandler } = require('./middlewares/error-handler');
 
 const app = express();
 dotenv.config({ path: './.env' });

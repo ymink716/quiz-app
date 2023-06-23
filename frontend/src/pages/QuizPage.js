@@ -4,13 +4,13 @@ import { Button, Input } from 'antd';
 import { PageHeader } from '@ant-design/pro-layout';
 import axios from 'axios';
 
-function QuizPage(props) {
+function QuizPage() {
     const { unitId } = useParams();
     const [words, setWords] = useState([]);
     const [answers, setAnswers] = useState([]);
 
     useEffect(() => {
-        axios.get(`/api/unit/${unitId}`)
+        axios.get(`/api/units/${unitId}`)
         .then(response => {
             if (response.data.success) {
                 if (response.data.unit.words && response.data.unit.words.length !== 0) 
@@ -60,10 +60,7 @@ function QuizPage(props) {
                         </div>
                     )
                 })}
-                <Link to={{
-                    pathname: `/quizResult/${unitId}`,
-                    state: { words, answers }
-                }}>
+                <Link to={`/quizResult/${unitId}`} state={{ words, answers }}>
                     <Button type="primary">정답 확인</Button>
                 </Link>
             </div>

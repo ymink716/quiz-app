@@ -33,7 +33,7 @@ exports.createToken = async (email, password) => {
   if (!isMatched) {
     throw new CustomError(userBadRequest.type, userBadRequest.status, userBadRequest.message);
   }
-
+  
   const token = jwt.sign({ email, userId: user._id }, process.env.JWT_SECRET_KEY);
       
   return { user: User.toJSON(user), token };

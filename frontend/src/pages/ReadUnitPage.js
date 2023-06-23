@@ -24,7 +24,7 @@ function ReadUnitPage() {
     const { speak } = useSpeechSynthesis();
 
     useEffect(() => {
-        axios.get(`/api/unit/${unitId}`)
+        axios.get(`/api/units/${unitId}`)
         .then(response => {
             if (response.data.success) {
                 setTitle(response.data.unit.title);
@@ -32,7 +32,7 @@ function ReadUnitPage() {
                 if (response.data.unit.words && response.data.unit.words.length !== 0) 
                     setWords([ ...response.data.unit.words ]);
                 setMaker(response.data.unit.maker);
-                if (user && user.email == response.data.unit.maker.email) setIsOwner(true);
+                if (user && user.email === response.data.unit.maker.email) setIsOwner(true);
             } else {
                 alert('단어장 불러오기를 실패했습니다.');
             }
@@ -44,7 +44,7 @@ function ReadUnitPage() {
         if (!check) return
 
         axios.delete(
-            `/api/unit/${unitId}`,
+            `/api/units/${unitId}`,
             { headers: { Authorization: token }}
         ).then(response => {
             if (response.data.success) {

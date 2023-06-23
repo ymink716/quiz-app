@@ -12,7 +12,7 @@ function ReviewButton(props) {
     const [userRate, setUserRate] = useState(5);
 
     useEffect(() => {
-        axios.get(`/api/review/${props.unitId}`)
+        axios.get(`/api/reviews/${props.unitId}`)
         .then((response) => {
             const reviews = response.data.reviews;
             if (reviews.length !== 0) {
@@ -31,7 +31,7 @@ function ReviewButton(props) {
 
     const handleOk = () => {
         axios.post(
-            '/api/review',
+            '/api/reviews',
             { unitId: props.unitId, rate: userRate }, 
             { headers: { Authorization: token }}
         ).then((response) => {

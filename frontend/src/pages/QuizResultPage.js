@@ -4,7 +4,7 @@ import { Button, Table } from 'antd';
 import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import { PageHeader } from '@ant-design/pro-layout';
 
-function QuizResultPage(props) {
+function QuizResultPage() {
     const navigate = useNavigate();
     const { unitId } = useParams();
     const { state } = useLocation();
@@ -17,7 +17,7 @@ function QuizResultPage(props) {
         words.map((word, index) => {
             word.answer = answers[index];
             word.index = index + 1;
-            if (word.meaning == word.answer) {
+            if (word.meaning === word.answer) {
                 word.check = true;
                 setAnswerCount(answerCount => answerCount + 1);
             }
@@ -56,7 +56,7 @@ function QuizResultPage(props) {
         },
     ];
 
-    const goBack = () => navigate(`/unit/${unitId}`);
+    const goBack = () => navigate(`/units/${unitId}`);
 
     return (
         <div style={{ width: '100%', marginLeft: '5%' }}>

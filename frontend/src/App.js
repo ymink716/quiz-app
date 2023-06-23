@@ -39,14 +39,14 @@ function App() {
           {user ? (
             <Routes>
               <Route path="/" element={<MainPage />} />
-              <Route path="/myFolder" element={<MyFolderPage />} />
-              <Route path="/folder/:folderId" element={<FolderDetailPage />} />
+              <Route path="/myFolders" element={<MyFolderPage />} />
+              <Route path="/folders/:folderId" element={<FolderDetailPage />} />
               <Route path="/createUnit/:folderId" element={<SaveUnitPage />} />
               <Route path="/updateUnit/:unitId" element={<SaveUnitPage />} />
-              <Route path="/unit/:unitId" element={<ReadUnitPage />} />
+              <Route path="/units/:unitId" element={<ReadUnitPage />} />
               <Route path="/createImage/:folderId" element={<SaveImagePage />} />
-              <Route path="/image/:unitId" element={<ReadImagePage />} />
-              <Route path="/bookmark" element={<BookmarkPage />} />
+              <Route path="/images/:unitId" element={<ReadImagePage />} />
+              <Route path="/bookmarks" element={<BookmarkPage />} />
               <Route path="/study/:unitId" element={<StudyWordsPage />} />
               <Route path="/quiz/:unitId" element={<QuizPage />} />
               <Route path="/quizResult/:unitId" element={<QuizResultPage />} />
@@ -57,8 +57,8 @@ function App() {
               <Route path="/" element={<MainPage />} />
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/login" element={<LoginPage />} />
-              <Route path="/unit/:unitId" element={<ReadUnitPage />} />
-              <Route path="/image/:unitId" element={<ReadImagePage />} />
+              <Route path="/units/:unitId" element={<ReadUnitPage />} />
+              <Route path="/images/:unitId" element={<ReadImagePage />} />
               <Route path="/study/:unitId" element={<StudyWordsPage />} />
               <Route path="/quiz/:unitId" element={<QuizPage />} />
               <Route path="/quizResult/:unitId" element={<QuizResultPage />} />

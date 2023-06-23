@@ -13,7 +13,7 @@ function StudyWordsPage() {
     const [words, setWords] = useState([]);
 
     useEffect(() => {
-        axios.get(`/api/unit/${unitId}`)
+        axios.get(`/api/units/${unitId}`)
         .then(response => {
             if (response.data.success) {
                 setTitle(response.data.unit.title);
@@ -25,7 +25,7 @@ function StudyWordsPage() {
     }, []);
 
     const quizHandler = (e) => navigate(`/quiz/${unitId}`);
-    const quitStudy = (e) => navigate(`/unit/${unitId}`);
+    const quitStudy = (e) => navigate(`/units/${unitId}`);
 
     return (
         <div style={{ width: '100%', marginLeft: '5%' }}>

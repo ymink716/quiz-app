@@ -34,6 +34,17 @@ router.get('/',
   })
 );
 
+router.get('/bookmarks', 
+  checkCurrentUser, 
+  asyncWrapper(async (req, res) => {
+    const userId = req.currentUser._id;
+
+    const units = await unitService.getBookmarkedUnits(userId);
+
+    return res.status(200).json({ success: true, units });
+  })
+);
+
 router.get('/:unitId', 
   [param('unitId').notEmpty().isMongoId(), catchValidationError], 
   asyncWrapper(async (req, res) => {
@@ -62,17 +73,6 @@ router.get('/folder/:folderId',
     const folderId = req.params.folderId;
 
     const units = await unitService.getUnitsByFolder(folderId);
-
-    return res.status(200).json({ success: true, units });
-  })
-);
-
-router.get('/bookmarks', 
-  checkCurrentUser, 
-  asyncWrapper(async (req, res) => {
-    const userId = req.currentUser._id;
-
-    const units = await unitService.getBookmarkedUnits(userId);
 
     return res.status(200).json({ success: true, units });
   })

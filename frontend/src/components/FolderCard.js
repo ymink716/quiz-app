@@ -2,7 +2,7 @@ import React from 'react'
 import { Col, Card } from 'antd';
 
 function FolderCard({folder, index}) {
-    const link = `/folder/${folder._id}`;
+    const link = `/folders/${folder._id}`;
 
     return (
         <Col className="gutter-row" lg={6} md={8} xs={24}>

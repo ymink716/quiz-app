@@ -46,11 +46,11 @@ function SaveUnitPage() {
         e.preventDefault();
 
         axios.post(
-            '/api/unit', 
+            '/api/units', 
             { title, description, isPublic, words, folderId },
             { headers: { Authorization: token }}
         ).then(response => {
-            if (response.data.success) navigate(`/folder/${folderId}`)
+            if (response.data.success) navigate(`/folders/${folderId}`)
             else alert('단어장 생성에 실패했습니다.');
         }).catch(error => {
             console.error(error);
@@ -62,11 +62,11 @@ function SaveUnitPage() {
         e.preventDefault();
 
         axios.put(
-            `/api/unit/${unitId}`, 
+            `/api/units/${unitId}`, 
             { title, description, isPublic, words },
             { headers: { Authorization: token }}
         ).then(response => {
-            if (response.data.success) navigate(`/unit/${unitId}`)
+            if (response.data.success) navigate(`/units/${unitId}`)
             else alert(response.data.message);
         }).catch(error => {
             console.error(error);
@@ -77,7 +77,7 @@ function SaveUnitPage() {
     useEffect(() => {        
         if (path !== "/updateUnit/:unitId") return
         
-        axios.get(`/api/unit/${unitId}`)
+        axios.get(`/api/units/${unitId}`)
         .then(response => {
             if (response.data.success) {
                 setTitle(response.data.unit.title);
